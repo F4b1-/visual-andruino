@@ -1,4 +1,6 @@
 #include <SoftwareSerial.h>
+#include <string.h>
+#include <stdio.h>
 
 #define rxPin 50
 #define txPin 51
@@ -13,18 +15,11 @@ void setup() {
   mySerial.begin(9600);
   // until command SETUP_COMPLETE
 
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
-    //String blRead = readBluetooth();
-
-   /* if(blRead.length() > 0) {
-      Serial.println(readBluetooth());
-    }*/
-
-  
   if (mySerial.available()){
   
     char btData = mySerial.read();
@@ -49,31 +44,66 @@ void loop() {
 }
 
 void handleCommand(String commandString) {
-  Serial.println(commandString);
   commandString.trim();
-  if(commandString.equals("1")) {
+
+  char* tokens[3];
+  splitCommand((char*) commandString.c_str(), tokens);
+  //Serial.println(tokens[1]);
+  char* commandId = tokens[0];
+  char* commandParam1 = tokens[1];
+  char* commandParam2 = tokens[2];
+
+  /**
+  *** COMMANDS ***
+  */
+  
+  // -- analogWrite ---
+  if(strcmp(commandId, "2") == 0) {
     Serial.println("analogWrite");
-  } else {
+    Serial.println(commandParam1);
+    Serial.println(commandParam2);
+    analogWrite(atoi(commandParam1), atoi(commandParam2));  
+    
+  }
+  // -- digitalWrite ---
+   else if(strcmp(commandId, "3") == 0) {
+    Serial.println("digitalWrite");
+    Serial.println(commandParam1);
+    Serial.println(commandParam2);
+    //if(strcmp(commandParam2, "HIGH") == 0 || strcmp(commandParam2, "LOW") == 0) {
+      digitalWrite(atoi(commandParam1), atoi(commandParam2));  
+    //}
+      
+   }
+  
+  else {
     Serial.println("unknown command");
   }
 }
 
-/*
-String readBluetooth() {
+/** 
+ *  Returns an array containing the command parts
+ *  arr[0]-> commandId
+ *  arr[1 ... 2]-> command parameters 
+  */
+void splitCommand(char* str, char* tokens[]) {
+  
+   const char s[2] = " ";
+   char *token;
+   
+   /* get the first token */
+   token = strtok(str, s);
+   int counter = 0;
+   tokens[counter] = token;
+   //tokens[1] = strtok(str, s);
+   
+   /* walk through other tokens */
+   while( token != NULL ) {
+      //printf( " %s\n", token );
+      counter++;
+      token = strtok(NULL, s);
+      tokens[counter] = token;
+   }
+   
+}
 
-  String inString;
-  if (mySerial.available()){
-    while(mySerial.peek() != ";" ) {
-    char btData = mySerial.read();
-  //  if (isDigit(btData)) {
-      // convert the incoming byte to a char and add it to the string:
-      inString += (char)btData;
-      
-   // }
-    }
-      //Serial.println(inString);
-      return inString;
-  
-  }
-  
-}*/

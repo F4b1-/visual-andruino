@@ -12,13 +12,22 @@
     </ImageView>
 
 
+    <EditText
+        android:id="@+id/pinNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/codifyButton"
+        android:layout_centerHorizontal="true"
+        android:hint="Pin Number"
+        android:inputType="text" />
+
     <Button
-        android:id="@+id/button"
+        android:id="@+id/codifyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
-        android:text="Codify" />
+        android:text="digitalWrite->HIGH" />
 
 </RelativeLayout>
