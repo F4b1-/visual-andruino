@@ -11,23 +11,54 @@
         android:src="@drawable/shape">
     </ImageView>
 
+    <Button
+        android:id="@+id/analogReadButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="analogRead 41" />
+
 
     <EditText
         android:id="@+id/pinNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/codifyButton"
-        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/digitalLow"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
         android:hint="Pin Number"
         android:inputType="text" />
 
     <Button
-        android:id="@+id/codifyButton"
+        android:id="@+id/digitalHigh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
         android:text="digitalWrite->HIGH" />
+
+    <Button
+        android:id="@+id/digitalLow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/digitalHigh"
+        android:layout_alignEnd="@+id/digitalHigh"
+        android:layout_alignRight="@+id/digitalHigh"
+        android:layout_marginBottom="13dp"
+        android:text="digitalWrite->LOW" />
+
+    <TextView
+        android:id="@+id/resultView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/analogReadButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:text="readResult" />
 
 </RelativeLayout>
