@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.palaima.smoothbluetooth.Device;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity implements View.OnTouchListener {
     private int _xDelta;
     private int _yDelta;
     private SmoothBluetooth mSmoothBluetooth;
+    private List<Integer> mBuffer = new ArrayList<>();
 
     private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
         @Override
@@ -107,25 +109,20 @@ public class MainActivity extends Activity implements View.OnTouchListener {
         @Override
         public void onDataReceived(int data) {
             //receives all bytes
-            /*mBuffer.add(data);
+            mBuffer.add(data);
             StringBuilder sb = new StringBuilder();
 
-            if(data == 6) {
-
-            }
-
             if (data == 3 && !mBuffer.isEmpty()) {
-                //if (data == 0x0D && !mBuffer.isEmpty() && mBuffer.get(mBuffer.size()-2) == 0xA0) {
 
                 for (int integer : mBuffer) {
                     sb.append((char) integer);
                 }
                 mBuffer.clear();
 
-                writeCommand(sb.toString());
+                TextView resultView = findViewById(R.id.resultView);
+                resultView.setText(sb.toString());
 
-
-            }*/
+            }
 
         }
     };
@@ -158,14 +155,40 @@ public class MainActivity extends Activity implements View.OnTouchListener {
 
         _view.setOnTouchListener(this);
 
-        final Button button = findViewById(R.id.codifyButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        final Button buttonHigh = findViewById(R.id.digitalHigh);
+        buttonHigh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 EditText edit = (EditText)findViewById(R.id.pinNumber);
                 String pinNumber = edit.getText().toString();
 
                 String testCommand = "3 " + pinNumber + " 1;";
+
+                // Code here executes on main thread after user presses button
+                mSmoothBluetooth.send(testCommand, false);
+            }
+        });
+
+        final Button buttonLow = findViewById(R.id.digitalLow);
+        buttonLow.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                EditText edit = (EditText)findViewById(R.id.pinNumber);
+                String pinNumber = edit.getText().toString();
+
+                String testCommand = "3 " + pinNumber + " 0;";
+
+                // Code here executes on main thread after user presses button
+                mSmoothBluetooth.send(testCommand, false);
+            }
+        });
+
+
+        final Button buttonAnalogRead = findViewById(R.id.analogReadButton);
+        buttonAnalogRead.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                
+                String testCommand = "-1 41;";
 
                 // Code here executes on main thread after user presses button
                 mSmoothBluetooth.send(testCommand, false);
