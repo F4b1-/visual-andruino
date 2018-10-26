@@ -2,5 +2,15 @@
 <resources>
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccents">#FF4081</color>
+    <color name="list_item_background">#AACCCCCC</color>
+    <color name="colorInput">#8EAE3C</color>
+    <color name="colorDelay">#ff8c1a</color>
+
+    <color name="app_color">#8EAE3C</color>
+    <color name="endColor">#ff8c1a</color>
+    <color name="startColor">#ffb366</color>
+    <color name="endColor2">#8EAE3C</color>
+    <color name="startColor2">#D81B60</color>
+
 </resources>

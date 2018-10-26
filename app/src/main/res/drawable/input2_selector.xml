@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape
+            android:shape="rectangle">
+
+            <corners
+                android:bottomRightRadius="0dp"
+                android:radius="0dp" />
+
+            <gradient
+                android:angle="45"
+
+                android:endColor="@color/endColor"
+                android:startColor="@color/startColor"
+                android:type="linear" />
+
+            <!--If your shape requires only one solid color-->
+            <!--<solid
+                android:color="#FFFFFF" />-->
+
+            <size
+                android:width="82dp"
+                android:height="82dp" />
+
+            <!--Use android:dashWidth="2dp" and android:dashGap="2dp"
+            to add dashes to your stroke-->
+            <stroke
+                android:width="2dp"
+                android:color="#FFFFFF" />
+
+            <!--If you want to add padding-->
+            <!-- <padding
+                 android:left="10dp"
+                 android:top="20dp"
+                 android:right="40dp"
+                 android:bottom="8dp" />-->
+
+        </shape>
+    </item>
+    <item>
+        <shape
+            android:shape="rectangle">
+
+            <corners
+                android:bottomRightRadius="0dp"
+                android:radius="0dp" />
+
+            <gradient
+                android:angle="45"
+
+                android:endColor="@color/startColor2"
+                android:startColor="@color/endColor2"
+                android:type="linear" />
+
+            <!--If your shape requires only one solid color-->
+            <!--<solid
+                android:color="#FFFFFF" />-->
+
+            <size
+                android:width="82dp"
+                android:height="82dp" />
+
+            <!--Use android:dashWidth="2dp" and android:dashGap="2dp"
+            to add dashes to your stroke-->
+            <stroke
+                android:width="2dp"
+                android:color="#FFFFFF" />
+
+            <!--If you want to add padding-->
+            <!-- <padding
+                 android:left="10dp"
+                 android:top="20dp"
+                 android:right="40dp"
+                 android:bottom="8dp" />-->
+
+        </shape>
+    </item>
+</selector>
+
