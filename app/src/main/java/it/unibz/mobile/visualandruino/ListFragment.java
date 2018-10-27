@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -28,6 +27,7 @@ import java.util.List;
 
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
+import it.unibz.mobile.visualandruino.models.Brick;
 
 public class ListFragment extends Fragment {
 
@@ -149,7 +149,7 @@ public class ListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.firstlist_layout, container, false);
+        final View view = inflater.inflate(R.layout.firstlist_layout, container, false);
         mRefreshLayout = (MySwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mDragListView = (DragListView) view.findViewById(R.id.drag_list_view);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
@@ -219,7 +219,7 @@ public class ListFragment extends Fragment {
         buttonHigh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                EditText edit = (EditText)v.findViewById(R.id.pinNumber);
+                EditText edit = (EditText)view.findViewById(R.id.pinNumber);
                 String pinNumber = edit.getText().toString();
 
                 String testCommand = "3 " + pinNumber + " 1;";
@@ -233,7 +233,7 @@ public class ListFragment extends Fragment {
         buttonLow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                EditText edit = (EditText)v.findViewById(R.id.pinNumber);
+                EditText edit = (EditText)view.findViewById(R.id.pinNumber);
                 String pinNumber = edit.getText().toString();
 
                 String testCommand = "3 " + pinNumber + " 0;";

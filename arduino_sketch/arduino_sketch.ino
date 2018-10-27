@@ -35,6 +35,7 @@ void loop() {
       inString += (char)btData;
          
     } else { 
+      Serial.println(inString);
       handleCommand(inString);
       inString = "";
     }
@@ -61,9 +62,26 @@ void handleCommand(String commandString) {
   /**
   *** COMMANDS ***
   */
-  
+    // -- pinMode ---
+  if(strcmp(commandId, "1") == 0) {
+    char* commandParam1 = tokens[1];
+    char* commandParam2 = tokens[2];
+    
+    Serial.println("analogWrite");
+    Serial.println(commandParam1);
+    Serial.println(commandParam2);
+    
+    if(strcmp(commandParam2, "OUTPUT") == 0) {
+       pinMode(atoi(commandParam1), OUTPUT);  
+    } 
+    else if(strcmp(commandParam2, "INPUT") == 0) {
+       pinMode(atoi(commandParam1), INPUT);  
+    } 
+     
+    
+  }
   // -- analogWrite ---
-  if(strcmp(commandId, "2") == 0) {
+  else if(strcmp(commandId, "2") == 0) {
     char* commandParam1 = tokens[1];
     char* commandParam2 = tokens[2];
     
@@ -87,10 +105,8 @@ void handleCommand(String commandString) {
    }
    else if(strcmp(commandId, "-1") == 0) {
     char* commandParam1 = tokens[1];
-
     Serial.println("analogRead");
     Serial.println(commandParam1);
-    //mySerial.write(analogRead(atoi(commandParam1)));  
     mySerial.write("testing return value");
     mySerial.write(3);
    }
@@ -103,7 +119,7 @@ void handleCommand(String commandString) {
 /** 
  *  Returns an array containing the command parts
  *  arr[0]-> commandId
- *  arr[1 ... 2]-> command parameters 
+ *  arr[1 ... maxNumOfCommandParams - 1]-> command parameters 
   */
 void splitCommand(char* str, char* tokens[]) {
   
