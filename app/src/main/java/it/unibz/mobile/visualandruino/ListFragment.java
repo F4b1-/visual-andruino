@@ -28,6 +28,7 @@ import java.util.List;
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.utils.BrickSender;
 
 public class ListFragment extends Fragment {
 
@@ -36,6 +37,7 @@ public class ListFragment extends Fragment {
     private ListSwipeHelper mSwipeHelper;
     private MySwipeRefreshLayout mRefreshLayout;
 
+    /*
     private SmoothBluetooth mSmoothBluetooth;
     private List<Integer> mBuffer = new ArrayList<>();
 
@@ -135,11 +137,13 @@ public class ListFragment extends Fragment {
             }
 
         }
-    };
+    };*/
+
 
     public static ListFragment newInstance() {
         return new ListFragment();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -210,10 +214,13 @@ public class ListFragment extends Fragment {
 
         setupListRecyclerView();
 
-
+        /*
         mSmoothBluetooth = new SmoothBluetooth(getActivity().getApplicationContext());
         mSmoothBluetooth.setListener(mListener);
-        mSmoothBluetooth.tryConnection();
+        mSmoothBluetooth.tryConnection();*/
+        final BrickSender brickSender = BrickSender.getInstance();
+        brickSender.initiateBluetooth(getActivity().getApplicationContext());
+
 
         final Button buttonHigh = view.findViewById(R.id.digitalHigh);
         buttonHigh.setOnClickListener(new View.OnClickListener() {
@@ -225,7 +232,8 @@ public class ListFragment extends Fragment {
                 String testCommand = "3 " + pinNumber + " 1;";
 
                 // Code here executes on main thread after user presses button
-                mSmoothBluetooth.send(testCommand, false);
+                //mSmoothBluetooth.send(testCommand, false);
+                brickSender.sendCommand(testCommand);
             }
         });
 
@@ -239,7 +247,8 @@ public class ListFragment extends Fragment {
                 String testCommand = "3 " + pinNumber + " 0;";
 
                 // Code here executes on main thread after user presses button
-                mSmoothBluetooth.send(testCommand, false);
+                //mSmoothBluetooth.send(testCommand, false);
+                brickSender.sendCommand(testCommand);
             }
         });
 
@@ -251,7 +260,8 @@ public class ListFragment extends Fragment {
                 String testCommand = "-1 41;";
 
                 // Code here executes on main thread after user presses button
-                mSmoothBluetooth.send(testCommand, false);
+                //mSmoothBluetooth.send(testCommand, false);
+                brickSender.sendCommand(testCommand);
             }
         });
 
