@@ -3,6 +3,8 @@ package it.unibz.mobile.visualandruino.models;
 
 import java.util.ArrayList;
 
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
+
 public class ArduinoCommandBrick extends Brick {
     private int commandId;
 

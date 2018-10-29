@@ -2,6 +2,9 @@ package it.unibz.mobile.visualandruino.models;
 
 import java.util.ArrayList;
 
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
+import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
+
 public class InternalBrick extends Brick {
     private ArrayList<Brick> subBricks;
     private InternalSubTypes subType;

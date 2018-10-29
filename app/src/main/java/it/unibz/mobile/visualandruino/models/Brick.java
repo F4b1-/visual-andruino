@@ -2,8 +2,7 @@ package it.unibz.mobile.visualandruino.models;
 
 import java.util.ArrayList;
 
-import it.unibz.mobile.visualandruino.models.BrickTypes;
-import it.unibz.mobile.visualandruino.models.Value;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
 public class Brick {
     private String name;

@@ -1,4 +1,4 @@
-package it.unibz.mobile.visualandruino.models;
+package it.unibz.mobile.visualandruino.models.enums;
 
 
 public enum InternalSubTypes {

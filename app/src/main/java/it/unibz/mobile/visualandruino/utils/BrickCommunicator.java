@@ -1,45 +1,41 @@
 package it.unibz.mobile.visualandruino.utils;
 
-import android.content.Context;
-import android.support.v4.app.FragmentManager;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 import it.unibz.mobile.visualandruino.ListFragment;
-import it.unibz.mobile.visualandruino.R;
-import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
-import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.BrickTypes;
-import it.unibz.mobile.visualandruino.models.InternalBrick;
-import it.unibz.mobile.visualandruino.models.Value;
 
 
 //Builder Class
-public class BrickSender {
+public class BrickCommunicator {
 
     // static variable single_instance of type Singleton
-    private static BrickSender single_instance = null;
+    private static BrickCommunicator single_instance = null;
 
     private SmoothBluetooth mSmoothBluetooth;
     private List<Integer> mBuffer = new ArrayList<>();
+    private ListFragment listFragment;
 
     // static method to create instance of Singleton class
-    public static BrickSender getInstance()
+    public static BrickCommunicator getInstance()
     {
-        if (single_instance == null)
-            single_instance = new BrickSender();
+        if (single_instance == null) {
+            single_instance = new BrickCommunicator();
+        }
 
         return single_instance;
     }
 
-    public void initiateBluetooth(Context context) {
-        mSmoothBluetooth = new SmoothBluetooth(context);
-        mSmoothBluetooth.setListener(mListener);
-        mSmoothBluetooth.tryConnection();
+    public void initiateBluetooth(ListFragment listFragment) {
+        this.listFragment = listFragment;
+        if(listFragment != null) {
+            mSmoothBluetooth = new SmoothBluetooth(listFragment.getActivity().getApplicationContext());
+            mSmoothBluetooth.setListener(mListener);
+            mSmoothBluetooth.tryConnection();
+        }
+
     }
 
 
@@ -132,6 +128,8 @@ public class BrickSender {
                     sb.append((char) integer);
                 }
                 mBuffer.clear();
+
+                listFragment.updateReturnView(sb.toString());
 
                 //TextView resultView = getView().findViewById(R.id.resultView);
                 //resultView.setText(sb.toString());

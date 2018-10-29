@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.BrickTypes;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.Value;
 
 

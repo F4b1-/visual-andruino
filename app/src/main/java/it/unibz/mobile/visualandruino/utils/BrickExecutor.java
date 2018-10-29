@@ -1,11 +1,10 @@
 package it.unibz.mobile.visualandruino.utils;
 
-import java.net.InterfaceAddress;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.BrickTypes;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.Value;
 
@@ -26,7 +25,7 @@ public class BrickExecutor {
                 command += value.getValue();
             }
 
-            BrickSender.getInstance().sendCommand(command);
+            BrickCommunicator.getInstance().sendCommand(command);
 
         } else if(currentBrick.getBrickType() == BrickTypes.INTERNAL) {
             // Execute subBricks recursively
