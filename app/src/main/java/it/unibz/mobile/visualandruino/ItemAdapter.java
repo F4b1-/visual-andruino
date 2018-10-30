@@ -13,6 +13,8 @@ import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
 
+import it.unibz.mobile.visualandruino.models.Brick;
+
 class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHolder> {
 
     private int mLayoutId;
@@ -37,9 +39,9 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         Brick iline= mItemList.get(position).second;
-        holder.mText.setText(iline.name);
+        holder.mText.setText(iline.getName());
         holder.itemView.setTag(mItemList.get(position));
-        if(iline.type==0)
+        if(iline.getType()==0)
             holder.mLayout.setBackgroundResource(R.drawable.input_selector);
         else
             holder.mLayout.setBackgroundResource(R.drawable.input2_selector);

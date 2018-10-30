@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -24,10 +23,9 @@ import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import io.palaima.smoothbluetooth.Device;
-import io.palaima.smoothbluetooth.SmoothBluetooth;
+import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 
 public class ListFragment extends Fragment {
 
@@ -36,110 +34,11 @@ public class ListFragment extends Fragment {
     private ListSwipeHelper mSwipeHelper;
     private MySwipeRefreshLayout mRefreshLayout;
 
-    private SmoothBluetooth mSmoothBluetooth;
-    private List<Integer> mBuffer = new ArrayList<>();
-
-    private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
-        @Override
-        public void onBluetoothNotSupported() {
-            //device does not support bluetooth
-        }
-
-        @Override
-        public void onBluetoothNotEnabled() {
-            //bluetooth is disabled, probably call Intent request to enable bluetooth
-        }
-
-        @Override
-        public void onConnecting(Device device) {
-            //called when connecting to particular device
-            //Toast.makeText(MainActivity.this, "Connecting to: " + device.getName(), Toast.LENGTH_SHORT).show();
-            //writeCommand("Connecting to: " + device.getName());
-        }
-
-        @Override
-        public void onConnected(Device device) {
-            //called when connected to particular device
-            //Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-            //writeCommand("Connected");
-
-        }
-
-        @Override
-        public void onDisconnected() {
-            //called when disconnected from device
-            //writeCommand("Disconnected");
-            mSmoothBluetooth.tryConnection();
-        }
-
-        @Override
-        public void onConnectionFailed(Device device) {
-            //called when connection failed to particular device
-            mSmoothBluetooth.tryConnection();
-        }
-
-        @Override
-        public void onDiscoveryStarted() {
-            //called when discovery is started
-        }
-
-        @Override
-        public void onDiscoveryFinished() {
-            //called when discovery is finished
-        }
-
-        @Override
-        public void onNoDevicesFound() {
-            //called when no devices found
-            mSmoothBluetooth.tryConnection();
-        }
-
-        @Override
-        public void onDevicesFound(final List<Device> deviceList,
-                                   final SmoothBluetooth.ConnectionCallback connectionCallback) {
-            //receives discovered devices list and connection callback
-            //you can filter devices list and connect to specific one
-            //connectionCallback.connectTo(deviceList.get(position));
-
-            Device spiderDevice = null;
-
-            for (Device device: deviceList) {
-
-                if(device.getName().equals("HC-05")) {
-                    spiderDevice = device;
-                }
-            }
-
-            connectionCallback.connectTo(spiderDevice);
-
-
-
-        }
-
-        @Override
-        public void onDataReceived(int data) {
-            //receives all bytes
-            mBuffer.add(data);
-            StringBuilder sb = new StringBuilder();
-
-            if (data == 3 && !mBuffer.isEmpty()) {
-
-                for (int integer : mBuffer) {
-                    sb.append((char) integer);
-                }
-                mBuffer.clear();
-
-                TextView resultView = getView().findViewById(R.id.resultView);
-                resultView.setText(sb.toString());
-
-            }
-
-        }
-    };
 
     public static ListFragment newInstance() {
         return new ListFragment();
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,7 +48,7 @@ public class ListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.firstlist_layout, container, false);
+        final View view = inflater.inflate(R.layout.firstlist_layout, container, false);
         mRefreshLayout = (MySwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mDragListView = (DragListView) view.findViewById(R.id.drag_list_view);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
@@ -210,22 +109,26 @@ public class ListFragment extends Fragment {
 
         setupListRecyclerView();
 
-
+        /*
         mSmoothBluetooth = new SmoothBluetooth(getActivity().getApplicationContext());
         mSmoothBluetooth.setListener(mListener);
-        mSmoothBluetooth.tryConnection();
+        mSmoothBluetooth.tryConnection();*/
+        final BrickCommunicator brickCommunicator = BrickCommunicator.getInstance();
+        brickCommunicator.initiateBluetooth(this);
+
 
         final Button buttonHigh = view.findViewById(R.id.digitalHigh);
         buttonHigh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                EditText edit = (EditText)v.findViewById(R.id.pinNumber);
+                EditText edit = (EditText)view.findViewById(R.id.pinNumber);
                 String pinNumber = edit.getText().toString();
 
                 String testCommand = "3 " + pinNumber + " 1;";
 
                 // Code here executes on main thread after user presses button
-                mSmoothBluetooth.send(testCommand, false);
+                //mSmoothBluetooth.send(testCommand, false);
+                brickCommunicator.sendCommand(testCommand);
             }
         });
 
@@ -233,13 +136,14 @@ public class ListFragment extends Fragment {
         buttonLow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                EditText edit = (EditText)v.findViewById(R.id.pinNumber);
+                EditText edit = (EditText)view.findViewById(R.id.pinNumber);
                 String pinNumber = edit.getText().toString();
 
                 String testCommand = "3 " + pinNumber + " 0;";
 
                 // Code here executes on main thread after user presses button
-                mSmoothBluetooth.send(testCommand, false);
+                //mSmoothBluetooth.send(testCommand, false);
+                brickCommunicator.sendCommand(testCommand);
             }
         });
 
@@ -251,7 +155,8 @@ public class ListFragment extends Fragment {
                 String testCommand = "-1 41;";
 
                 // Code here executes on main thread after user presses button
-                mSmoothBluetooth.send(testCommand, false);
+                //mSmoothBluetooth.send(testCommand, false);
+                brickCommunicator.sendCommand(testCommand);
             }
         });
 
@@ -276,6 +181,11 @@ public class ListFragment extends Fragment {
 
 
 
+    }
+
+    public void updateReturnView(String answer) {
+        TextView resultView = getView().findViewById(R.id.resultView);
+        resultView.setText(answer);
     }
 
 

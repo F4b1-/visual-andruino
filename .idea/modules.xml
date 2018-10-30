@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/VisualAndruino.iml" filepath="$PROJECT_DIR$/VisualAndruino.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/visual-andruino.iml" filepath="$PROJECT_DIR$/visual-andruino.iml" />
+      <module fileurl="file://C:\cygwin64\home\fabia\joystick-spider\VisualAndruino\visual-andruino.iml" filepath="C:\cygwin64\home\fabia\joystick-spider\VisualAndruino\visual-andruino.iml" />
     </modules>
   </component>
 </project>
