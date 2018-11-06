@@ -9,7 +9,7 @@ public class ArduinoCommandBrick extends Brick {
     private int commandId;
 
 
-    public ArduinoCommandBrick(String name, int type, ArrayList<Value> parameters, int commandId)
+    public ArduinoCommandBrick(String name, int type, ArrayList<Parameter> parameters, int commandId)
     {
         super(name, BrickTypes.ARDUINO_COMMAND, type, parameters);
         this.commandId = commandId;

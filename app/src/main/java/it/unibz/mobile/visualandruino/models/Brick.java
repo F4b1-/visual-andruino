@@ -9,9 +9,9 @@ public class Brick {
     private BrickTypes brickType;
     private int type;
 
-    private ArrayList<Value> parameters;
+    private ArrayList<Parameter> parameters;
 
-    public Brick(String name, BrickTypes brickType, int type, ArrayList<Value> parameters)
+    public Brick(String name, BrickTypes brickType, int type, ArrayList<Parameter> parameters)
     {
         this.name = name;
         this.brickType = brickType;
@@ -29,7 +29,7 @@ public class Brick {
         return brickType;
     }
 
-    public ArrayList<Value> getParameters() {
+    public ArrayList<Parameter> getParameters() {
         return parameters;
     }
 
@@ -41,7 +41,7 @@ public class Brick {
         this.brickType = type;
     }
 
-    public void setParameters(ArrayList<Value> parameters) {
+    public void setParameters(ArrayList<Parameter> parameters) {
         this.parameters = parameters;
     }
 

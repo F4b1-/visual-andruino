@@ -114,6 +114,8 @@ void handleCommand(String commandString) {
   else {
     Serial.println("unknown command");
   }
+
+  delay(1000);
 }
 
 /** 
