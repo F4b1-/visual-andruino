@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
-import it.unibz.mobile.visualandruino.models.Value;
 
 
 //Builder Class
@@ -15,12 +15,12 @@ public class BrickBuilder{
     private String name;
     private BrickTypes brickType;
     private int type;
-    private ArrayList<Value> parameters;
+    private ArrayList<Parameter> parameters;
 
     // optional parameters
     private int commandId;
 
-    public BrickBuilder(String name, BrickTypes brickType, int type, ArrayList<Value> parameters){
+    public BrickBuilder(String name, BrickTypes brickType, int type, ArrayList<Parameter> parameters){
         this.name = name;
         this.brickType = brickType;
         this.type = type;
