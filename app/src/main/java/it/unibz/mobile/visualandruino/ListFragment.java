@@ -4,6 +4,8 @@ package it.unibz.mobile.visualandruino;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -16,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -24,8 +27,12 @@ import com.woxthebox.draglistview.swipe.ListSwipeItem;
 
 import java.util.ArrayList;
 
+import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.Value;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
+import it.unibz.mobile.visualandruino.utils.BrickExecutor;
 
 public class ListFragment extends Fragment {
 
@@ -33,12 +40,22 @@ public class ListFragment extends Fragment {
     private DragListView mDragListView;
     private ListSwipeHelper mSwipeHelper;
     private MySwipeRefreshLayout mRefreshLayout;
-
+    private View mainView;
+    BrickExecutor brickExecutor;
 
     public static ListFragment newInstance() {
         return new ListFragment();
     }
 
+
+    public ArrayList<Brick> getBricksArray() {
+        ArrayList<Brick> arrBricks= new ArrayList<Brick>();
+        for (int i=0; i< mItemArray.size(); i++)
+        {
+            arrBricks.add(mItemArray.get(i).second);
+        }
+        return arrBricks;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +65,9 @@ public class ListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.firstlist_layout, container, false);
-        mRefreshLayout = (MySwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        mDragListView = (DragListView) view.findViewById(R.id.drag_list_view);
+        mainView = inflater.inflate(R.layout.firstlist_layout, container, false);
+        mRefreshLayout = (MySwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
+        mDragListView = (DragListView) mainView.findViewById(R.id.drag_list_view);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
             @Override
@@ -69,8 +86,21 @@ public class ListFragment extends Fragment {
         });
 
         mItemArray = new ArrayList<>();
-        for (int i = 0; i < 40; i++) {
-            Brick item= new Brick("Item " + i,i%2);
+
+        for (int i = 0; i < 6; i++) {
+
+            Value val=new Value();
+
+            val.setValue(String.valueOf((i%2)));
+            ArrayList<Value> arr=new ArrayList<Value>();
+            arr.add(val );
+            String name="ON";
+            if(i%2==0)
+            {
+                name="OFF";
+            }
+
+            Brick item= new ArduinoCommandBrick(name, i%2 , arr, 3);
             mItemArray.add( new Pair<>((long) i,item));
         }
 
@@ -117,38 +147,27 @@ public class ListFragment extends Fragment {
         brickCommunicator.initiateBluetooth(this);
 
 
-        final Button buttonHigh = view.findViewById(R.id.digitalHigh);
+
+        final Button buttonHigh = mainView.findViewById(R.id.digitalHigh);
         buttonHigh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                EditText edit = (EditText)view.findViewById(R.id.pinNumber);
+                EditText edit = (EditText)mainView.findViewById(R.id.pinNumber);
                 String pinNumber = edit.getText().toString();
 
-                String testCommand = "3 " + pinNumber + " 1;";
+
+                brickExecutor.executeBlocks(getBricksArray(), pinNumber);
+
+
+                //String testCommand = "3 " + pinNumber + " 1;";
 
                 // Code here executes on main thread after user presses button
                 //mSmoothBluetooth.send(testCommand, false);
-                brickCommunicator.sendCommand(testCommand);
-            }
-        });
-
-        final Button buttonLow = view.findViewById(R.id.digitalLow);
-        buttonLow.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                EditText edit = (EditText)view.findViewById(R.id.pinNumber);
-                String pinNumber = edit.getText().toString();
-
-                String testCommand = "3 " + pinNumber + " 0;";
-
-                // Code here executes on main thread after user presses button
-                //mSmoothBluetooth.send(testCommand, false);
-                brickCommunicator.sendCommand(testCommand);
+                //brickCommunicator.sendCommand(testCommand);
             }
         });
 
 
-        final Button buttonAnalogRead = view.findViewById(R.id.analogReadButton);
+        final Button buttonAnalogRead = mainView.findViewById(R.id.analogReadButton);
         buttonAnalogRead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -160,7 +179,25 @@ public class ListFragment extends Fragment {
             }
         });
 
-        return view;
+        FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.addButton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Value val=new Value();
+
+                val.setValue(String.valueOf("1"));
+                ArrayList<Value> arr=new ArrayList<Value>();
+                arr.add(val );
+
+
+                Brick item= new ArduinoCommandBrick("ON", 1 , arr, 3);
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,item));
+
+            }
+        });
+
+        return mainView;
     }
 
     @Override
@@ -173,7 +210,19 @@ public class ListFragment extends Fragment {
 
     private void setupListRecyclerView() {
         mDragListView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false);
+        brickExecutor= new BrickExecutor();
+        ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false,
+
+                new RecyclerViewOnItemClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+
+                        EditText edit = (EditText)mainView.findViewById(R.id.pinNumber);
+                        String pinNumber = edit.getText().toString();
+                        //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();
+                        brickExecutor.executeBrick(mItemArray.get(position).second, pinNumber);
+                    }
+                });
         mDragListView.setAdapter(listAdapter, true);
         mDragListView.setCanDragHorizontally(false);
         mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item));

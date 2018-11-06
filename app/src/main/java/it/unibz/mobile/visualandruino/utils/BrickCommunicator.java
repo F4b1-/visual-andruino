@@ -1,5 +1,7 @@
 package it.unibz.mobile.visualandruino.utils;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,5 +145,6 @@ public class BrickCommunicator {
 
     public void sendCommand(String command) {
         mSmoothBluetooth.send(command, false);
+        Toast.makeText(this.listFragment.getContext(), "Send "+command, Toast.LENGTH_SHORT).show();
     }
 }

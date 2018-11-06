@@ -4,13 +4,15 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccents">#FF4081</color>
     <color name="list_item_background">#AACCCCCC</color>
-    <color name="colorInput">#8EAE3C</color>
+    <color name="colorInput">#008184</color>
     <color name="colorDelay">#ff8c1a</color>
 
-    <color name="app_color">#8EAE3C</color>
-    <color name="endColor">#ff8c1a</color>
-    <color name="startColor">#ffb366</color>
-    <color name="endColor2">#8EAE3C</color>
-    <color name="startColor2">#D81B60</color>
+    <color name="app_color">#008184</color>
+    <color name="endColor">#121839</color>
+    <color name="startColor">#000000</color>
+    <color name="endColor2">#ff8c1a</color>
+    <color name="startColor2">#ffb366</color>
 
+    <color name="textWhite">#ffffff</color>
+    <color name="textDark">#000000</color>
 </resources>

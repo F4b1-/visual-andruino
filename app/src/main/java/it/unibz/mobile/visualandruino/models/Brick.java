@@ -19,12 +19,6 @@ public class Brick {
         this.parameters = parameters;
     }
 
-    public Brick(String name,  int type)
-    {
-        this.name = name;
-        this.brickType = brickType;
-        this.type = type;
-    }
 
 
     public String getName() {

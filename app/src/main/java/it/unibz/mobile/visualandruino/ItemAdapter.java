@@ -1,6 +1,8 @@
 package it.unibz.mobile.visualandruino;
 
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +22,13 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
     private int mLayoutId;
     private int mGrabHandleId;
     private boolean mDragOnLongPress;
+    private RecyclerViewOnItemClickListener recyclerViewOnItemClickListener;
 
-    ItemAdapter(ArrayList<Pair<Long, Brick>> list, int layoutId, int grabHandleId, boolean dragOnLongPress) {
+    ItemAdapter(ArrayList<Pair<Long, Brick>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,  @NonNull RecyclerViewOnItemClickListener recyclerViewOnItemClickListener) {
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
         mDragOnLongPress = dragOnLongPress;
+        this.recyclerViewOnItemClickListener = recyclerViewOnItemClickListener;
         setItemList(list);
     }
 
@@ -39,12 +43,23 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         Brick iline= mItemList.get(position).second;
+
+
         holder.mText.setText(iline.getName());
         holder.itemView.setTag(mItemList.get(position));
         if(iline.getType()==0)
+        {
             holder.mLayout.setBackgroundResource(R.drawable.input_selector);
+
+            //holder.mText.setTextColor(0xffffff);
+        }
         else
+        {
             holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
+            //holder.mText.setTextColor(0x000000);
+        }
+
+
 
 
     }
@@ -66,12 +81,15 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
 
         @Override
         public void onItemClicked(View view) {
-            Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+            recyclerViewOnItemClickListener.onClick(view, getAdapterPosition());
         }
 
         @Override
         public boolean onItemLongClicked(View view) {
-            Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
+
+            recyclerViewOnItemClickListener.onClick(view, getAdapterPosition());
             return true;
         }
     }

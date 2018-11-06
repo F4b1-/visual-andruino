@@ -13,32 +13,43 @@ import it.unibz.mobile.visualandruino.models.Value;
 public class BrickExecutor {
 
 
-    void executeBlocks(ArrayList<Brick> bricks) {
-        Brick currentBrick = bricks.get(0);
 
-
+    public void executeBrick(Brick currentBrick, String pinNumber)
+    {
         if(currentBrick.getBrickType() == BrickTypes.ARDUINO_COMMAND) {
             String command = "";
             command += ((ArduinoCommandBrick) currentBrick).getCommandId();
+            command += " "+pinNumber+ " ";
 
             for(Value value : currentBrick.getParameters()) {
                 command += value.getValue();
             }
-
+            command += ";";
             BrickCommunicator.getInstance().sendCommand(command);
 
         } else if(currentBrick.getBrickType() == BrickTypes.INTERNAL) {
             // Execute subBricks recursively
-            executeBlocks(((InternalBrick) currentBrick).getSubBricks());
+            executeBlocks(((InternalBrick) currentBrick).getSubBricks() , pinNumber);
 
             // TODO Execute
         } else if(currentBrick.getBrickType() == BrickTypes.ANDROID) {
             //TODO Execute Android commands
         }
+    }
 
+    public void executeBlocks(ArrayList<Brick> bricks, String pinNumber ) {
+        Brick currentBrick = bricks.get(0);
+
+        executeBrick(currentBrick, pinNumber);
 
         //remove at the end and move on
+
         bricks.remove(0);
-        executeBlocks(bricks);
+        if(bricks.size()>0)
+        {
+            executeBlocks(bricks, pinNumber);
+        }
+
+
     }
 }
