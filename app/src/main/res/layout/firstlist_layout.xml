@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
 
 
@@ -11,31 +11,59 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <EditText
-            android:id="@+id/pinNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
 
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginEnd="11dp"
-            android:layout_marginRight="11dp"
-            android:hint="Pin Number"
-            android:inputType="text" />
 
-        <TextView
-            android:id="@+id/resultView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/analogReadButton"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="32dp"
-            android:text="readResult" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
+
+            <EditText
+                android:id="@+id/pinNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="11dp"
+                android:layout_marginRight="11dp"
+                android:hint="Pin Number"
+                android:inputType="text" />
+
+
+            <Button
+                android:id="@+id/digitalHigh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:text="RUN" />
+
+
+            <Button
+                android:id="@+id/digitalOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:text="Test" />
+
+
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
 
 
 
@@ -47,26 +75,14 @@
                 android:layout_centerVertical="true"
                 android:text="analogRead 41" />
 
-
-
-            <Button
-                android:id="@+id/digitalHigh"
+            <TextView
+                android:id="@+id/resultView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_above="@+id/analogReadButton"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="15dp"
-                android:text="digitalWrite->HIGH" />
-
-            <Button
-                android:id="@+id/digitalLow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/digitalHigh"
-                android:layout_alignEnd="@+id/digitalHigh"
-                android:layout_alignRight="@+id/digitalHigh"
-                android:layout_marginBottom="13dp"
-                android:text="digitalWrite->LOW" />
+                android:layout_marginBottom="32dp"
+                android:text="readResult" />
 
 
 
@@ -93,5 +109,12 @@
 
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 
 </FrameLayout>

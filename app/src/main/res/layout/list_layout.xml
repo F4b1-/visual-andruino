@@ -13,10 +13,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
 
     <it.unibz.mobile.visualandruino.MySwipeRefreshLayout
@@ -36,4 +36,11 @@
                 android:layout_height="match_parent"/>
         </FrameLayout>
     </it.unibz.mobile.visualandruino.MySwipeRefreshLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_add_white_24dp" />
 </FrameLayout>

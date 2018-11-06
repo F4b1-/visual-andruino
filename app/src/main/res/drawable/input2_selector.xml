@@ -11,8 +11,8 @@
             <gradient
                 android:angle="45"
 
-                android:endColor="@color/endColor"
-                android:startColor="@color/startColor"
+                android:endColor="@color/colorInput"
+                android:startColor="@color/colorInput"
                 android:type="linear" />
 
             <!--If your shape requires only one solid color-->

@@ -53,7 +53,7 @@
         android:id="@id/item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/input_selector"
+        android:background="@drawable/input2_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="16dp">
@@ -64,11 +64,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:src="@drawable/ic_reorder_white_24dp"/>
+            android:src="@drawable/ic_reorder_black_24dp"/>
 
         <TextView
             android:id="@+id/text"
-            android:textColor="@color/textWhite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
