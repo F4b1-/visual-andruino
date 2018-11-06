@@ -6,7 +6,7 @@ import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
-import it.unibz.mobile.visualandruino.models.Value;
+import it.unibz.mobile.visualandruino.models.Parameter;
 
 
 //Builder Class
@@ -21,7 +21,7 @@ public class BrickExecutor {
             command += ((ArduinoCommandBrick) currentBrick).getCommandId();
             command += " "+pinNumber+ " ";
 
-            for(Value value : currentBrick.getParameters()) {
+            for(Parameter value : currentBrick.getParameters()) {
                 command += value.getValue();
             }
             command += ";";

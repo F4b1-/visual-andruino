@@ -29,7 +29,8 @@ import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.Value;
+import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
@@ -89,10 +90,10 @@ public class ListFragment extends Fragment {
 
         for (int i = 0; i < 6; i++) {
 
-            Value val=new Value();
+            Parameter val=new Parameter();
 
             val.setValue(String.valueOf((i%2)));
-            ArrayList<Value> arr=new ArrayList<Value>();
+            ArrayList<Parameter> arr=new ArrayList<Parameter>();
             arr.add(val );
             String name="ON";
             if(i%2==0)
@@ -184,10 +185,10 @@ public class ListFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Value val=new Value();
+                Parameter val=new Parameter();
 
                 val.setValue(String.valueOf("1"));
-                ArrayList<Value> arr=new ArrayList<Value>();
+                ArrayList<Parameter> arr=new ArrayList<Parameter>();
                 arr.add(val );
 
 
