@@ -67,6 +67,7 @@ public class BrickPersisterTest {
         String jsonArr = "[{'commandId':3,'name':'test','brickType':'ARDUINO_COMMAND','type':2,'parameters':[{'value':'2'}]},{'commandId':4,'name':'test2','brickType':'ARDUINO_COMMAND','type':3,'parameters':[{'value':'3'}]}]";
 
         ArrayList<Brick> loadedArr = BrickPersister.loadSketchFromJson(jsonArr);
+
         assertThat(((ArduinoCommandBrick)bricks.get(0))).isEqualToComparingFieldByFieldRecursively(loadedArr.get(0));
         assertThat(((ArduinoCommandBrick)bricks.get(1))).isEqualToComparingFieldByFieldRecursively(loadedArr.get(1));
 
