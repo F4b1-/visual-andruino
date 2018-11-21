@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -15,10 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -30,8 +26,6 @@ import java.util.ArrayList;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
 
@@ -43,6 +37,7 @@ public class ListFragment extends Fragment {
     private MySwipeRefreshLayout mRefreshLayout;
     private View mainView;
     BrickExecutor brickExecutor;
+    ItemBrickAdapter listAdapter;
 
     public static ListFragment newInstance() {
         return new ListFragment();
@@ -56,6 +51,22 @@ public class ListFragment extends Fragment {
             arrBricks.add(mItemArray.get(i).second);
         }
         return arrBricks;
+    }
+    public Brick getBrick(int i)
+    {
+        ArrayList<Parameter> arr=new ArrayList<Parameter>();
+        Parameter val=new Parameter("Output",String.valueOf((i%2)));
+        Parameter valPin=new Parameter("PinNumber","22");
+        arr.add(val );
+        arr.add(valPin );
+
+        String name="ON";
+        if(i%2==0)
+        {
+            name="OFF";
+        }
+
+        return new ArduinoCommandBrick(name, i%2 , arr, 3);
     }
 
     @Override
@@ -88,21 +99,10 @@ public class ListFragment extends Fragment {
 
         mItemArray = new ArrayList<>();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 3; i++) {
 
-            Parameter val=new Parameter();
 
-            val.setValue(String.valueOf((i%2)));
-            ArrayList<Parameter> arr=new ArrayList<Parameter>();
-            arr.add(val );
-            String name="ON";
-            if(i%2==0)
-            {
-                name="OFF";
-            }
-
-            Brick item= new ArduinoCommandBrick(name, i%2 , arr, 3);
-            mItemArray.add( new Pair<>((long) i,item));
+            mItemArray.add( new Pair<>((long) i,getBrick(i)));
         }
 
         mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
@@ -148,7 +148,7 @@ public class ListFragment extends Fragment {
         brickCommunicator.initiateBluetooth(this);
 
 
-
+/*
         final Button buttonHigh = mainView.findViewById(R.id.digitalHigh);
         buttonHigh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -178,22 +178,15 @@ public class ListFragment extends Fragment {
                 //mSmoothBluetooth.send(testCommand, false);
                 brickCommunicator.sendCommand(testCommand);
             }
-        });
+        });*/
 
         FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Parameter val=new Parameter();
-
-                val.setValue(String.valueOf("1"));
-                ArrayList<Parameter> arr=new ArrayList<Parameter>();
-                arr.add(val );
-
-
-                Brick item= new ArduinoCommandBrick("ON", 1 , arr, 3);
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,item));
+                mItemArray.add( new Pair<>((long) mItemArray.size(),getBrick(mItemArray.size())));
+                listAdapter.notifyDataSetChanged();
 
             }
         });
@@ -212,21 +205,24 @@ public class ListFragment extends Fragment {
     private void setupListRecyclerView() {
         mDragListView.setLayoutManager(new LinearLayoutManager(getContext()));
         brickExecutor= new BrickExecutor();
-        ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false,
+
+
+         listAdapter = new ItemBrickAdapter(getContext(), mItemArray, R.layout.list_item_parameters, R.id.image, false,
 
                 new RecyclerViewOnItemClickListener() {
                     @Override
                     public void onClick(View view, int position) {
 
-                        EditText edit = (EditText)mainView.findViewById(R.id.pinNumber);
+                        /*EditText edit = (EditText)mainView.findViewById(R.id.pinNumber);
                         String pinNumber = edit.getText().toString();
-                        //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();
-                        brickExecutor.executeBrick(mItemArray.get(position).second, pinNumber);
+                        //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();*/
+
+                        brickExecutor.executeBrick(mItemArray.get(position).second, mItemArray.get(position).second.getParameters().get(0).getValue());
                     }
                 });
         mDragListView.setAdapter(listAdapter, true);
         mDragListView.setCanDragHorizontally(false);
-        mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item));
+        mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item_parameters));
 
 
 
@@ -234,8 +230,8 @@ public class ListFragment extends Fragment {
     }
 
     public void updateReturnView(String answer) {
-        TextView resultView = getView().findViewById(R.id.resultView);
-        resultView.setText(answer);
+        /*TextView resultView = getView().findViewById(R.id.resultView);
+        resultView.setText(answer);*/
     }
 
 

@@ -1,5 +1,6 @@
 package it.unibz.mobile.visualandruino.utils;
 
+import android.widget.Toast;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
@@ -16,6 +17,7 @@ public class BrickExecutor {
 
     public void executeBrick(Brick currentBrick, String pinNumber)
     {
+
         if(currentBrick.getBrickType() == BrickTypes.ARDUINO_COMMAND) {
             String command = "";
             command += ((ArduinoCommandBrick) currentBrick).getCommandId();
@@ -26,6 +28,8 @@ public class BrickExecutor {
             }
             command += ";";
             BrickCommunicator.getInstance().sendCommand(command);
+
+
 
         } else if(currentBrick.getBrickType() == BrickTypes.INTERNAL) {
             // Execute subBricks recursively

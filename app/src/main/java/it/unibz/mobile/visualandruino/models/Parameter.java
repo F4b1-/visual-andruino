@@ -5,6 +5,11 @@ public class Parameter {
     private String parameterName;
     private String value;
 
+    public Parameter(String name, String val)
+    {
+        parameterName=name;
+        value=val;
+    }
     public String getValue() {
         return value;
     }

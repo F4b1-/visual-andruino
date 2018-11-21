@@ -18,6 +18,7 @@ import java.util.List;
 
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
+import it.unibz.mobile.visualandruino.dummy.DummyContent;
 
 
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemParameterFragment.OnListFragmentInteractionListener {
 
 
     ViewGroup _root;
@@ -41,20 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         showFragment(ListFragment.newInstance());
-/*
-        _root = (ViewGroup)findViewById(R.id.container);
-
-        ImageView  _view = (ImageView) findViewById(R.id.rectimage);
-*/
-
-        /*RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(400, 200);
-        layoutParams.leftMargin = 50;
-        layoutParams.topMargin = 50;
-        layoutParams.bottomMargin = -250;
-        layoutParams.rightMargin = -250;
-        _view.setLayoutParams(layoutParams);*/
-
-        //_view.setOnTouchListener(this);
 
 
 
@@ -63,39 +50,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showFragment(Fragment fragment) {
+    public void showFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment, "fragment").commit();
     }
 
+    public void onListFragmentInteraction(DummyContent.DummyItem uri){
+        //you can leave it empty
+    }
 
 
-    /*
-    public boolean onTouch(View view, MotionEvent event) {
-        final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                _xDelta = X - lParams.leftMargin;
-                _yDelta = Y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                layoutParams.leftMargin = X - _xDelta;
-                layoutParams.topMargin = Y - _yDelta;
-                layoutParams.rightMargin = -250;
-                layoutParams.bottomMargin = -250;
-                view.setLayoutParams(layoutParams);
-                break;
-        }
-        _root.invalidate();
-        return true;
-    }*/
+
 }
