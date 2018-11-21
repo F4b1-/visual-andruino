@@ -62,6 +62,10 @@ public class BrickExecutor {
     }
 
     public void executeInternal(InternalBrick currentBrick, String pinNumber) {
+        executeInternal(currentBrick, pinNumber, this);
+    }
+
+    public void executeInternal(InternalBrick currentBrick, String pinNumber, BrickExecutor brickExecutor) {
         /**
          * *** FOR ***
          */
@@ -70,15 +74,16 @@ public class BrickExecutor {
             ComparatorTypes comparator = ComparatorTypes.valueOf(currentBrick.getParameters().get(1).getValue());
             int forLoopLimiter = Integer.parseInt(currentBrick.getParameters().get(2).getValue());
 
-            if(comparator == ComparatorTypes.GREATER) {
+
+            if(comparator == ComparatorTypes.GREATER && referenceValue < forLoopLimiter) {
                 for(int i = referenceValue; i<forLoopLimiter; i++) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                 }
             }
 
-            if(comparator == ComparatorTypes.LESS) {
-                for(int i= referenceValue; i>forLoopLimiter; i++) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+            if(comparator == ComparatorTypes.LESS && referenceValue > forLoopLimiter) {
+                for(int i= referenceValue; i>forLoopLimiter; i--) {
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                 }
             }
         }
@@ -93,28 +98,28 @@ public class BrickExecutor {
 
             if(comparator == ComparatorTypes.GREATER) {
                 while (referenceValue > loopLimiter) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
-                    referenceValue++;
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    referenceValue--;
                 }
             }
 
             if(comparator == ComparatorTypes.LESS) {
                 while (referenceValue < loopLimiter) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                     referenceValue++;
                 }
             }
 
             if(comparator == ComparatorTypes.EQUALS) {
                 while (referenceValue == loopLimiter) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                     referenceValue++;
                 }
             }
 
             if(comparator == ComparatorTypes.NOTEQUALS) {
                 while (referenceValue != loopLimiter) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                     referenceValue++;
                 }
             }
@@ -131,25 +136,25 @@ public class BrickExecutor {
 
             if(comparator == ComparatorTypes.GREATER) {
                 if(referenceValue > secondValue) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                 }
             }
 
-            if(comparator == ComparatorTypes.LESS) {
+            else if(comparator == ComparatorTypes.LESS) {
                 if(referenceValue < secondValue) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                 }
             }
 
-            if(comparator == ComparatorTypes.EQUALS) {
+            else if(comparator == ComparatorTypes.EQUALS) {
                 if(referenceValue == secondValue) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                 }
             }
 
-            if(comparator != ComparatorTypes.EQUALS) {
+            else if(comparator == ComparatorTypes.NOTEQUALS) {
                 if(referenceValue != secondValue) {
-                    executeBlocks(currentBrick.getSubBricks() , pinNumber);
+                    brickExecutor.executeBlocks(currentBrick.getSubBricks() , pinNumber);
                 }
             }
 
