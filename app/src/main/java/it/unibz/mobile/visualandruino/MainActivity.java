@@ -6,32 +6,67 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
-import android.view.View;
+import android.support.v4.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import io.palaima.smoothbluetooth.Device;
-import io.palaima.smoothbluetooth.SmoothBluetooth;
+import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
+import it.unibz.mobile.visualandruino.utils.BrickBuilder;
+import it.unibz.mobile.visualandruino.utils.BrickPersister;
 
 
 import android.support.v7.app.AppCompatActivity;
-
-
+import android.widget.EditText;
 
 
 public class MainActivity extends AppCompatActivity {
 
 
     ViewGroup _root;
+    ListFragment listFragment;
+
     //private int _xDelta;
     //private int _yDelta;
 
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.load_sketch_button) {
+            EditText edit = (EditText)listFragment.getMainView().findViewById(R.id.fileName);
+            String fileName = edit.getText().toString();
+            listFragment.setmItemArray(getCertainSketch(fileName));
+        }
+
+        if (id == R.id.save_sketch_button) {
+            EditText edit = (EditText)listFragment.getMainView().findViewById(R.id.fileName);
+            String fileName = edit.getText().toString();
+
+            ArrayList<Brick> brickList = new ArrayList<>();
+
+            for(Pair<Long, Brick> pair : listFragment.getmItemArray()) {
+                brickList.add(pair.second);
+            }
+
+            BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(brickList));
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @Override
@@ -64,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showFragment(Fragment fragment) {
+        listFragment = (ListFragment) fragment;
+
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment, "fragment").commit();
     }
@@ -98,4 +136,19 @@ public class MainActivity extends AppCompatActivity {
         _root.invalidate();
         return true;
     }*/
+
+    private ArrayList<Pair<Long, Brick>> getCertainSketch(String fileName) {
+        ArrayList<Pair<Long, Brick>> brickPairs = new ArrayList<Pair<Long, Brick>>();
+
+        String standardJSON = BrickPersister.readJsonFile(getApplicationContext(), Constants.SKETCHES_FOLDER,
+                fileName);
+        ArrayList<Brick> brickList = BrickPersister.loadSketchFromJson(standardJSON);
+
+
+        for(Brick item : brickList) {
+            brickPairs.add(new Pair<>((long) brickPairs.size(),item));
+        }
+
+        return brickPairs;
+    }
 }

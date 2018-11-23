@@ -1,6 +1,7 @@
 package it.unibz.mobile.visualandruino.utils;
 
 import android.content.Context;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -15,8 +16,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import it.unibz.mobile.visualandruino.Constants;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
 
@@ -97,6 +101,64 @@ public class BrickPersister {
         return sb.toString();
 
     }
+
+    private static boolean fileExist(Context context, String folderName, String fname){
+        File file = new File(context.getFilesDir() + File.separator + folderName + File.separator +  fname);
+        boolean fileExists = file.exists();
+        return fileExists;
+
+    }
+
+    public static boolean saveStandardSketch(Context context) {
+
+        if(fileExist(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH)) {
+            return false;
+        }
+
+        ArrayList<Brick> bricks = new ArrayList<Brick>();
+
+        /**
+         * DigitalWrite
+         */
+        Parameter val1=new Parameter();
+        val1.setParameterName("PinNumber");
+        val1.setValue(String.valueOf(("5")));
+        Parameter val2=new Parameter();
+        ArrayList<String> allowedValues = new ArrayList<String>();
+        allowedValues.add("HIGH");
+        allowedValues.add("LOW");
+        val2.setAllowedValues(allowedValues);
+        val2.setParameterName("WriteValue");
+        val2.setValue(String.valueOf(("HIGH")));
+
+        ArrayList<Parameter> arr=new ArrayList<Parameter>();
+        arr.add(val1);
+        arr.add(val2);
+        BrickBuilder bb = new BrickBuilder("DigitalWrite", BrickTypes.ARDUINO_COMMAND , arr);
+        bb.setCommandId(3);
+        Brick item= bb.buildBrick();
+
+        /**
+         * AnalogWrite
+         */
+        Parameter analogVal2=new Parameter();
+        analogVal2.setParameterName("analogWrite");
+        analogVal2.setValue(String.valueOf((0)));
+        ArrayList<Parameter> arrAnalog=new ArrayList<Parameter>();
+        arrAnalog.add(val1);
+        arrAnalog.add(analogVal2);
+        bb = new BrickBuilder("AnalogWrite", BrickTypes.ARDUINO_COMMAND , arrAnalog);
+        bb.setCommandId(2);
+        Brick item2= bb.buildBrick();
+
+        bricks.add(item);
+        bricks.add(item2);
+
+        writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(bricks));
+
+        return true;
+    }
+
 
 
 }

@@ -47,7 +47,7 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
 
         holder.mText.setText(iline.getName());
         holder.itemView.setTag(mItemList.get(position));
-        if(iline.getType()==0)
+        /*if(iline.getType()==0)
         {
             holder.mLayout.setBackgroundResource(R.drawable.input_selector);
 
@@ -57,7 +57,7 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
         {
             holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
             //holder.mText.setTextColor(0x000000);
-        }
+        }*/
 
 
 

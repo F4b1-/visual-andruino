@@ -29,7 +29,7 @@ public class BrickExecutorTest {
         /*Parameter val=new Parameter();
         val.setValue(String.valueOf((2)));
         arr.add(val );*/
-        BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, 2 , arr);
+        BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
         //bbSub.setCommandId(3);
         Brick itemSub= bbSub.buildBrick();
 
@@ -50,7 +50,7 @@ public class BrickExecutorTest {
         valInternalRef.setValue(String.valueOf((3)));
         arrInternal.add(valInternalRef);
 
-        BrickBuilder bb = new BrickBuilder("test", BrickTypes.INTERNAL, 2 , arrInternal);
+        BrickBuilder bb = new BrickBuilder("test", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.IF);
         bb.setSubBricks(subList);
 
@@ -71,7 +71,7 @@ public class BrickExecutorTest {
         /*Parameter val=new Parameter();
         val.setValue(String.valueOf((2)));
         arr.add(val );*/
-        BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, 2 , arr);
+        BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
         //bbSub.setCommandId(3);
         Brick itemSub= bbSub.buildBrick();
 
@@ -92,7 +92,7 @@ public class BrickExecutorTest {
         valInternalRef.setValue(String.valueOf((2)));
         arrInternal.add(valInternalRef);
 
-        BrickBuilder bb = new BrickBuilder("test", BrickTypes.INTERNAL, 2 , arrInternal);
+        BrickBuilder bb = new BrickBuilder("test", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.IF);
         bb.setSubBricks(subList);
 
@@ -112,7 +112,7 @@ public class BrickExecutorTest {
 
         ArrayList<Parameter> arr=new ArrayList<Parameter>();
 
-        BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, 2 , arr);
+        BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
 
         Brick itemSub= bbSub.buildBrick();
 
@@ -133,7 +133,7 @@ public class BrickExecutorTest {
         valInternalRef.setValue(String.valueOf((3)));
         arrInternal.add(valInternalRef);
 
-        BrickBuilder bb = new BrickBuilder("test", BrickTypes.INTERNAL, 2 , arrInternal);
+        BrickBuilder bb = new BrickBuilder("test", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.FOR);
         bb.setSubBricks(subList);
 
