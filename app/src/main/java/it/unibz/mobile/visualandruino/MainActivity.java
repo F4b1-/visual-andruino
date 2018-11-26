@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_color)));
+        BrickPersister.saveStandardSketch(getApplicationContext());
 
     }
 

@@ -18,4 +18,9 @@
         android:title="Load"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/run_sketch_button"
+        android:title="Run"
+        app:showAsAction="always"
+        />
 </menu>

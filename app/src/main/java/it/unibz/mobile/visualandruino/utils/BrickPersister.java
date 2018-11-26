@@ -20,8 +20,11 @@ import java.util.ArrayList;
 import it.unibz.mobile.visualandruino.Constants;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
+import it.unibz.mobile.visualandruino.models.enums.ComparatorTypes;
+import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 
 
 public class BrickPersister {
@@ -110,10 +113,10 @@ public class BrickPersister {
     }
 
     public static boolean saveStandardSketch(Context context) {
-
+        /*
         if(fileExist(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH)) {
             return false;
-        }
+        }*/
 
         ArrayList<Brick> bricks = new ArrayList<Brick>();
 
@@ -151,14 +154,54 @@ public class BrickPersister {
         bb.setCommandId(2);
         Brick item2= bb.buildBrick();
 
+
+        /**
+         * adding bricks
+         */
         bricks.add(item);
         bricks.add(item2);
+        InternalBrick ifBrick = createIfBrick();
+        if(ifBrick != null) {
+            bricks.add(ifBrick);
+        }
+
 
         writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(bricks));
 
         return true;
     }
 
+private static InternalBrick createIfBrick() {
+    /**
+     * If
+     */
+    /*ArrayList<Parameter> arr=new ArrayList<Parameter>();
+    BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
+    Brick itemSub= bbSub.buildBrick();
 
+    ArrayList<Brick> subList=new ArrayList<Brick>();
+    subList.add(itemSub);*/
+
+
+    ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+    Parameter valInternal=new Parameter();
+    valInternal.setValue(String.valueOf((2)));
+    arrInternal.add(valInternal);
+
+    Parameter valInternalComp=new Parameter();
+    valInternalComp.setValue(ComparatorTypes.GREATER.toString());
+    arrInternal.add(valInternalComp);
+
+    Parameter valInternalRef=new Parameter();
+    valInternalRef.setValue(String.valueOf((3)));
+    arrInternal.add(valInternalRef);
+
+    BrickBuilder bb = new BrickBuilder("If", BrickTypes.INTERNAL, arrInternal);
+    bb.setSubType(InternalSubTypes.IF);
+    //bb.setSubBricks(subList);
+
+    InternalBrick item= (InternalBrick) bb.buildBrick();
+    return item;
+}
 
 }
