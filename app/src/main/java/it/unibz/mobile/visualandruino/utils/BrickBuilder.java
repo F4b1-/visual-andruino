@@ -16,7 +16,7 @@ public class BrickBuilder{
     // required parameters
     private String name;
     private BrickTypes brickType;
-    private int type;
+
     private ArrayList<Parameter> parameters;
 
     // optional parameters
@@ -24,10 +24,10 @@ public class BrickBuilder{
     private InternalSubTypes subType;
     private ArrayList<Brick> subBricks;
 
-    public BrickBuilder(String name, BrickTypes brickType, int type, ArrayList<Parameter> parameters){
+    public BrickBuilder(String name, BrickTypes brickType, ArrayList<Parameter> parameters){
         this.name = name;
         this.brickType = brickType;
-        this.type = type;
+
         this.parameters = parameters;
     }
 
@@ -52,10 +52,10 @@ public class BrickBuilder{
             return null;
         }
         if(this.brickType == BrickTypes.ARDUINO_COMMAND){
-            return new ArduinoCommandBrick(this.name, this.type,parameters, this.commandId);
+            return new ArduinoCommandBrick(this.name,parameters, this.commandId);
 
         } else if(this.brickType == BrickTypes.INTERNAL){
-            return new InternalBrick(this.name, this.type, parameters, this.subBricks, this.subType);
+            return new InternalBrick(this.name, parameters, this.subBricks, this.subType);
 
         } else if(this.brickType == BrickTypes.ANDROID){
             //TODO

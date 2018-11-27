@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -30,8 +28,6 @@ import java.util.ArrayList;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
 
@@ -88,7 +84,7 @@ public class ListFragment extends Fragment {
 
         mItemArray = new ArrayList<>();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 2; i++) {
 
             Parameter val=new Parameter();
 
@@ -101,7 +97,7 @@ public class ListFragment extends Fragment {
                 name="OFF";
             }
 
-            Brick item= new ArduinoCommandBrick(name, i%2 , arr, 3);
+            Brick item= new ArduinoCommandBrick(name, arr, 3);
             mItemArray.add( new Pair<>((long) i,item));
         }
 
@@ -152,7 +148,7 @@ public class ListFragment extends Fragment {
         final Button buttonHigh = mainView.findViewById(R.id.digitalHigh);
         buttonHigh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText edit = (EditText)mainView.findViewById(R.id.pinNumber);
+                EditText edit = (EditText)mainView.findViewById(R.id.fileName);
                 String pinNumber = edit.getText().toString();
 
 
@@ -192,11 +188,14 @@ public class ListFragment extends Fragment {
                 arr.add(val );
 
 
-                Brick item= new ArduinoCommandBrick("ON", 1 , arr, 3);
+                Brick item= new ArduinoCommandBrick("ON", arr, 3);
                 mItemArray.add( new Pair<>((long) mItemArray.size()-1,item));
 
             }
         });
+
+        EditText edit = (EditText)mainView.findViewById(R.id.fileName);
+        edit.setText(Constants.STANDARD_SKETCH);
 
         return mainView;
     }
@@ -218,7 +217,7 @@ public class ListFragment extends Fragment {
                     @Override
                     public void onClick(View view, int position) {
 
-                        EditText edit = (EditText)mainView.findViewById(R.id.pinNumber);
+                        EditText edit = (EditText)mainView.findViewById(R.id.fileName);
                         String pinNumber = edit.getText().toString();
                         //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();
                         brickExecutor.executeBrick(mItemArray.get(position).second, pinNumber);
@@ -251,5 +250,21 @@ public class ListFragment extends Fragment {
             ((TextView) dragView.findViewById(R.id.text)).setText(text);
             dragView.findViewById(R.id.item_layout).setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
         }
+    }
+
+    public void setmItemArray(ArrayList<Pair<Long, Brick>> mItemArray) {
+
+        this.mItemArray.clear();
+        this.mItemArray.addAll(mItemArray);
+        mDragListView.getAdapter().notifyDataSetChanged();
+
+    }
+
+    public ArrayList<Pair<Long, Brick>> getmItemArray() {
+        return mItemArray;
+    }
+
+    public View getMainView() {
+        return mainView;
     }
 }
