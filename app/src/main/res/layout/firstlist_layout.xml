@@ -14,6 +14,83 @@
         android:orientation="vertical">
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <EditText
+                android:id="@+id/fileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="20dp"
+                android:layout_marginEnd="11dp"
+                android:layout_marginRight="11dp"
+                android:hint="File Name"
+                android:inputType="text" />
+
+
+            <Button
+                android:id="@+id/digitalHigh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:visibility="invisible"
+                android:text="RUN" />
+
+
+            <Button
+                android:id="@+id/digitalOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="15dp"
+                android:visibility="invisible"
+                android:text="Test" />
+
+
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+
+
+
+            <Button
+                android:id="@+id/analogReadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="analogRead 41" />
+
+            <TextView
+                android:id="@+id/resultView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/analogReadButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dp"
+                android:text="readResult" />
+
+
+
+        </LinearLayout>
+
+
 
         <it.unibz.mobile.visualandruino.MySwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"

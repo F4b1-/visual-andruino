@@ -7,4 +7,20 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/save_sketch_button"
+        android:title="Save"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/load_sketch_button"
+        android:title="Load"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/run_sketch_button"
+        android:title="Run"
+        app:showAsAction="always"
+        />
 </menu>
