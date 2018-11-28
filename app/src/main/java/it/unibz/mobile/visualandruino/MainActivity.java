@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
 
 
-    private void showFragment(Fragment fragment) {
+    public void showFragment(Fragment fragment) {
         listFragment = (ListFragment) fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment, "fragment").commit();

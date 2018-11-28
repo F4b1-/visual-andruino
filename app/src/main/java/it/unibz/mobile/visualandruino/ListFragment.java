@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.EditText;
 
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
@@ -66,7 +67,7 @@ public class ListFragment extends Fragment {
             name="OFF";
         }
 
-        return new ArduinoCommandBrick(name, i%2 , arr, 3);
+        return new ArduinoCommandBrick(name, arr,3);
     }
 
     @Override
@@ -101,8 +102,13 @@ public class ListFragment extends Fragment {
 
         for (int i = 0; i < 2; i++) {
 
-            Parameter val=new Parameter();
-            Brick item= new ArduinoCommandBrick(name, arr, 3);
+            ArrayList<Parameter> arr=new ArrayList<Parameter>();
+            Parameter val=new Parameter("Output",String.valueOf((i%2)));
+            Parameter valPin=new Parameter("PinNumber","22");
+            arr.add(val );
+            arr.add(valPin );
+
+            Brick item= new ArduinoCommandBrick("ComandB", arr, 3);
             mItemArray.add( new Pair<>((long) i,item));
 
         }
@@ -187,15 +193,17 @@ public class ListFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Parameter val=new Parameter();
+                Parameter val=new Parameter("new","value");
 
                 val.setValue(String.valueOf("1"));
                 ArrayList<Parameter> arr=new ArrayList<Parameter>();
                 arr.add(val );
 
 
-                Brick item= new ArduinoCommandBrick("ON", arr, 3);
+                Brick item= new ArduinoCommandBrick("DigitalWrite", arr, 3);
                 mItemArray.add( new Pair<>((long) mItemArray.size()-1,item));
+
+                mDragListView.getAdapter().notifyDataSetChanged();
 
 
             }

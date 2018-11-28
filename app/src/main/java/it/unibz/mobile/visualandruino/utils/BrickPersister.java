@@ -123,16 +123,15 @@ public class BrickPersister {
         /**
          * DigitalWrite
          */
-        Parameter val1=new Parameter();
-        val1.setParameterName("PinNumber");
-        val1.setValue(String.valueOf(("5")));
-        Parameter val2=new Parameter();
+        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
+
+        Parameter val2=new Parameter("WriteValue",String.valueOf(("HIGH")));
         ArrayList<String> allowedValues = new ArrayList<String>();
         allowedValues.add("HIGH");
         allowedValues.add("LOW");
         val2.setAllowedValues(allowedValues);
         val2.setParameterName("WriteValue");
-        val2.setValue(String.valueOf(("HIGH")));
+
 
         ArrayList<Parameter> arr=new ArrayList<Parameter>();
         arr.add(val1);
@@ -144,9 +143,8 @@ public class BrickPersister {
         /**
          * AnalogWrite
          */
-        Parameter analogVal2=new Parameter();
-        analogVal2.setParameterName("analogWrite");
-        analogVal2.setValue(String.valueOf((0)));
+        Parameter analogVal2=new Parameter("analogWrite",String.valueOf((0)));
+
         ArrayList<Parameter> arrAnalog=new ArrayList<Parameter>();
         arrAnalog.add(val1);
         arrAnalog.add(analogVal2);
@@ -184,16 +182,14 @@ private static InternalBrick createIfBrick() {
 
 
     ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
-    Parameter valInternal=new Parameter();
-    valInternal.setValue(String.valueOf((2)));
+    Parameter valInternal=new Parameter("Internal",String.valueOf((2)));
     arrInternal.add(valInternal);
 
-    Parameter valInternalComp=new Parameter();
-    valInternalComp.setValue(ComparatorTypes.GREATER.toString());
+    Parameter valInternalComp=new Parameter("InternalComp",ComparatorTypes.GREATER.toString());
     arrInternal.add(valInternalComp);
 
-    Parameter valInternalRef=new Parameter();
-    valInternalRef.setValue(String.valueOf((3)));
+    Parameter valInternalRef=new Parameter("Ref",String.valueOf((3)));
+
     arrInternal.add(valInternalRef);
 
     BrickBuilder bb = new BrickBuilder("If", BrickTypes.INTERNAL, arrInternal);
