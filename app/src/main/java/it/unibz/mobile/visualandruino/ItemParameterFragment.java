@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 
 import it.unibz.mobile.visualandruino.dummy.DummyContent;
 import it.unibz.mobile.visualandruino.dummy.DummyContent.DummyItem;
+import it.unibz.mobile.visualandruino.models.Parameter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,9 +72,14 @@ public class ItemParameterFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            
+            ArrayList<Parameter> arr=new ArrayList<Parameter>();
+            Parameter val=new Parameter("Output","1");
+            Parameter valPin=new Parameter("PinNumber","22");
+            arr.add(val );
+            arr.add(valPin );
 
-            recyclerView.setAdapter(new MyItemParameterRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+            recyclerView.setAdapter(new MyItemParameterRecyclerViewAdapter(arr, mListener));
         }
         return view;
     }
@@ -107,6 +114,6 @@ public class ItemParameterFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Parameter item);
     }
 }

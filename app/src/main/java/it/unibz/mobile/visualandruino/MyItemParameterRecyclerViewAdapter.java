@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import it.unibz.mobile.visualandruino.ItemParameterFragment.OnListFragmentInteractionListener;
 import it.unibz.mobile.visualandruino.dummy.DummyContent.DummyItem;
+import it.unibz.mobile.visualandruino.models.Parameter;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ import java.util.List;
  */
 public class MyItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<MyItemParameterRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<Parameter> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemParameterRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyItemParameterRecyclerViewAdapter(List<Parameter> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,8 +37,8 @@ public class MyItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<MyI
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getParameterName());
+        holder.mContentView.setText(mValues.get(position).getValue());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +61,7 @@ public class MyItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<MyI
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Parameter mItem;
 
         public ViewHolder(View view) {
             super(view);

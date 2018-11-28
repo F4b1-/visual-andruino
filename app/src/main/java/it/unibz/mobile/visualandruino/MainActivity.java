@@ -19,6 +19,7 @@ import java.util.List;
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 import it.unibz.mobile.visualandruino.dummy.DummyContent;
+import it.unibz.mobile.visualandruino.models.Parameter;
 
 
 import android.support.v7.app.AppCompatActivity;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         transaction.replace(R.id.container, fragment, "fragment").commit();
     }
 
-    public void onListFragmentInteraction(DummyContent.DummyItem uri){
+    public void onListFragmentInteraction(Parameter uri){
         //you can leave it empty
     }
 
