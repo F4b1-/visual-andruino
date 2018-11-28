@@ -9,4 +9,12 @@ public final class Constants {
 
     public static final String STANDARD_SKETCH = "standard.json";
     public static final String SKETCHES_FOLDER = "sketches";
+
+    public static final String LOAD_TITLE = "Loading Sketch";
+    public static final String SAVE_TITLE = "Loading Sketch";
+    public static final String LOAD_ENTER_FILE = "Enter the file you want to load";
+    public static final String SAVE_ENTER_FILE = "Enter the file you want to save";
+    public static final String LOAD_BUTTON = "Load";
+    public static final String SAVE_BUTTON = "Save";
+    public static final String CANCEL_BUTTON = "Cancel";
 }

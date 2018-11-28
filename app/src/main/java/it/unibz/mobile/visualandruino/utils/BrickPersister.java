@@ -37,17 +37,20 @@ public class BrickPersister {
 
     public static ArrayList<Brick> loadSketchFromJson(String sketch) {
         Gson gson = new Gson();
-        final JsonArray data = new JsonParser().parse(sketch).getAsJsonArray();
-
         ArrayList<Brick> list = new ArrayList();
-        for (JsonElement element : data) {
-            String currentBrickType = ((JsonObject) element).get("brickType").getAsString();
-            if(currentBrickType.equals(BrickTypes.ARDUINO_COMMAND.toString())) {
-                list.add(gson.fromJson(element, ArduinoCommandBrick.class));
-            } else if(currentBrickType.equals(BrickTypes.INTERNAL.toString())) {
-                //TODO
-            } else if(currentBrickType.equals(BrickTypes.ANDROID.toString())) {
-                //TODO
+
+        if(sketch != null && !sketch.isEmpty()) {
+            final JsonArray data = new JsonParser().parse(sketch).getAsJsonArray();
+
+            for (JsonElement element : data) {
+                String currentBrickType = ((JsonObject) element).get("brickType").getAsString();
+                if(currentBrickType.equals(BrickTypes.ARDUINO_COMMAND.toString())) {
+                    list.add(gson.fromJson(element, ArduinoCommandBrick.class));
+                } else if(currentBrickType.equals(BrickTypes.INTERNAL.toString())) {
+                    //TODO
+                } else if(currentBrickType.equals(BrickTypes.ANDROID.toString())) {
+                    //TODO
+                }
             }
         }
 
