@@ -22,6 +22,7 @@ import com.woxthebox.draglistview.DragItemAdapter;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
 class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapter.ViewHolder> {
 
@@ -51,14 +52,30 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        Brick iline= mItemList.get(position).second;
+        Brick brickItem= mItemList.get(position).second;
         this.holder= holder;
 
 
 
-        //holder.mText.setText(iline.getName());
+
         holder.itemView.setTag(mItemList.get(position));
-        holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
+        holder.mText.setText(brickItem.getName());
+
+
+
+        if(brickItem.getName().equals("AnalogWrite"))
+        {
+            holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
+
+        }else if(brickItem.getName().equals("DigitalWrite"))
+
+        {
+            holder.mLayout.setBackgroundResource(R.drawable.input_selector);
+        }
+        else
+        {
+            holder.mLayout.setBackgroundResource(R.drawable.input_selector3);
+        }
 
 
 
