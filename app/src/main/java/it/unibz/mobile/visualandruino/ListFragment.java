@@ -14,8 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.woxthebox.draglistview.DragItem;
@@ -39,6 +37,7 @@ public class ListFragment extends Fragment {
     private MySwipeRefreshLayout mRefreshLayout;
     private View mainView;
     BrickExecutor brickExecutor;
+    ItemBrickAdapter listAdapter;
 
     public static ListFragment newInstance() {
         return new ListFragment();
@@ -52,6 +51,22 @@ public class ListFragment extends Fragment {
             arrBricks.add(mItemArray.get(i).second);
         }
         return arrBricks;
+    }
+    public Brick getBrick(int i)
+    {
+        ArrayList<Parameter> arr=new ArrayList<Parameter>();
+        Parameter val=new Parameter("Output",String.valueOf((i%2)));
+        Parameter valPin=new Parameter("PinNumber","22");
+        arr.add(val );
+        arr.add(valPin );
+
+        String name="ON";
+        if(i%2==0)
+        {
+            name="OFF";
+        }
+
+        return new ArduinoCommandBrick(name, i%2 , arr, 3);
     }
 
     @Override
@@ -87,18 +102,9 @@ public class ListFragment extends Fragment {
         for (int i = 0; i < 2; i++) {
 
             Parameter val=new Parameter();
-
-            val.setValue(String.valueOf((i%2)));
-            ArrayList<Parameter> arr=new ArrayList<Parameter>();
-            arr.add(val );
-            String name="ON";
-            if(i%2==0)
-            {
-                name="OFF";
-            }
-
             Brick item= new ArduinoCommandBrick(name, arr, 3);
             mItemArray.add( new Pair<>((long) i,item));
+
         }
 
         mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
@@ -144,7 +150,7 @@ public class ListFragment extends Fragment {
         brickCommunicator.initiateBluetooth(this);
 
 
-
+/*
         final Button buttonHigh = mainView.findViewById(R.id.digitalHigh);
         buttonHigh.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -174,7 +180,7 @@ public class ListFragment extends Fragment {
                 //mSmoothBluetooth.send(testCommand, false);
                 brickCommunicator.sendCommand(testCommand);
             }
-        });
+        });*/
 
         FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +196,7 @@ public class ListFragment extends Fragment {
 
                 Brick item= new ArduinoCommandBrick("ON", arr, 3);
                 mItemArray.add( new Pair<>((long) mItemArray.size()-1,item));
+
 
             }
         });
@@ -211,21 +218,25 @@ public class ListFragment extends Fragment {
     private void setupListRecyclerView() {
         mDragListView.setLayoutManager(new LinearLayoutManager(getContext()));
         brickExecutor= new BrickExecutor();
-        ItemAdapter listAdapter = new ItemAdapter(mItemArray, R.layout.list_item, R.id.image, false,
+
+
+         listAdapter = new ItemBrickAdapter(getContext(), mItemArray, R.layout.list_item_parameters, R.id.image, false,
 
                 new RecyclerViewOnItemClickListener() {
                     @Override
                     public void onClick(View view, int position) {
 
                         EditText edit = (EditText)mainView.findViewById(R.id.fileName);
+
                         String pinNumber = edit.getText().toString();
-                        //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();
-                        brickExecutor.executeBrick(mItemArray.get(position).second, pinNumber);
+                        //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();*/
+
+                        brickExecutor.executeBrick(mItemArray.get(position).second, mItemArray.get(position).second.getParameters().get(0).getValue());
                     }
                 });
         mDragListView.setAdapter(listAdapter, true);
         mDragListView.setCanDragHorizontally(false);
-        mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item));
+        mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item_parameters));
 
 
 
@@ -233,8 +244,8 @@ public class ListFragment extends Fragment {
     }
 
     public void updateReturnView(String answer) {
-        TextView resultView = getView().findViewById(R.id.resultView);
-        resultView.setText(answer);
+        /*TextView resultView = getView().findViewById(R.id.resultView);
+        resultView.setText(answer);*/
     }
 
 

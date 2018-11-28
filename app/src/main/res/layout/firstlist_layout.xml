@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
 
 
         <LinearLayout
@@ -91,6 +91,7 @@
         </LinearLayout>
 
 
+
         <it.unibz.mobile.visualandruino.MySwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="fill_parent"
@@ -112,11 +113,29 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/runButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_anchorGravity="top"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/app_color"
+        app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/app_color"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
 </FrameLayout>

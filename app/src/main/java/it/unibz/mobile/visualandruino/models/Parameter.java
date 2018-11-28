@@ -9,6 +9,11 @@ public class Parameter {
     private String value;
     ArrayList<String> allowedValues;
 
+    public Parameter(String name, String val)
+    {
+        parameterName=name;
+        value=val;
+    }
     public String getValue() {
         return value;
     }

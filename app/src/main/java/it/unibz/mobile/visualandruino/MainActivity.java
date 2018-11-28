@@ -13,18 +13,17 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.utils.BrickBuilder;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
-
-
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemParameterFragment.OnListFragmentInteractionListener {
 
 
     ViewGroup _root;
@@ -76,20 +75,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         showFragment(ListFragment.newInstance());
-/*
-        _root = (ViewGroup)findViewById(R.id.container);
-
-        ImageView  _view = (ImageView) findViewById(R.id.rectimage);
-*/
-
-        /*RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(400, 200);
-        layoutParams.leftMargin = 50;
-        layoutParams.topMargin = 50;
-        layoutParams.bottomMargin = -250;
-        layoutParams.rightMargin = -250;
-        _view.setLayoutParams(layoutParams);*/
-
-        //_view.setOnTouchListener(this);
 
 
 
@@ -99,14 +84,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     private void showFragment(Fragment fragment) {
         listFragment = (ListFragment) fragment;
-
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment, "fragment").commit();
     }
 
+    public void onListFragmentInteraction(Parameter uri){
+        //you can leave it empty
+    }
 
 
     /*
@@ -152,4 +139,5 @@ public class MainActivity extends AppCompatActivity {
 
         return brickPairs;
     }
+
 }

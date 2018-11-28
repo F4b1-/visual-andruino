@@ -7,7 +7,10 @@ import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
     private int mGrabHandleId;
     private boolean mDragOnLongPress;
     private RecyclerViewOnItemClickListener recyclerViewOnItemClickListener;
+    private  ViewHolder holder;
 
     ItemAdapter(ArrayList<Pair<Long, Brick>> list, int layoutId, int grabHandleId, boolean dragOnLongPress,  @NonNull RecyclerViewOnItemClickListener recyclerViewOnItemClickListener) {
         mLayoutId = layoutId;
@@ -43,6 +47,8 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         Brick iline= mItemList.get(position).second;
+        this.holder= holder;
+
 
 
         holder.mText.setText(iline.getName());
@@ -62,6 +68,7 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
 
 
 
+
     }
 
     @Override
@@ -72,11 +79,51 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
     class ViewHolder extends DragItemAdapter.ViewHolder {
         TextView mText;
         LinearLayout mLayout;
+        Spinner spPinNumber;
+        Spinner spOutPut;
 
         ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
             mText = (TextView) itemView.findViewById(R.id.text);
+            spPinNumber= (Spinner) itemView.findViewById(R.id.sp_dw_num_pin);
+            spOutPut= (Spinner) itemView.findViewById(R.id.sp_dw_output);
+
+
+            String[] writeOutputs = itemView.getContext().getResources().getStringArray(R.array.digital_write_Outputs);
+            String[] pinNumber = itemView.getContext().getResources().getStringArray(R.array.pinNumbers);
+
+            // Initializing an ArrayAdapter
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>( itemView.getContext(),R.layout.spinner_item,writeOutputs);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+            spOutPut.setAdapter(spinnerArrayAdapter);
+
+            // Initializing an ArrayAdapter
+            ArrayAdapter<String> spinnerPinArrayAdapter = new ArrayAdapter<String>( itemView.getContext(),R.layout.spinner_item,pinNumber);
+            spinnerPinArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+            spPinNumber.setAdapter(spinnerPinArrayAdapter);
+
             mLayout= (LinearLayout) itemView.findViewById(R.id.item_layout);
+            spOutPut.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    if(position==0)
+                    {
+                        mLayout.setBackgroundResource(R.drawable.input2_selector);
+
+                    }else
+                    {
+                        mLayout.setBackgroundResource(R.drawable.input_selector);
+                    }
+
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+
+                }
+
+            });
         }
 
         @Override
