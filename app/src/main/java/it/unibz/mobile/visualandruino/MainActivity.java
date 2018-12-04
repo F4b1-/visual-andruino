@@ -1,23 +1,21 @@
 package it.unibz.mobile.visualandruino;
 
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
 import android.support.v4.util.Pair;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
-
-
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
-import it.unibz.mobile.visualandruino.utils.BrickBuilder;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
     ViewGroup _root;
     ListFragment listFragment;
+
 
     //private int _xDelta;
     //private int _yDelta;
@@ -45,22 +44,15 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         int id = item.getItemId();
 
         if (id == R.id.load_sketch_button) {
-            EditText edit = (EditText)listFragment.getMainView().findViewById(R.id.fileName);
-            String fileName = edit.getText().toString();
-            listFragment.setmItemArray(getCertainSketch(fileName));
+            showPersistenceDialog(MainActivity.this, true);
+
         }
 
         if (id == R.id.save_sketch_button) {
             EditText edit = (EditText)listFragment.getMainView().findViewById(R.id.fileName);
             String fileName = edit.getText().toString();
+            showPersistenceDialog(MainActivity.this, false);
 
-            ArrayList<Brick> brickList = new ArrayList<>();
-
-            for(Pair<Long, Brick> pair : listFragment.getmItemArray()) {
-                brickList.add(pair.second);
-            }
-
-            BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(brickList));
 
         }
 
@@ -138,6 +130,50 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         }
 
         return brickPairs;
+    }
+
+    private void showPersistenceDialog(Context c, final boolean load) {
+        String title;
+        String message;
+        String positiveButtonText;
+
+        if(load) {
+            title = Constants.LOAD_TITLE;
+            message = Constants.LOAD_ENTER_FILE;
+            positiveButtonText = Constants.LOAD_BUTTON;
+        } else {
+            title = Constants.SAVE_TITLE;
+            message = Constants.SAVE_ENTER_FILE;
+            positiveButtonText = Constants.SAVE_BUTTON;
+        }
+
+        final EditText taskEditText = new EditText(c);
+        taskEditText.setText(Constants.STANDARD_SKETCH);
+        AlertDialog dialog = new AlertDialog.Builder(c)
+                .setTitle(title)
+                .setMessage(message)
+                .setView(taskEditText)
+                .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String fileName = String.valueOf(taskEditText.getText());
+                        if(load) {
+                            listFragment.setmItemArray(getCertainSketch(fileName));
+                        } else {
+                            ArrayList<Brick> brickList = new ArrayList<>();
+
+                            for(Pair<Long, Brick> pair : listFragment.getmItemArray()) {
+                                brickList.add(pair.second);
+                            }
+
+                            BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(brickList));
+                        }
+
+                    }
+                })
+                .setNegativeButton(Constants.CANCEL_BUTTON, null)
+                .create();
+        dialog.show();
     }
 
 }
