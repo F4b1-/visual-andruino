@@ -9,6 +9,7 @@ public class InternalBrick extends Brick {
     private ArrayList<Brick> subBricks;
     private InternalSubTypes subType;
 
+
     public InternalBrick(String name, ArrayList<Parameter> parameters, ArrayList<Brick> subBricks, InternalSubTypes subType) {
         super(name, BrickTypes.ARDUINO_COMMAND, parameters);
         this.subBricks = subBricks;
