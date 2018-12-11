@@ -3,6 +3,9 @@ package it.unibz.mobile.visualandruino;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -14,21 +17,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.EditText;
-
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
-
 import java.util.ArrayList;
-
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
+import it.unibz.mobile.visualandruino.utils.BrickHelper;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
 
 public class ListFragment extends Fragment {
@@ -40,6 +43,10 @@ public class ListFragment extends Fragment {
     private View mainView;
     BrickExecutor brickExecutor;
     ItemBrickAdapter listAdapter;
+    ProgressBar progressBarRun;
+    Handler progressHandler = new Handler();
+    int currentBrick=0;
+    int progressStatusCounter = 0;
 
     public ListFragment()
     {
@@ -103,22 +110,6 @@ public class ListFragment extends Fragment {
             }
         });
 
-
-/*
-        for (int i = 0; i < 2; i++) {
-
-            ArrayList<Parameter> arr=new ArrayList<Parameter>();
-            Parameter val=new Parameter("Output",String.valueOf((i%2)));
-            Parameter valPin=new Parameter("PinNumber","22");
-            arr.add(val );
-            arr.add(valPin );
-
-            Brick item= new ArduinoCommandBrick("ComandB", arr, 3);
-            mItemArray.add( new Pair<>((long) i,item));
-
-        }
-        */
-
         mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.app_color));
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -180,13 +171,20 @@ public class ListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createIfBrick()));
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createEndIfBrick()));
                 mDragListView.getAdapter().notifyDataSetChanged();
             }
         });
 
 
+
+        progressBarRun = (ProgressBar) mainView.findViewById(R.id.progress_bar_run);
+
+
         EditText edit = (EditText)mainView.findViewById(R.id.fileName);
         edit.setText(Constants.STANDARD_SKETCH);
+
+
         return mainView;
     }
 
@@ -214,7 +212,7 @@ public class ListFragment extends Fragment {
                         String pinNumber = edit.getText().toString();
                         //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();*/
 
-                        brickExecutor.executeBrick(mItemArray.get(position).second, mItemArray.get(position).second.getParameters().get(0).getValue());
+                        brickExecutor.executeBrick(mItemArray.get(position).second);
                     }
                 });
         mDragListView.setAdapter(listAdapter, true);
@@ -226,6 +224,51 @@ public class ListFragment extends Fragment {
 
     }
 
+
+
+    public void executeBricks()
+    {
+        brickExecutor.executeBlocks(BrickHelper.translateUiBricksToBackendBricks(mItemArray));
+
+    }
+    public void executeNextBrick()
+    {
+        if(currentBrick<mItemArray.size())
+        {
+            progressStatusCounter = 0;
+            mItemArray.get(currentBrick).second.setBrickStatus(BrickStatus.Started);
+            mDragListView.getAdapter().notifyDataSetChanged();
+            brickExecutor.executeBrick(mItemArray.get(currentBrick).second);
+            new Handler(Looper.getMainLooper()).post((new Runnable() {
+                @Override
+                public void run() {
+                    new CountDownTimer(progressBarRun.getMax(), 10) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                            progressBarRun.setProgress(progressBarRun.getMax()-(int) millisUntilFinished);
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            currentBrick+=1;
+                            executeNextBrick();
+                            progressBarRun.setProgress(progressBarRun.getMax());
+                        }
+                    }.start();
+                }
+            }));
+        }else {
+            progressBarRun.setProgress(0);
+            currentBrick=0;
+            for(int i=0; i<mItemArray.size();i++)
+            {
+                mItemArray.get(i).second.setBrickStatus(BrickStatus.Waiting);
+            }
+            mDragListView.getAdapter().notifyDataSetChanged();
+        }
+
+    }
     public void updateReturnView(String answer) {
         /*TextView resultView = getView().findViewById(R.id.resultView);
         resultView.setText(answer);*/
