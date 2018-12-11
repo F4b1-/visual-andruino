@@ -15,6 +15,7 @@ import com.woxthebox.draglistview.DragItemAdapter;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 
 class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapter.ViewHolder> {
 
@@ -52,19 +53,26 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
         holder.brickData= brickItem;
 
 
-
-        if(brickItem.getName().equals("AnalogWrite"))
+        if(!brickItem.getBrickStatus().equals(BrickStatus.Waiting))
         {
-            holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
-
-        }else if(brickItem.getName().equals("DigitalWrite"))
-        {
-            holder.mLayout.setBackgroundResource(R.drawable.input_selector);
+            holder.mLayout.setBackgroundResource(R.drawable.input_selector_run);
         }
-        else
-        {
-            holder.mLayout.setBackgroundResource(R.drawable.input_selector3);
+        else {
+            if(brickItem.getName().equals("AnalogWrite"))
+            {
+                holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
+
+            }else if(brickItem.getName().equals("DigitalWrite"))
+            {
+                holder.mLayout.setBackgroundResource(R.drawable.input_selector);
+            }
+            else
+            {
+                holder.mLayout.setBackgroundResource(R.drawable.input_selector3);
+            }
+
         }
+
 
 
 

@@ -117,7 +117,7 @@ public class BrickPersister {
     {
 
         Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
-        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,20,1);
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,53,1);
         val1.setAllowedValues(allowedValuesV1);
 
 
@@ -139,7 +139,7 @@ public class BrickPersister {
     public static Brick createAnalogWriteBrick()
     {
         Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
-        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,20,1);
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,53,1);
         val1.setAllowedValues(allowedValuesV1);
 
         Parameter analogVal2=new Parameter("analogWrite",String.valueOf((0)));
@@ -179,9 +179,12 @@ public class BrickPersister {
         bricks.add(item);
         bricks.add(item2);
         Brick ifBrick = createIfBrick();
+
         if(ifBrick != null) {
             bricks.add(ifBrick);
         }
+        Brick endBrick= createEndIfBrick();
+        bricks.add(endBrick );
 
 
         writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(bricks));
@@ -190,7 +193,7 @@ public class BrickPersister {
     }
 private  static ArrayList<String> getArrValues(int init, int max, int step){
     ArrayList<String> allowedValuesAW = new ArrayList<String>();
-    for ( int i=init; i<max;i+=step  )
+    for ( int i=init; i<=max;i+=step  )
     {
         allowedValuesAW.add( String.valueOf(i));
     }
@@ -235,5 +238,17 @@ public static Brick createIfBrick() {
     InternalBrick item= (InternalBrick) bb.buildBrick();
     return item;
 }
+
+
+    public static Brick createEndIfBrick() {
+
+        ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+        BrickBuilder bb = new BrickBuilder("EndIf", BrickTypes.INTERNAL, arrInternal);
+        bb.setSubType(InternalSubTypes.ENDIF);
+        //bb.setSubBricks(subList);
+
+        InternalBrick item= (InternalBrick) bb.buildBrick();
+        return item;
+    }
 
 }

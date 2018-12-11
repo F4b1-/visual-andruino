@@ -55,10 +55,13 @@ public class BrickHelper {
             else if(insideCommandStructure && currentInternalSuperBrick != null) {
 
                 ArrayList<Brick> subBricks = currentInternalSuperBrick.getSubBricks();
-                if(subBricks != null) {
-                    subBricks.add(currentBrick);
-                    currentInternalSuperBrick.setSubBricks(subBricks, currentInternalSuperBrick.getSubType());
+                if(subBricks == null)
+                {
+                    subBricks= new ArrayList<Brick>();
                 }
+                subBricks.add(currentBrick);
+                currentInternalSuperBrick.setSubBricks(subBricks, currentInternalSuperBrick.getSubType());
+
 
             }
            else {

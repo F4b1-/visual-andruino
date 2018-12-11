@@ -11,7 +11,7 @@ public class InternalBrick extends Brick {
 
 
     public InternalBrick(String name, ArrayList<Parameter> parameters, ArrayList<Brick> subBricks, InternalSubTypes subType) {
-        super(name, BrickTypes.ARDUINO_COMMAND, parameters);
+        super(name, BrickTypes.INTERNAL, parameters);
         this.subBricks = subBricks;
         this.subType = subType;
     }

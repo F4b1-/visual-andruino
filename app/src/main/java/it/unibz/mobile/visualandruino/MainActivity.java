@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     Fragment currentFragment;
 
 
+
     //private int _xDelta;
     //private int _yDelta;
 
@@ -49,15 +50,21 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         if (id == R.id.load_sketch_button) {
             showPersistenceDialog(MainActivity.this, true);
-
         }
 
         if (id == R.id.save_sketch_button) {
             EditText edit = (EditText)listFragment.getMainView().findViewById(R.id.fileName);
             String fileName = edit.getText().toString();
             showPersistenceDialog(MainActivity.this, false);
+        }
+        if(id== R.id.run_sketch_button){
 
+            listFragment.executeBricks();
+        }
 
+        if(id== R.id.debug_sketch_button){
+
+            listFragment.executeNextBrick();
         }
 
         return super.onOptionsItemSelected(item);
@@ -72,13 +79,8 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         setContentView(R.layout.activity_main);
         ListFragment listF =ListFragment.newInstance();
         showListFragment(listF);
-
-
-
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_color)));
         BrickPersister.saveStandardSketch(getApplicationContext());
-
-
 
 
     }
@@ -99,7 +101,6 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     }
 
     public void showFragment(Fragment fragment) {
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment, "fragment");
         transaction.addToBackStack(fragment.getClass().getName());

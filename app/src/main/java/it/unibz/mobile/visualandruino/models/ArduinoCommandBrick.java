@@ -13,6 +13,7 @@ public class ArduinoCommandBrick extends Brick {
     {
         super(name, BrickTypes.ARDUINO_COMMAND, parameters);
         this.commandId = commandId;
+
     }
 
 

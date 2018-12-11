@@ -16,5 +16,6 @@ public final class Constants {
     public static final String SAVE_ENTER_FILE = "Enter the file you want to save";
     public static final String LOAD_BUTTON = "Load";
     public static final String SAVE_BUTTON = "Save";
+    public static final String RUN_BUTTON = "RUN";
     public static final String CANCEL_BUTTON = "Cancel";
 }

@@ -5,14 +5,20 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
+        <ProgressBar
+            android:id="@+id/progress_bar_run"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:minHeight="5dp"
+            android:max="2000"
+            android:progress="0"
+            android:progressTint="@color/colorPrimaryDark" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,13 +30,11 @@
                 android:id="@+id/fileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="11dp"
                 android:layout_marginRight="11dp"
                 android:layout_marginBottom="20dp"
-
                 android:hint="File Name"
                 android:inputType="text" />
 
@@ -92,9 +96,6 @@
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-
-            <!-- Need to wrap DragListView in another layout for
-                wrap_content to work for some reason -->
             <com.woxthebox.draglistview.DragListView
                 android:id="@+id/drag_list_view"
                 android:layout_width="match_parent"
@@ -128,7 +129,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/endColor"
         app:srcCompat="@drawable/ic_add_white_24dp" />
@@ -141,9 +141,7 @@
         android:layout_marginBottom="88dp"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-
         app:backgroundTint="@color/endColor2"
-
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
@@ -155,7 +153,6 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
         app:backgroundTint="@color/endColor3"
-
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
 

@@ -2,19 +2,24 @@ package it.unibz.mobile.visualandruino.models;
 
 import java.util.ArrayList;
 
+import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
 public class Brick {
     private String name;
     private BrickTypes brickType;
+    private BrickStatus brickStatus;
 
     private ArrayList<Parameter> parameters;
+
+
 
     public Brick(String name, BrickTypes brickType, ArrayList<Parameter> parameters)
     {
         this.name = name;
         this.brickType = brickType;
         this.parameters = parameters;
+        this.brickStatus= BrickStatus.Waiting;
     }
 
 
@@ -37,6 +42,10 @@ public class Brick {
         return brickType;
     }
 
+    public BrickStatus getBrickStatus() {
+        return brickStatus;
+    }
+
     public ArrayList<Parameter> getParameters() {
         return parameters;
     }
@@ -49,8 +58,13 @@ public class Brick {
         this.brickType = type;
     }
 
+    public void setBrickStatus(BrickStatus status) {
+        this.brickStatus = status;
+    }
+
     public void setParameters(ArrayList<Parameter> parameters) {
         this.parameters = parameters;
     }
 
 }
+
