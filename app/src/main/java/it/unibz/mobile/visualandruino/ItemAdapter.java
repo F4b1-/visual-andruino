@@ -89,8 +89,6 @@ class ItemAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemAdapter.ViewHol
             spOutPut= (Spinner) itemView.findViewById(R.id.sp_dw_output);
 
 
-
-
             String[] writeOutputs = itemView.getContext().getResources().getStringArray(R.array.digital_write_Outputs);
             String[] pinNumber = itemView.getContext().getResources().getStringArray(R.array.pinNumbers);
 

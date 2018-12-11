@@ -1,20 +1,13 @@
 package it.unibz.mobile.visualandruino;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.Pair;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.woxthebox.draglistview.DragItemAdapter;
@@ -22,7 +15,6 @@ import com.woxthebox.draglistview.DragItemAdapter;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
 class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapter.ViewHolder> {
 
@@ -54,12 +46,10 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
         super.onBindViewHolder(holder, position);
         Brick brickItem= mItemList.get(position).second;
         this.holder= holder;
-
-
-
-
         holder.itemView.setTag(mItemList.get(position));
         holder.mText.setText(brickItem.getName());
+        holder.btnParameters.setText(brickItem.getParametersText() );
+        holder.brickData= brickItem;
 
 
 
@@ -68,7 +58,6 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
             holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
 
         }else if(brickItem.getName().equals("DigitalWrite"))
-
         {
             holder.mLayout.setBackgroundResource(R.drawable.input_selector);
         }
@@ -91,6 +80,7 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
         TextView mText;
         LinearLayout mLayout;
         Button btnParameters;
+        Brick brickData;
 
 
         ViewHolder(final View itemView) {
@@ -103,9 +93,8 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
             btnParameters.setOnClickListener(
                     new View.OnClickListener() {
                         public void onClick(View v) {
-                            int number=0;
 
-                            ((MainActivity) context).showFragment(ItemParameterFragment.newInstance(1) );
+                            ((MainActivity) context).showFragment(ItemParameterFragment.newInstance(1,brickData.getParameters()) );
 
                         }
                     });

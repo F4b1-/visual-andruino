@@ -18,6 +18,16 @@ public class Brick {
     }
 
 
+    public String getParametersText() {
+        String params="";
+        for ( int i=0; i< parameters.size(); i++ )
+        {
+            params=params+  parameters.get(i).getParameterName()+"="+parameters.get(i).getValue()+";";
+        }
+
+        return params;
+    }
+
 
     public String getName() {
         return name;

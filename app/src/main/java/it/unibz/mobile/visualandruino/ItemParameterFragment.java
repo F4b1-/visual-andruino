@@ -10,12 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import it.unibz.mobile.visualandruino.dummy.DummyContent;
-import it.unibz.mobile.visualandruino.dummy.DummyContent.DummyItem;
 import it.unibz.mobile.visualandruino.models.Parameter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -30,6 +27,7 @@ public class ItemParameterFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private ArrayList<Parameter>  parameters;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -40,11 +38,12 @@ public class ItemParameterFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ItemParameterFragment newInstance(int columnCount) {
+    public static ItemParameterFragment newInstance(int columnCount, ArrayList<Parameter> parameters ) {
         ItemParameterFragment fragment = new ItemParameterFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
+        fragment.parameters= parameters;
         return fragment;
     }
 
@@ -72,14 +71,9 @@ public class ItemParameterFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            ArrayList<Parameter> arr=new ArrayList<Parameter>();
-            Parameter val=new Parameter("Output","1");
-            Parameter valPin=new Parameter("PinNumber","22");
-            arr.add(val );
-            arr.add(valPin );
 
 
-            recyclerView.setAdapter(new MyItemParameterRecyclerViewAdapter(arr, mListener));
+            recyclerView.setAdapter(new ItemParameterRecyclerViewAdapter(parameters, mListener));
         }
         return view;
     }

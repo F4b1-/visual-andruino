@@ -1,11 +1,14 @@
 package it.unibz.mobile.visualandruino;
 
 
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import android.support.v4.util.Pair;
@@ -26,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
     ViewGroup _root;
     ListFragment listFragment;
+    Fragment currentFragment;
 
 
     //private int _xDelta;
@@ -66,56 +70,52 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
 
         setContentView(R.layout.activity_main);
-        showFragment(ListFragment.newInstance());
+        ListFragment listF =ListFragment.newInstance();
+        showListFragment(listF);
 
 
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_color)));
         BrickPersister.saveStandardSketch(getApplicationContext());
 
+
+
+
     }
 
+    @Override
+    public void onBackPressed() {
 
+
+        // note: you can also use 'getSupportFragmentManager()'
+        FragmentManager mgr = getSupportFragmentManager();
+        if (mgr.getBackStackEntryCount() == 0) {
+            // No backstack to pop, so calling super
+            super.onBackPressed();
+        } else {
+            mgr.popBackStack();
+            //mgr.popBackStackImmediate(currentFragment.getClass().getName(), 0);
+        }
+    }
 
     public void showFragment(Fragment fragment) {
-        listFragment = (ListFragment) fragment;
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment, "fragment").commit();
+        transaction.replace(R.id.container, fragment, "fragment");
+        transaction.addToBackStack(fragment.getClass().getName());
+        transaction.commit();
+        currentFragment=fragment;
+    }
+
+    public void showListFragment(Fragment fragment) {
+        listFragment = (ListFragment) fragment;
+
+        showFragment(fragment);
     }
 
     public void onListFragmentInteraction(Parameter uri){
         //you can leave it empty
     }
-
-
-    /*
-    public boolean onTouch(View view, MotionEvent event) {
-        final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                _xDelta = X - lParams.leftMargin;
-                _yDelta = Y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                layoutParams.leftMargin = X - _xDelta;
-                layoutParams.topMargin = Y - _yDelta;
-                layoutParams.rightMargin = -250;
-                layoutParams.bottomMargin = -250;
-                view.setLayoutParams(layoutParams);
-                break;
-        }
-        _root.invalidate();
-        return true;
-    }*/
 
     private ArrayList<Pair<Long, Brick>> getCertainSketch(String fileName) {
         ArrayList<Pair<Long, Brick>> brickPairs = new ArrayList<Pair<Long, Brick>>();

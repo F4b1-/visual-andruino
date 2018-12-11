@@ -4,6 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import it.unibz.mobile.visualandruino.ItemParameterFragment.OnListFragmentInteractionListener;
@@ -17,12 +21,12 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<MyItemParameterRecyclerViewAdapter.ViewHolder> {
+public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemParameterRecyclerViewAdapter.ViewHolder> {
 
     private final List<Parameter> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemParameterRecyclerViewAdapter(List<Parameter> items, OnListFragmentInteractionListener listener) {
+    public ItemParameterRecyclerViewAdapter(List<Parameter> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -35,7 +39,7 @@ public class MyItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<MyI
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getParameterName());
         holder.mContentView.setText(mValues.get(position).getValue());
@@ -50,6 +54,29 @@ public class MyItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<MyI
                 }
             }
         });
+
+
+
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>( holder.mView.getContext(),R.layout.spinner_item,mValues.get(position).getAllowedValues());
+        //spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        holder.spValueView.setAdapter(spinnerArrayAdapter);
+        holder.spValueView.setSelection(mValues.get(position).getAllowedValues().indexOf(mValues.get(position).getValue()) );
+
+        holder.spValueView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int posItem, long id) {
+
+                mValues.get(position).setValue(mValues.get(position).getAllowedValues().get(posItem));
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
     }
 
     @Override
@@ -60,14 +87,19 @@ public class MyItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<MyI
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
+        public final EditText mContentView;
+        public final Spinner spValueView;
         public Parameter mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mContentView = (EditText) view.findViewById(R.id.content);
+
+            spValueView = (Spinner) view.findViewById(R.id.sp_value);
+
+
         }
 
         @Override

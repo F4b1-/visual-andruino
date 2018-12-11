@@ -29,6 +29,7 @@ import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
+import it.unibz.mobile.visualandruino.utils.BrickPersister;
 
 public class ListFragment extends Fragment {
 
@@ -40,6 +41,10 @@ public class ListFragment extends Fragment {
     BrickExecutor brickExecutor;
     ItemBrickAdapter listAdapter;
 
+    public ListFragment()
+    {
+        mItemArray = new ArrayList<>();
+    }
     public static ListFragment newInstance() {
         return new ListFragment();
     }
@@ -98,8 +103,8 @@ public class ListFragment extends Fragment {
             }
         });
 
-        mItemArray = new ArrayList<>();
 
+/*
         for (int i = 0; i < 2; i++) {
 
             ArrayList<Parameter> arr=new ArrayList<Parameter>();
@@ -112,6 +117,7 @@ public class ListFragment extends Fragment {
             mItemArray.add( new Pair<>((long) i,item));
 
         }
+        */
 
         mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
         mRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.app_color));
@@ -148,70 +154,39 @@ public class ListFragment extends Fragment {
 
         setupListRecyclerView();
 
-        /*
-        mSmoothBluetooth = new SmoothBluetooth(getActivity().getApplicationContext());
-        mSmoothBluetooth.setListener(mListener);
-        mSmoothBluetooth.tryConnection();*/
         final BrickCommunicator brickCommunicator = BrickCommunicator.getInstance();
         brickCommunicator.initiateBluetooth(this);
-
-
-/*
-        final Button buttonHigh = mainView.findViewById(R.id.digitalHigh);
-        buttonHigh.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                EditText edit = (EditText)mainView.findViewById(R.id.fileName);
-                String pinNumber = edit.getText().toString();
-
-
-                brickExecutor.executeBlocks(getBricksArray(), pinNumber);
-
-
-                //String testCommand = "3 " + pinNumber + " 1;";
-
-                // Code here executes on main thread after user presses button
-                //mSmoothBluetooth.send(testCommand, false);
-                //brickCommunicator.sendCommand(testCommand);
-            }
-        });
-
-
-        final Button buttonAnalogRead = mainView.findViewById(R.id.analogReadButton);
-        buttonAnalogRead.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                String testCommand = "-1 41;";
-
-                // Code here executes on main thread after user presses button
-                //mSmoothBluetooth.send(testCommand, false);
-                brickCommunicator.sendCommand(testCommand);
-            }
-        });*/
 
         FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Parameter val=new Parameter("new","value");
-
-                val.setValue(String.valueOf("1"));
-                ArrayList<Parameter> arr=new ArrayList<Parameter>();
-                arr.add(val );
-
-
-                Brick item= new ArduinoCommandBrick("DigitalWrite", arr, 3);
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,item));
-
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createDigitalWriteBrick()));
                 mDragListView.getAdapter().notifyDataSetChanged();
-
-
             }
         });
 
+        FloatingActionButton fabA = (FloatingActionButton) mainView.findViewById(R.id.addBrickAnalog);
+        fabA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createAnalogWriteBrick()));
+                mDragListView.getAdapter().notifyDataSetChanged();
+            }
+        });
+
+        FloatingActionButton fabIf = (FloatingActionButton) mainView.findViewById(R.id.addBrickIf);
+        fabIf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createIfBrick()));
+                mDragListView.getAdapter().notifyDataSetChanged();
+            }
+        });
+
+
         EditText edit = (EditText)mainView.findViewById(R.id.fileName);
         edit.setText(Constants.STANDARD_SKETCH);
-
         return mainView;
     }
 

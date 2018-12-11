@@ -13,6 +13,7 @@ public class Parameter {
     {
         parameterName=name;
         value=val;
+        allowedValues= new  ArrayList<String>();
     }
     public String getValue() {
         return value;
@@ -24,6 +25,7 @@ public class Parameter {
 
     public ArrayList<String> getAllowedValues() {
         return allowedValues;
+
     }
 
     public void setAllowedValues(ArrayList<String> allowedValues) {

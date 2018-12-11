@@ -1,7 +1,6 @@
 package it.unibz.mobile.visualandruino.utils;
 
 import android.content.Context;
-import android.support.v4.util.Pair;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -114,6 +113,46 @@ public class BrickPersister {
         return fileExists;
 
     }
+    public static Brick createDigitalWriteBrick()
+    {
+
+        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,20,1);
+        val1.setAllowedValues(allowedValuesV1);
+
+
+        Parameter val2=new Parameter("WriteValue",String.valueOf(("HIGH")));
+        ArrayList<String> allowedValues = new ArrayList<String>();
+        allowedValues.add("HIGH");
+        allowedValues.add("LOW");
+        val2.setAllowedValues(allowedValues);
+        val2.setParameterName("WriteValue");
+
+
+        ArrayList<Parameter> arrParameters=new ArrayList<Parameter>();
+        arrParameters.add(val1);
+        arrParameters.add(val2);
+        BrickBuilder bb = new BrickBuilder("DigitalWrite", BrickTypes.ARDUINO_COMMAND , arrParameters);
+        bb.setCommandId(3);
+        return bb.buildBrick();
+    }
+    public static Brick createAnalogWriteBrick()
+    {
+        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,20,1);
+        val1.setAllowedValues(allowedValuesV1);
+
+        Parameter analogVal2=new Parameter("analogWrite",String.valueOf((0)));
+        analogVal2.setAllowedValues(BrickPersister.getArrValues(0,200,10));
+
+
+        ArrayList<Parameter> arrAnalog=new ArrayList<Parameter>();
+        arrAnalog.add(val1);
+        arrAnalog.add(analogVal2);
+        BrickBuilder bb = new BrickBuilder("AnalogWrite", BrickTypes.ARDUINO_COMMAND , arrAnalog);
+        bb.setCommandId(2);
+        return bb.buildBrick();
+    }
 
     public static boolean saveStandardSketch(Context context) {
         /*
@@ -126,34 +165,12 @@ public class BrickPersister {
         /**
          * DigitalWrite
          */
-        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
-
-        Parameter val2=new Parameter("WriteValue",String.valueOf(("HIGH")));
-        ArrayList<String> allowedValues = new ArrayList<String>();
-        allowedValues.add("HIGH");
-        allowedValues.add("LOW");
-        val2.setAllowedValues(allowedValues);
-        val2.setParameterName("WriteValue");
-
-
-        ArrayList<Parameter> arr=new ArrayList<Parameter>();
-        arr.add(val1);
-        arr.add(val2);
-        BrickBuilder bb = new BrickBuilder("DigitalWrite", BrickTypes.ARDUINO_COMMAND , arr);
-        bb.setCommandId(3);
-        Brick item= bb.buildBrick();
+        Brick item= createDigitalWriteBrick();
 
         /**
          * AnalogWrite
          */
-        Parameter analogVal2=new Parameter("analogWrite",String.valueOf((0)));
-
-        ArrayList<Parameter> arrAnalog=new ArrayList<Parameter>();
-        arrAnalog.add(val1);
-        arrAnalog.add(analogVal2);
-        bb = new BrickBuilder("AnalogWrite", BrickTypes.ARDUINO_COMMAND , arrAnalog);
-        bb.setCommandId(2);
-        Brick item2= bb.buildBrick();
+        Brick item2= createAnalogWriteBrick();
 
 
         /**
@@ -161,7 +178,7 @@ public class BrickPersister {
          */
         bricks.add(item);
         bricks.add(item2);
-        InternalBrick ifBrick = createIfBrick();
+        Brick ifBrick = createIfBrick();
         if(ifBrick != null) {
             bricks.add(ifBrick);
         }
@@ -171,8 +188,15 @@ public class BrickPersister {
 
         return true;
     }
-
-private static InternalBrick createIfBrick() {
+private  static ArrayList<String> getArrValues(int init, int max, int step){
+    ArrayList<String> allowedValuesAW = new ArrayList<String>();
+    for ( int i=init; i<max;i+=step  )
+    {
+        allowedValuesAW.add( String.valueOf(i));
+    }
+    return allowedValuesAW;
+}
+public static Brick createIfBrick() {
     /**
      * If
      */
@@ -186,13 +210,22 @@ private static InternalBrick createIfBrick() {
 
     ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
     Parameter valInternal=new Parameter("Internal",String.valueOf((2)));
+    valInternal.setAllowedValues(BrickPersister.getArrValues(0,50,1));
     arrInternal.add(valInternal);
 
     Parameter valInternalComp=new Parameter("InternalComp",ComparatorTypes.GREATER.toString());
+    ArrayList<String> allowedValues = new ArrayList<String>();
+
+    allowedValues.add(ComparatorTypes.EQUALS.toString());
+    allowedValues.add(ComparatorTypes.NOTEQUALS.toString());
+    allowedValues.add(ComparatorTypes.GREATER.toString());
+    allowedValues.add(ComparatorTypes.LESS.toString());
+    valInternalComp.setAllowedValues(allowedValues);
+
     arrInternal.add(valInternalComp);
 
     Parameter valInternalRef=new Parameter("Ref",String.valueOf((3)));
-
+    valInternalRef.setAllowedValues(BrickPersister.getArrValues(0,50,1));
     arrInternal.add(valInternalRef);
 
     BrickBuilder bb = new BrickBuilder("If", BrickTypes.INTERNAL, arrInternal);
