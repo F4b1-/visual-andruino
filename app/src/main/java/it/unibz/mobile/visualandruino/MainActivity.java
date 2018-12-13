@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
+import it.unibz.mobile.visualandruino.utils.BrickHelper;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
@@ -81,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         showListFragment(listF);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_color)));
         BrickPersister.saveStandardSketch(getApplicationContext());
+
+        final BrickCommunicator brickCommunicator = BrickCommunicator.getInstance();
+        brickCommunicator.initiateBluetooth(this);
+
 
 
     }
@@ -161,13 +167,18 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
                         if(load) {
                             listFragment.setmItemArray(getCertainSketch(fileName));
                         } else {
-                            ArrayList<Brick> brickList = new ArrayList<>();
+                            ArrayList<Pair<Long, Brick>> brickList = listFragment.getmItemArray();
+                           /* ArrayList<Brick> brickList = new ArrayList<>();
+
 
                             for(Pair<Long, Brick> pair : listFragment.getmItemArray()) {
                                 brickList.add(pair.second);
-                            }
+                            }*/
 
-                            BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(brickList));
+
+                            ArrayList<Brick> translatedBricks = BrickHelper.translateUiBricksToBackendBricks(brickList);
+
+                            BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(translatedBricks));
                         }
 
                     }

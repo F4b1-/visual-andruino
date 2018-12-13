@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.utils.BrickHelper;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,8 @@ public class ItemParameterFragment extends Fragment {
         fragment.parameters= parameters;
         return fragment;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

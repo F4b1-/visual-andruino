@@ -13,9 +13,16 @@ import android.widget.TextView;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.InternalBrick;
+import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
+import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
+import it.unibz.mobile.visualandruino.utils.BrickHelper;
 
 class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapter.ViewHolder> {
 
@@ -23,7 +30,7 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
     private int mGrabHandleId;
     private boolean mDragOnLongPress;
     private RecyclerViewOnItemClickListener recyclerViewOnItemClickListener;
-    private  ViewHolder holder;
+    private ViewHolder holder;
     private Context context;
 
     ItemBrickAdapter(Context context, ArrayList<Pair<Long, Brick>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, @NonNull RecyclerViewOnItemClickListener recyclerViewOnItemClickListener) {
@@ -32,7 +39,7 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
         mDragOnLongPress = dragOnLongPress;
         this.recyclerViewOnItemClickListener = recyclerViewOnItemClickListener;
         setItemList(list);
-        this.context=context;
+        this.context = context;
     }
 
     @NonNull
@@ -45,36 +52,27 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        Brick brickItem= mItemList.get(position).second;
-        this.holder= holder;
+        Brick brickItem = mItemList.get(position).second;
+        this.holder = holder;
         holder.itemView.setTag(mItemList.get(position));
         holder.mText.setText(brickItem.getName());
-        holder.btnParameters.setText(brickItem.getParametersText() );
-        holder.brickData= brickItem;
+        holder.btnParameters.setText(brickItem.getParametersText());
+        holder.brickData = brickItem;
 
 
-        if(!brickItem.getBrickStatus().equals(BrickStatus.Waiting))
-        {
+        if (!brickItem.getBrickStatus().equals(BrickStatus.Waiting)) {
             holder.mLayout.setBackgroundResource(R.drawable.input_selector_run);
-        }
-        else {
-            if(brickItem.getName().equals("AnalogWrite"))
-            {
+        } else {
+            if (brickItem.getName().equals("AnalogWrite")) {
                 holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
 
-            }else if(brickItem.getName().equals("DigitalWrite"))
-            {
+            } else if (brickItem.getName().equals("DigitalWrite")) {
                 holder.mLayout.setBackgroundResource(R.drawable.input_selector);
-            }
-            else
-            {
+            } else {
                 holder.mLayout.setBackgroundResource(R.drawable.input_selector3);
             }
 
         }
-
-
-
 
 
     }
@@ -94,22 +92,39 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
         ViewHolder(final View itemView) {
             super(itemView, mGrabHandleId, mDragOnLongPress);
             mText = (TextView) itemView.findViewById(R.id.text);
-            btnParameters= (Button) itemView.findViewById(R.id.btnParameters);
+            btnParameters = (Button) itemView.findViewById(R.id.btnParameters);
 
-            mLayout= (LinearLayout) itemView.findViewById(R.id.item_layout);
+            mLayout = (LinearLayout) itemView.findViewById(R.id.item_layout);
+
 
             btnParameters.setOnClickListener(
                     new View.OnClickListener() {
                         public void onClick(View v) {
 
-                            ((MainActivity) context).showFragment(ItemParameterFragment.newInstance(1,brickData.getParameters()) );
+                            if (brickData.getBrickType() == BrickTypes.INTERNAL) {
+                                InternalSubTypes internalSubType = ((InternalBrick) brickData).getSubType();
+                                if (internalSubType == InternalSubTypes.FOR || internalSubType == InternalSubTypes.WHILE || internalSubType == InternalSubTypes.IF) {
+                                    updateVariableParametersWithSetVariables();
+                                }
+                            }
+
+                            ((MainActivity) context).showFragment(ItemParameterFragment.newInstance(1, brickData.getParameters()));
 
                         }
                     });
 
 
-
         }
+
+
+        public void updateVariableParametersWithSetVariables() {
+            ArrayList<Parameter> parameters = brickData.getParameters();
+            BrickHelper.getInstance().setSetVariable("test", 5);
+            Map<String, Integer> setVariables = BrickHelper.getInstance().getSetVariables();
+            parameters.get(0).setAllowedValues(new ArrayList<>(setVariables.keySet()));
+            brickData.setParameters(parameters);
+        }
+
 
         @Override
         public void onItemClicked(View view) {

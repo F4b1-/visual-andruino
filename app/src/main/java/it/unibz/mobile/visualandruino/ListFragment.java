@@ -14,6 +14,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,9 @@ import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
@@ -145,9 +149,6 @@ public class ListFragment extends Fragment {
 
         setupListRecyclerView();
 
-        final BrickCommunicator brickCommunicator = BrickCommunicator.getInstance();
-        brickCommunicator.initiateBluetooth(this);
-
         FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.addButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,12 +167,31 @@ public class ListFragment extends Fragment {
             }
         });
 
+        FloatingActionButton fabARead = (FloatingActionButton) mainView.findViewById(R.id.addBrickAnalogRead);
+        fabARead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createAnalogReadBrick()));
+                mDragListView.getAdapter().notifyDataSetChanged();
+            }
+        });
+
         FloatingActionButton fabIf = (FloatingActionButton) mainView.findViewById(R.id.addBrickIf);
         fabIf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createIfBrick()));
                 mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createEndIfBrick()));
+                mDragListView.getAdapter().notifyDataSetChanged();
+            }
+        });
+
+        FloatingActionButton fabVariable = (FloatingActionButton) mainView.findViewById(R.id.addBrickVariable);
+        fabVariable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createVariableBrick()));
+                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createEndVariableBrick()));
                 mDragListView.getAdapter().notifyDataSetChanged();
             }
         });
@@ -233,6 +253,7 @@ public class ListFragment extends Fragment {
     }
     public void executeNextBrick()
     {
+        printCurrentVariables();
         if(currentBrick<mItemArray.size())
         {
             progressStatusCounter = 0;
@@ -272,6 +293,13 @@ public class ListFragment extends Fragment {
     public void updateReturnView(String answer) {
         /*TextView resultView = getView().findViewById(R.id.resultView);
         resultView.setText(answer);*/
+    }
+
+
+
+    public void printCurrentVariables() {
+        ((TextView)mainView.findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
+
     }
 
 
