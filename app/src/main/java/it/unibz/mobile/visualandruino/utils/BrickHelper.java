@@ -104,7 +104,7 @@ public class BrickHelper {
         Iterator it = setVariables.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            sb.append("&#8226;" +  pair.getKey() + ": " + pair.getValue() + "<br/>");
+            sb.append("&#8226;" +  pair.getKey() + "=" + pair.getValue() + "<br/>");
             it.remove();
         }
 

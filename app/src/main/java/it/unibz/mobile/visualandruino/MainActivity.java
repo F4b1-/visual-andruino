@@ -70,15 +70,15 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
             showPersistenceDialog(MainActivity.this, false);
         }
         if (id == R.id.run_sketch_button) {
-
+            UiHelper.writeCommand("Executing sketch...");
             Thread thread = new Thread() {
                 @Override
                 public void run() {
                     try {
 
-                            listFragment.executeBricks();
-                            printCurrentVariables();
-                        
+                        listFragment.executeBricks();
+                        printCurrentVariables();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
             };
 
             thread.start();
-
 
 
         }
@@ -101,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
     public void printCurrentVariables() {
 
-         UiHelper.writeCommand(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()).toString());
+        UiHelper.writeCommand(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()).toString());
 
         //((TextView) findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
 
@@ -187,26 +186,31 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
                     InternalSubTypes subType = ((InternalBrick) item).getSubType();
                     InternalSubTypes endSubType = null;
-                    switch(subType){
+                    switch (subType) {
                         //Case statements
-                        case IF: endSubType = InternalSubTypes.ENDIF;
+                        case IF:
+                            endSubType = InternalSubTypes.ENDIF;
                             break;
-                        case VARIABLE: endSubType = InternalSubTypes.ENDVARIABLE;
+                        case VARIABLE:
+                            endSubType = InternalSubTypes.ENDVARIABLE;
                             break;
-                        case FOR: endSubType = InternalSubTypes.ENDFOR;
+                        case FOR:
+                            endSubType = InternalSubTypes.ENDFOR;
                             break;
-                        case WHILE: endSubType = InternalSubTypes.ENDWHILE;
+                        case WHILE:
+                            endSubType = InternalSubTypes.ENDWHILE;
                             break;
                         //Default case statement
-                        default: endSubType = InternalSubTypes.ENDWHILE;
+                        default:
+                            endSubType = InternalSubTypes.ENDWHILE;
                     }
 
-                    ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+                    ArrayList<Parameter> arrInternal = new ArrayList<Parameter>();
                     BrickBuilder bb = new BrickBuilder(endSubType.name(), BrickTypes.INTERNAL, arrInternal);
                     bb.setSubType(endSubType);
                     //bb.setSubBricks(subList);
 
-                    Brick itemEnd= (InternalBrick) bb.buildBrick();
+                    Brick itemEnd = (InternalBrick) bb.buildBrick();
                     counter++;
                     brickPairs.add(new Pair<>((long) counter, itemEnd));
 

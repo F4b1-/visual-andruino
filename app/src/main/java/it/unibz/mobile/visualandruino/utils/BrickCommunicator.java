@@ -115,7 +115,7 @@ public class BrickCommunicator {
 
             for (Device device: deviceList) {
 
-                if(device.getName().equals("HC-05") || device.getName().equals("HC-06")) {
+                if(device.getName().equals("HC-05")) {
                     spiderDevice = device;
                 }
             }
