@@ -72,10 +72,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
                 @Override
                 public void run() {
                     try {
-                        while(true) {
+
                             listFragment.executeBricks();
                             printCurrentVariables();
-                        }
+                        
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
