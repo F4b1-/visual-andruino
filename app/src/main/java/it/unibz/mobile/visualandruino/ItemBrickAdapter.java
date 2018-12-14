@@ -34,6 +34,7 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
     private Context context;
 
     ItemBrickAdapter(Context context, ArrayList<Pair<Long, Brick>> list, int layoutId, int grabHandleId, boolean dragOnLongPress, @NonNull RecyclerViewOnItemClickListener recyclerViewOnItemClickListener) {
+       BrickHelper.getInstance();
         mLayoutId = layoutId;
         mGrabHandleId = grabHandleId;
         mDragOnLongPress = dragOnLongPress;
@@ -101,14 +102,19 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
                     new View.OnClickListener() {
                         public void onClick(View v) {
 
+                            boolean isVariable = false;
+                            boolean isInternal = false;
                             if (brickData.getBrickType() == BrickTypes.INTERNAL) {
                                 InternalSubTypes internalSubType = ((InternalBrick) brickData).getSubType();
-                                if (internalSubType == InternalSubTypes.FOR || internalSubType == InternalSubTypes.WHILE || internalSubType == InternalSubTypes.IF) {
+                                /*if (internalSubType == InternalSubTypes.FOR || internalSubType == InternalSubTypes.WHILE || internalSubType == InternalSubTypes.IF) {
                                     updateVariableParametersWithSetVariables();
-                                }
+                                }*/
+                                isInternal = true;
+                                isVariable = internalSubType == InternalSubTypes.VARIABLE ? true : false;
                             }
 
-                            ((MainActivity) context).showFragment(ItemParameterFragment.newInstance(1, brickData.getParameters()));
+
+                            ((MainActivity) context).showFragment(ItemParameterFragment.newInstance(1, brickData.getParameters(), isVariable, isInternal));
 
                         }
                     });
@@ -116,14 +122,14 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
 
         }
 
-
+/*
         public void updateVariableParametersWithSetVariables() {
             ArrayList<Parameter> parameters = brickData.getParameters();
-            BrickHelper.getInstance().setSetVariable("test", 5);
+            //BrickHelper.getInstance().setSetVariable("test", 5);
             Map<String, Integer> setVariables = BrickHelper.getInstance().getSetVariables();
-            parameters.get(0).setAllowedValues(new ArrayList<>(setVariables.keySet()));
+            parameters.get(0).setAllowedValues(new ArrayList<>(BrickHelper.getInstance().getSetVariables().keySet()));
             brickData.setParameters(parameters);
-        }
+        }*/
 
 
         @Override

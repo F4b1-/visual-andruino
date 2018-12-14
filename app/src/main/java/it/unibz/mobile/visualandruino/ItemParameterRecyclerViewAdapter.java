@@ -1,9 +1,11 @@
 package it.unibz.mobile.visualandruino;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -25,10 +27,14 @@ public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemP
 
     private final List<Parameter> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private boolean isVariable;
+    private boolean isInternal;
 
-    public ItemParameterRecyclerViewAdapter(List<Parameter> items, OnListFragmentInteractionListener listener) {
+    public ItemParameterRecyclerViewAdapter(List<Parameter> items, OnListFragmentInteractionListener listener, boolean isVariable, boolean isInternal) {
         mValues = items;
         mListener = listener;
+        this.isVariable = isVariable;
+        this.isInternal = isInternal;
     }
 
     @Override
@@ -54,6 +60,28 @@ public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemP
                 }
             }
         });
+
+
+
+        if(isVariable || (isInternal && position == 0)){
+            holder.spValueView.setVisibility(View.GONE);
+            holder.mContentView.setVisibility(View.VISIBLE);
+            holder.mContentView.setText(mValues.get(position).getValue());
+
+            holder.mContentView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    if (!hasFocus) {
+                        mValues.get(position).setValue(((EditText)v).getText().toString());
+                    }
+                }
+            });
+
+
+
+        }
 
 
 
@@ -96,7 +124,6 @@ public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemP
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
             mContentView = (EditText) view.findViewById(R.id.content);
-
             spValueView = (Spinner) view.findViewById(R.id.sp_value);
 
 
@@ -107,4 +134,6 @@ public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemP
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
+
+
 }

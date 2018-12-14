@@ -15,7 +15,7 @@ import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 
 public class BrickHelper {
 
-    Map<String, Integer> setVariables = new HashMap<>();
+    private Map<String, Integer> setVariables = new HashMap();
 
     // static variable single_instance of type Singleton
     private static BrickHelper single_instance = null;
@@ -25,6 +25,7 @@ public class BrickHelper {
     {
         if (single_instance == null) {
             single_instance = new BrickHelper();
+
         }
 
         return single_instance;
@@ -109,11 +110,11 @@ public class BrickHelper {
     }
 
     public void setSetVariable(String variableName, Integer variableValue) {
-        this.setVariables.put(variableName, variableValue);
+        setVariables.put(variableName, variableValue);
     }
 
     public int getSetVariable(String variableName) {
-        return this.setVariables.get(variableName);
+        return setVariables.get(variableName);
     }
 
     public Map<String, Integer> getSetVariables() {

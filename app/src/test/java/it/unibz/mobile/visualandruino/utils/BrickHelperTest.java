@@ -51,8 +51,8 @@ public class BrickHelperTest {
         ((InternalBrick)backendIfBrick).setSubBricks(subBricks, InternalSubTypes.IF);
 
 
-        Brick actualSubBrick1 = ((InternalBrick)BrickHelper.translateUiBricksToBackendBricks(uiBricks).get(0)).getSubBricks().get(0);
-        Brick actualSubBrick2 = ((InternalBrick)BrickHelper.translateUiBricksToBackendBricks(uiBricks).get(0)).getSubBricks().get(1);
+        Brick actualSubBrick1 = ((InternalBrick)BrickHelper.getInstance().translateUiBricksToBackendBricks(uiBricks).get(0)).getSubBricks().get(0);
+        Brick actualSubBrick2 = ((InternalBrick)BrickHelper.getInstance().translateUiBricksToBackendBricks(uiBricks).get(0)).getSubBricks().get(1);
 
         assertThat((arduinoCommandBrick1)).isEqualToComparingFieldByFieldRecursively(actualSubBrick1);
         assertThat((arduinoCommandBrick2)).isEqualToComparingFieldByFieldRecursively(actualSubBrick2);

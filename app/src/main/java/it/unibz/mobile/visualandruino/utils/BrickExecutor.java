@@ -199,7 +199,7 @@ public class BrickExecutor {
                 int returnedValue = BrickCommunicator.getInstance().getCurrentReturnValue();
 
                 BrickHelper.getInstance().setSetVariable(variableName, returnedValue);
-                //setVariables.put(variableName, returnedValue);
+
             }
 
 
@@ -211,7 +211,7 @@ public class BrickExecutor {
 
     public void awaitReturn(final int retries) {
 
-        while (BrickCommunicator.getInstance().isAwaitingReturn() && retries < Constants.RETURN_VALUE_RETRIES) {
+        if (BrickCommunicator.getInstance().isAwaitingReturn() && retries < Constants.RETURN_VALUE_RETRIES) {
 
             try {
                 Thread.sleep(200);

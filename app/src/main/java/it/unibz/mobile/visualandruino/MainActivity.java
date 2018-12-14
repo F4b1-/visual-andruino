@@ -1,7 +1,6 @@
 package it.unibz.mobile.visualandruino;
 
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
@@ -13,17 +12,26 @@ import android.support.v4.app.FragmentTransaction;
 
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+
 import java.util.ArrayList;
+
 import it.unibz.mobile.visualandruino.models.Brick;
+import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
+import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
+import it.unibz.mobile.visualandruino.utils.BrickBuilder;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
+
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class MainActivity extends AppCompatActivity implements ItemParameterFragment.OnListFragmentInteractionListener {
@@ -32,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     ViewGroup _root;
     ListFragment listFragment;
     Fragment currentFragment;
-
 
 
     //private int _xDelta;
@@ -55,16 +62,17 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         }
 
         if (id == R.id.save_sketch_button) {
-            EditText edit = (EditText)listFragment.getMainView().findViewById(R.id.fileName);
+            EditText edit = (EditText) listFragment.getMainView().findViewById(R.id.fileName);
             String fileName = edit.getText().toString();
             showPersistenceDialog(MainActivity.this, false);
         }
-        if(id== R.id.run_sketch_button){
+        if (id == R.id.run_sketch_button) {
 
             listFragment.executeBricks();
+            printCurrentVariables();
         }
 
-        if(id== R.id.debug_sketch_button){
+        if (id == R.id.debug_sketch_button) {
 
             listFragment.executeNextBrick();
         }
@@ -72,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         return super.onOptionsItemSelected(item);
     }
 
+    public void printCurrentVariables() {
+        ((TextView) findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,14 +91,13 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
 
         setContentView(R.layout.activity_main);
-        ListFragment listF =ListFragment.newInstance();
+        ListFragment listF = ListFragment.newInstance();
         showListFragment(listF);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_color)));
         BrickPersister.saveStandardSketch(getApplicationContext());
 
         final BrickCommunicator brickCommunicator = BrickCommunicator.getInstance();
         brickCommunicator.initiateBluetooth(this);
-
 
 
     }
@@ -111,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         transaction.replace(R.id.container, fragment, "fragment");
         transaction.addToBackStack(fragment.getClass().getName());
         transaction.commit();
-        currentFragment=fragment;
+        currentFragment = fragment;
     }
 
     public void showListFragment(Fragment fragment) {
@@ -120,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         showFragment(fragment);
     }
 
-    public void onListFragmentInteraction(Parameter uri){
+    public void onListFragmentInteraction(Parameter uri) {
         //you can leave it empty
     }
 
@@ -131,9 +142,54 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
                 fileName);
         ArrayList<Brick> brickList = BrickPersister.loadSketchFromJson(standardJSON);
 
+        int counter = 0;
 
-        for(Brick item : brickList) {
-            brickPairs.add(new Pair<>((long) brickPairs.size(),item));
+        for (Brick item : brickList) {
+
+
+            brickPairs.add(new Pair<>((long) counter, item));
+
+
+            if (item.getBrickType() == BrickTypes.INTERNAL) {
+                ArrayList<Brick> subBricks = ((InternalBrick) item).getSubBricks();
+                if (subBricks != null) {
+                    for (Brick subBrick : subBricks) {
+                        counter++;
+                        brickPairs.add(new Pair<>((long) counter, subBrick));
+                    }
+
+
+                    InternalSubTypes subType = ((InternalBrick) item).getSubType();
+                    InternalSubTypes endSubType = null;
+                    switch(subType){
+                        //Case statements
+                        case IF: endSubType = InternalSubTypes.ENDIF;
+                            break;
+                        case VARIABLE: endSubType = InternalSubTypes.ENDVARIABLE;
+                            break;
+                        case FOR: endSubType = InternalSubTypes.ENDFOR;
+                            break;
+                        case WHILE: endSubType = InternalSubTypes.ENDWHILE;
+                            break;
+                        //Default case statement
+                        default: endSubType = InternalSubTypes.ENDWHILE;
+                    }
+
+                    ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+                    BrickBuilder bb = new BrickBuilder(endSubType.name(), BrickTypes.INTERNAL, arrInternal);
+                    bb.setSubType(endSubType);
+                    //bb.setSubBricks(subList);
+
+                    Brick itemEnd= (InternalBrick) bb.buildBrick();
+                    counter++;
+                    brickPairs.add(new Pair<>((long) counter, itemEnd));
+
+
+                }
+            }
+
+            counter++;
+
         }
 
         return brickPairs;
@@ -144,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         String message;
         String positiveButtonText;
 
-        if(load) {
+        if (load) {
             title = Constants.LOAD_TITLE;
             message = Constants.LOAD_ENTER_FILE;
             positiveButtonText = Constants.LOAD_BUTTON;
@@ -164,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String fileName = String.valueOf(taskEditText.getText());
-                        if(load) {
+                        if (load) {
                             listFragment.setmItemArray(getCertainSketch(fileName));
                         } else {
                             ArrayList<Pair<Long, Brick>> brickList = listFragment.getmItemArray();
@@ -176,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
                             }*/
 
 
-                            ArrayList<Brick> translatedBricks = BrickHelper.translateUiBricksToBackendBricks(brickList);
+                            ArrayList<Brick> translatedBricks = BrickHelper.getInstance().translateUiBricksToBackendBricks(brickList);
 
                             BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(translatedBricks));
                         }

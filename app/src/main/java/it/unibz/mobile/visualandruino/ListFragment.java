@@ -248,11 +248,12 @@ public class ListFragment extends Fragment {
 
     public void executeBricks()
     {
-        brickExecutor.executeBlocks(BrickHelper.translateUiBricksToBackendBricks(mItemArray));
+        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks(mItemArray));
 
     }
     public void executeNextBrick()
     {
+
         printCurrentVariables();
         if(currentBrick<mItemArray.size())
         {
