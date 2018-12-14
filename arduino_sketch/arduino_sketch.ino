@@ -107,7 +107,7 @@ void handleCommand(String commandString) {
     char* commandParam1 = tokens[1];
     Serial.println("analogRead");
     Serial.println(commandParam1);
-    mySerial.write("testing return value");
+    mySerial.write("10");
     mySerial.write(3);
    }
   

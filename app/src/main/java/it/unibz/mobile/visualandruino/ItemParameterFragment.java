@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.utils.BrickHelper;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,8 @@ public class ItemParameterFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private ArrayList<Parameter>  parameters;
+    private boolean isVariable;
+    private boolean isInternal;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -38,14 +41,18 @@ public class ItemParameterFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ItemParameterFragment newInstance(int columnCount, ArrayList<Parameter> parameters ) {
+    public static ItemParameterFragment newInstance(int columnCount, ArrayList<Parameter> parameters, boolean isVariable, boolean isInternal) {
         ItemParameterFragment fragment = new ItemParameterFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         fragment.parameters= parameters;
+        fragment.isVariable = isVariable;
+        fragment.isInternal = isInternal;
         return fragment;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +80,7 @@ public class ItemParameterFragment extends Fragment {
 
 
 
-            recyclerView.setAdapter(new ItemParameterRecyclerViewAdapter(parameters, mListener));
+            recyclerView.setAdapter(new ItemParameterRecyclerViewAdapter(parameters, mListener, isVariable, isInternal));
         }
         return view;
     }

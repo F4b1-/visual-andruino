@@ -4,6 +4,9 @@ package it.unibz.mobile.visualandruino.utils;
 import android.support.v4.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
@@ -11,6 +14,22 @@ import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 
 public class BrickHelper {
+
+    private Map<String, Integer> setVariables = new HashMap();
+
+    // static variable single_instance of type Singleton
+    private static BrickHelper single_instance = null;
+
+    // static method to create instance of Singleton class
+    public static BrickHelper getInstance()
+    {
+        if (single_instance == null) {
+            single_instance = new BrickHelper();
+
+        }
+
+        return single_instance;
+    }
 
     /**
      * Translates the ui Bricks that know only one layer to the backend Bricks that know sub bricks.
@@ -75,5 +94,30 @@ public class BrickHelper {
 
         return brickList;
 
+    }
+
+    public String getCurrentVariablesFormatted() {
+        StringBuilder sb = new StringBuilder();
+
+        Iterator it = setVariables.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            sb.append("&#8226;" +  pair.getKey() + ": " + pair.getValue() + "<br/>");
+            it.remove();
+        }
+
+        return sb.toString();
+    }
+
+    public void setSetVariable(String variableName, Integer variableValue) {
+        setVariables.put(variableName, variableValue);
+    }
+
+    public int getSetVariable(String variableName) {
+        return setVariables.get(variableName);
+    }
+
+    public Map<String, Integer> getSetVariables() {
+        return setVariables;
     }
 }
