@@ -69,6 +69,7 @@ public class BrickCommunicator {
             //called when connected to particular device
             //Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_SHORT).show();
             //writeCommand("Connected");
+            UiHelper.writeCommand("Connected to " + device.getName());
 
         }
 
@@ -82,6 +83,7 @@ public class BrickCommunicator {
         @Override
         public void onConnectionFailed(Device device) {
             //called when connection failed to particular device
+            UiHelper.writeCommand("Connection failed. Trying again...");
             mSmoothBluetooth.tryConnection();
         }
 
@@ -98,6 +100,7 @@ public class BrickCommunicator {
         @Override
         public void onNoDevicesFound() {
             //called when no devices found
+            UiHelper.writeCommand("No devices found. Trying again...");
             mSmoothBluetooth.tryConnection();
         }
 
@@ -112,7 +115,7 @@ public class BrickCommunicator {
 
             for (Device device: deviceList) {
 
-                if(device.getName().equals("HC-05")) {
+                if(device.getName().equals("HC-05") || device.getName().equals("HC-06")) {
                     spiderDevice = device;
                 }
             }

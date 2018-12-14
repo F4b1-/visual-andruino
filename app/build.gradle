@@ -40,7 +40,7 @@ dependencies {
     implementation 'io.palaima:smoothbluetooth:0.1.0'
     implementation 'com.github.woxthebox:draglistview:1.6.3'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
-
+    compile 'com.jraska:console:0.4.3'
     implementation 'com.google.code.gson:gson:2.8.5'
 
     // required if you want to use Mockito for unit tests

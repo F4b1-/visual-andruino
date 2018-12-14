@@ -98,7 +98,9 @@ public class BrickHelper {
 
     public String getCurrentVariablesFormatted() {
         StringBuilder sb = new StringBuilder();
+        String header = "<br>Current Variables<br>";
 
+        sb.append(header);
         Iterator it = setVariables.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();

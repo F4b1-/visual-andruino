@@ -28,10 +28,13 @@ import it.unibz.mobile.visualandruino.utils.BrickBuilder;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
+import it.unibz.mobile.visualandruino.utils.UiHelper;
 
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.jraska.console.Console;
 
 
 public class MainActivity extends AppCompatActivity implements ItemParameterFragment.OnListFragmentInteractionListener {
@@ -97,7 +100,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     }
 
     public void printCurrentVariables() {
-        ((TextView) findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
+
+         UiHelper.writeCommand(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()).toString());
+
+        //((TextView) findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
 
     }
 
@@ -113,6 +119,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         BrickPersister.saveStandardSketch(getApplicationContext());
 
         final BrickCommunicator brickCommunicator = BrickCommunicator.getInstance();
+
+        UiHelper.writeCommand("Initialising bluetooth");
+
+
         brickCommunicator.initiateBluetooth(this);
 
 
