@@ -261,6 +261,8 @@ public class ListFragment extends Fragment {
             mItemArray.get(currentBrick).second.setBrickStatus(BrickStatus.Started);
             mDragListView.getAdapter().notifyDataSetChanged();
             brickExecutor.executeBrick(mItemArray.get(currentBrick).second);
+
+
             new Handler(Looper.getMainLooper()).post((new Runnable() {
                 @Override
                 public void run() {

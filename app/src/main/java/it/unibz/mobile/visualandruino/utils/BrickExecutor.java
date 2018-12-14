@@ -90,7 +90,7 @@ public class BrickExecutor {
         executeInternal(currentBrick, this);
     }
 
-    public void executeInternal(InternalBrick currentBrick, BrickExecutor brickExecutor) {
+    public void executeInternal(final InternalBrick currentBrick, final BrickExecutor brickExecutor) {
         /**
          * *** FOR ***
          */
@@ -189,8 +189,9 @@ public class BrickExecutor {
          */
         if (currentBrick.getSubType() == InternalSubTypes.VARIABLE) {
             BrickCommunicator.getInstance().setAwaitingReturn(true);
-            brickExecutor.executeBlocks(currentBrick.getSubBricks());
 
+
+            brickExecutor.executeBlocks(currentBrick.getSubBricks());
             awaitReturn(0);
 
             Parameter variableNameParam = currentBrick.getParameters().get(0);
@@ -209,7 +210,7 @@ public class BrickExecutor {
 
     }
 
-    public void awaitReturn(final int retries) {
+    public void awaitReturn(int retries) {
 
         if (BrickCommunicator.getInstance().isAwaitingReturn() && retries < Constants.RETURN_VALUE_RETRIES) {
 
@@ -220,13 +221,7 @@ public class BrickExecutor {
                 e.printStackTrace();
             }
 
-            /*Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    awaitReturn(retries + 1);
-                }
-            }, 200);*/
+
         }
     }
 

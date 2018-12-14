@@ -99,7 +99,7 @@ public class BrickHelper {
     public String getCurrentVariablesFormatted() {
         StringBuilder sb = new StringBuilder();
 
-        Iterator it = BrickHelper.getInstance().getSetVariables().entrySet().iterator();
+        Iterator it = setVariables.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             sb.append("&#8226;" +  pair.getKey() + ": " + pair.getValue() + "<br/>");

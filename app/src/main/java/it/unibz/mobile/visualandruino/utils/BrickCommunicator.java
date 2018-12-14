@@ -25,7 +25,7 @@ public class BrickCommunicator {
     private int currentReturnValue = -1;
 
     // static method to create instance of Singleton class
-    public static BrickCommunicator getInstance()
+    public static synchronized BrickCommunicator getInstance()
     {
         if (single_instance == null) {
             single_instance = new BrickCommunicator();
@@ -40,6 +40,7 @@ public class BrickCommunicator {
             mSmoothBluetooth = new SmoothBluetooth(activity.getApplicationContext());
             mSmoothBluetooth.setListener(mListener);
             mSmoothBluetooth.tryConnection();
+
         }
 
     }
@@ -169,7 +170,8 @@ public class BrickCommunicator {
             currentReturnValue = Long.valueOf(value).intValue();
         }
 
-        awaitingReturn = false;
+        setAwaitingReturn(false);
+
     }
 
 
@@ -179,19 +181,19 @@ public class BrickCommunicator {
 
     }
 
-    public boolean isAwaitingReturn() {
+    public synchronized boolean isAwaitingReturn() {
         return awaitingReturn;
     }
 
-    public void setAwaitingReturn(boolean awaitingReturn) {
+    public synchronized void setAwaitingReturn(boolean awaitingReturn) {
         this.awaitingReturn = awaitingReturn;
     }
 
-    public int getCurrentReturnValue() {
+    public synchronized int getCurrentReturnValue() {
         return currentReturnValue;
     }
 
-    public void setCurrentReturnValue(int currentReturnValue) {
+    public synchronized void setCurrentReturnValue(int currentReturnValue) {
         this.currentReturnValue = currentReturnValue;
     }
 

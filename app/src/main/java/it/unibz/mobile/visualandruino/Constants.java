@@ -7,7 +7,7 @@ public final class Constants {
         // restrict instantiation
     }
 
-    public static final int RETURN_VALUE_RETRIES= 5;
+    public static final int RETURN_VALUE_RETRIES= 30;
     public static final String STANDARD_SKETCH = "standard.json";
     public static final String SKETCHES_FOLDER = "sketches";
 

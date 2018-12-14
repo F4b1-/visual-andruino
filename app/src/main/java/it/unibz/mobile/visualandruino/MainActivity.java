@@ -68,8 +68,24 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         }
         if (id == R.id.run_sketch_button) {
 
-            listFragment.executeBricks();
-            printCurrentVariables();
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        while(true) {
+                            listFragment.executeBricks();
+                            printCurrentVariables();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            thread.start();
+
+
+
         }
 
         if (id == R.id.debug_sketch_button) {
