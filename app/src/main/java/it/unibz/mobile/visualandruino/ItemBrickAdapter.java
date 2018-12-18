@@ -61,6 +61,7 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
         holder.brickData = brickItem;
 
 
+
         if (!brickItem.getBrickStatus().equals(BrickStatus.Waiting)) {
             holder.mLayout.setBackgroundResource(R.drawable.input_selector_run);
         } else {

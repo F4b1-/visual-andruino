@@ -60,32 +60,6 @@ public class ListFragment extends Fragment {
         return new ListFragment();
     }
 
-
-    public ArrayList<Brick> getBricksArray() {
-        ArrayList<Brick> arrBricks= new ArrayList<Brick>();
-        for (int i=0; i< mItemArray.size(); i++)
-        {
-            arrBricks.add(mItemArray.get(i).second);
-        }
-        return arrBricks;
-    }
-    public Brick getBrick(int i)
-    {
-        ArrayList<Parameter> arr=new ArrayList<Parameter>();
-        Parameter val=new Parameter("Output",String.valueOf((i%2)));
-        Parameter valPin=new Parameter("PinNumber","22");
-        arr.add(val );
-        arr.add(valPin );
-
-        String name="ON";
-        if(i%2==0)
-        {
-            name="OFF";
-        }
-
-        return new ArduinoCommandBrick(name, arr,3);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,29 +196,18 @@ public class ListFragment extends Fragment {
 
 
          listAdapter = new ItemBrickAdapter(getContext(), mItemArray, R.layout.list_item_parameters, R.id.image, false,
-
                 new RecyclerViewOnItemClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-
-                        EditText edit = (EditText)mainView.findViewById(R.id.fileName);
-
-                        String pinNumber = edit.getText().toString();
-                        //Toast.makeText(view.getContext(), "Start - position: " + mItemArray.get(position).second.getName(), Toast.LENGTH_SHORT).show();*/
-
                         brickExecutor.executeBrick(mItemArray.get(position).second);
                     }
                 });
         mDragListView.setAdapter(listAdapter, true);
         mDragListView.setCanDragHorizontally(false);
-        mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item_parameters));
-
-
+        //mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item_parameters));
 
 
     }
-
-
 
     public void executeBricks()
     {
