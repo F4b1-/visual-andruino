@@ -64,6 +64,7 @@ public class BrickHelper {
                      * Internal Command Start
                      */
                     insideCommandStructure = true;
+                    ((InternalBrick) currentBrick).setSubBricks(new ArrayList<Brick>(), ((InternalBrick) currentBrick).getSubType());
                     currentInternalSuperBrick = (InternalBrick) currentBrick;
                 }
             }

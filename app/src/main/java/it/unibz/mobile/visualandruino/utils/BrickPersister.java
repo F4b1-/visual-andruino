@@ -46,12 +46,37 @@ public class BrickPersister {
                 if(currentBrickType.equals(BrickTypes.ARDUINO_COMMAND.toString())) {
                     list.add(gson.fromJson(element, ArduinoCommandBrick.class));
                 } else if(currentBrickType.equals(BrickTypes.INTERNAL.toString())) {
-                    list.add(gson.fromJson(element, InternalBrick.class));
+                    InternalBrick internal = gson.fromJson(element, InternalBrick.class);
+
+                    final JsonArray dataSubBricks  = ((JsonObject) element).get("subBricks").getAsJsonArray();
+
+                    ArrayList<Brick> internalSubBricks = new ArrayList<>();
+
+                    for (JsonElement elementSubBrick : dataSubBricks) {
+                        internalSubBricks.add(gson.fromJson(elementSubBrick, ArduinoCommandBrick.class));
+                    }
+
+                    internal.setSubBricks(internalSubBricks, internal.getSubType());
+
+                    list.add(internal);
+
+
                 } else if(currentBrickType.equals(BrickTypes.ANDROID.toString())) {
                     //TODO
                 }
             }
         }
+/*
+        ArrayList<Brick> listCasted = new ArrayList();
+        for(Brick superBrick : list) {
+            if(superBrick.getBrickType() == BrickTypes.INTERNAL) {
+                if(!((InternalBrick)superBrick).getSubBricks().isEmpty()) {
+                    for(Brick subBrick : ((InternalBrick)superBrick).getSubBricks()) {
+                        subBrick
+                    }
+                }
+            }
+        }*/
 
         return list;
     }
