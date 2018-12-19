@@ -138,56 +138,12 @@
         app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addButton"
+        android:id="@+id/addLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/endColor"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addBrickAnalog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="88dp"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        app:backgroundTint="@color/endColor2"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addBrickAnalogRead"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="160dp"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        app:backgroundTint="@color/endColor2"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addBrickIf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="240dp"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        app:backgroundTint="@color/endColor3"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addBrickVariable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="300dp"
-        android:layout_marginEnd="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        app:backgroundTint="@color/endColor3"
+        app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
 

@@ -26,14 +26,9 @@ import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 
-import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
-import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
@@ -68,7 +63,7 @@ public class ListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mainView = inflater.inflate(R.layout.firstlist_layout, container, false);
+        mainView = inflater.inflate(R.layout.frame_prog_layout, container, false);
         mRefreshLayout = (MySwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
         mDragListView = (DragListView) mainView.findViewById(R.id.drag_list_view);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
@@ -121,54 +116,21 @@ public class ListFragment extends Fragment {
             }
         });
 
+
+
         setupListRecyclerView();
 
-        FloatingActionButton fab = (FloatingActionButton) mainView.findViewById(R.id.addButton);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+
+
+        FloatingActionButton fabLayout = (FloatingActionButton) mainView.findViewById(R.id.addLayout);
+        fabLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createDigitalWriteBrick()));
-                mDragListView.getAdapter().notifyDataSetChanged();
+                ((MainActivity) view.getContext()).showFragment(ListBricksBase.newInstance());
             }
         });
 
-        FloatingActionButton fabA = (FloatingActionButton) mainView.findViewById(R.id.addBrickAnalog);
-        fabA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createAnalogWriteBrick()));
-                mDragListView.getAdapter().notifyDataSetChanged();
-            }
-        });
-
-        FloatingActionButton fabARead = (FloatingActionButton) mainView.findViewById(R.id.addBrickAnalogRead);
-        fabARead.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createAnalogReadBrick()));
-                mDragListView.getAdapter().notifyDataSetChanged();
-            }
-        });
-
-        FloatingActionButton fabIf = (FloatingActionButton) mainView.findViewById(R.id.addBrickIf);
-        fabIf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createIfBrick()));
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createEndIfBrick()));
-                mDragListView.getAdapter().notifyDataSetChanged();
-            }
-        });
-
-        FloatingActionButton fabVariable = (FloatingActionButton) mainView.findViewById(R.id.addBrickVariable);
-        fabVariable.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createVariableBrick()));
-                mItemArray.add( new Pair<>((long) mItemArray.size()-1,BrickPersister.createEndVariableBrick()));
-                mDragListView.getAdapter().notifyDataSetChanged();
-            }
-        });
 
 
 
@@ -188,18 +150,20 @@ public class ListFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Visual-Andruino");
     }
 
-
+    public void addBrick(Brick brick)
+    {
+        mItemArray.add( new Pair<>((long) mItemArray.size()-1,brick));
+        mDragListView.getAdapter().notifyDataSetChanged();
+    }
 
     private void setupListRecyclerView() {
         mDragListView.setLayoutManager(new LinearLayoutManager(getContext()));
         brickExecutor= new BrickExecutor();
-
-
-         listAdapter = new ItemBrickAdapter(getContext(), mItemArray, R.layout.list_item_parameters, R.id.image, false,
+         listAdapter = new ItemBrickAdapter(getContext(), mItemArray, R.layout.list_item_parameters, R.id.item_layout, true,
                 new RecyclerViewOnItemClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                        brickExecutor.executeBrick(mItemArray.get(position).second);
+                       // brickExecutor.executeBrick(mItemArray.get(position).second);
                     }
                 });
         mDragListView.setAdapter(listAdapter, true);

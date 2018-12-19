@@ -189,6 +189,7 @@ public class BrickPersister {
         Brick item2= createAnalogWriteBrick();
 
 
+
         /**
          * adding bricks
          */
@@ -201,6 +202,11 @@ public class BrickPersister {
         }
         Brick endBrick= createEndIfBrick();
         bricks.add(endBrick );
+
+
+        //Variable
+        bricks.add(createVariableBrick());
+        bricks.add(createEndVariableBrick());
 
 
         writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(bricks));

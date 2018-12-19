@@ -76,7 +76,6 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
 
         }
 
-
     }
 
     @Override
@@ -122,15 +121,6 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
 
 
         }
-
-/*
-        public void updateVariableParametersWithSetVariables() {
-            ArrayList<Parameter> parameters = brickData.getParameters();
-            //BrickHelper.getInstance().setSetVariable("test", 5);
-            Map<String, Integer> setVariables = BrickHelper.getInstance().getSetVariables();
-            parameters.get(0).setAllowedValues(new ArrayList<>(BrickHelper.getInstance().getSetVariables().keySet()));
-            brickData.setParameters(parameters);
-        }*/
 
 
         @Override

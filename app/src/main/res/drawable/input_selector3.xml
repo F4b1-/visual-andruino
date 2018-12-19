@@ -10,10 +10,11 @@
                 android:radius="0dp" />
 
             <gradient
+
                 android:angle="45"
 
                 android:endColor="@color/endColor3"
-                android:startColor="@color/startColor3"
+                android:startColor="@color/endColor3"
                 android:type="linear" />
 
             <!--If your shape requires only one solid color-->
@@ -51,7 +52,7 @@
             <gradient
                 android:angle="45"
 
-                android:endColor="@color/endColor3"
+                android:endColor="@color/startColor3"
                 android:startColor="@color/startColor3"
                 android:type="linear" />
 

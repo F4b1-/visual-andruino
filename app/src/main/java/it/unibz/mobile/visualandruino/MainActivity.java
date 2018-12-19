@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
 
     ViewGroup _root;
-    ListFragment listFragment;
-    Fragment currentFragment;
+    public ListFragment listFragment;
+    public Fragment currentFragment;
 
 
     //private int _xDelta;
@@ -142,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         }
     }
 
+    public void showListProgFragment()
+    {
+        showFragment(listFragment);
+    }
     public void showFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment, "fragment");
@@ -153,14 +157,14 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     public void showListFragment(Fragment fragment) {
         listFragment = (ListFragment) fragment;
 
-        showFragment(fragment);
+        showFragment(listFragment);
     }
 
     public void onListFragmentInteraction(Parameter uri) {
         //you can leave it empty
     }
 
-    private ArrayList<Pair<Long, Brick>> getCertainSketch(String fileName) {
+    public ArrayList<Pair<Long, Brick>> getCertainSketch(String fileName) {
         ArrayList<Pair<Long, Brick>> brickPairs = new ArrayList<Pair<Long, Brick>>();
 
         String standardJSON = BrickPersister.readJsonFile(getApplicationContext(), Constants.SKETCHES_FOLDER,

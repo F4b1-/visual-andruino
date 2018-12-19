@@ -29,10 +29,10 @@
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/item_layout"
         android:layout_alignTop="@+id/item_layout"
-        android:background="#ff0000"
+        android:background="@color/colorPrimary"
         android:gravity="start|center_vertical"
         android:padding="16dp"
-        android:text="Red"
+        android:text="Send"
         android:textColor="@android:color/white"
         android:textSize="20sp"/>
 
@@ -42,11 +42,11 @@
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/item_layout"
         android:layout_alignTop="@+id/item_layout"
-        android:background="#0000ff"
+        android:background="@color/white"
         android:gravity="end|center_vertical"
         android:padding="16dp"
-        android:text="Blue"
-        android:textColor="@android:color/white"
+        android:text="Deleted"
+
         android:textSize="20sp"/>
 
     <LinearLayout
@@ -59,11 +59,12 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/imgReorder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_reorder_white_24dp"/>
 
 
@@ -74,6 +75,7 @@
             android:layout_weight=".45"
             android:textColor="@color/textWhite"
             android:text="@string/digitalWText"
+            android:layout_marginLeft="@dimen/text_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
