@@ -112,6 +112,13 @@ public class ListFragment extends Fragment {
                     Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
                     int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
                     mDragListView.getAdapter().removeItem(pos);
+                }else
+                {
+                    Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
+                    int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
+
+
+                    brickExecutor.executeBrick(mItemArray.get(pos).second);
                 }
             }
         });
