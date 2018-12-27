@@ -182,7 +182,7 @@ public class ListFragment extends Fragment {
 
     public void executeBricks()
     {
-        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks(mItemArray));
+        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()));
 
     }
     public void executeNextBrick()
