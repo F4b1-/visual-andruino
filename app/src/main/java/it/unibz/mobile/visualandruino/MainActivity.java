@@ -92,7 +92,8 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         if (id == R.id.debug_sketch_button) {
 
-            listFragment.executeNextBrick();
+            //listFragment.executeNextBrick();
+            listFragment.debugBricks();
         }
 
         return super.onOptionsItemSelected(item);

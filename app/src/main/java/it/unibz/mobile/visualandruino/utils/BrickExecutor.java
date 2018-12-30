@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.unibz.mobile.visualandruino.Constants;
+import it.unibz.mobile.visualandruino.ListFragment;
 import it.unibz.mobile.visualandruino.R;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
@@ -77,6 +78,26 @@ public class BrickExecutor {
 
 
     }
+
+    public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment) {
+        Brick currentBrick = bricks.get(0);
+
+        fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Started);
+
+        executeBrick(currentBrick);
+
+        //remove at the end and move on
+
+        bricks.remove(0);
+        if (bricks.size() > 0) {
+            executeBlocks(bricks, fragment);
+        }
+
+        fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Finished);
+
+    }
+
+
 
     public Integer lookUpVariableValue(String variableName) {
         return BrickHelper.getInstance().getSetVariable(variableName);

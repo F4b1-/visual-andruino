@@ -9,6 +9,8 @@ public class Brick {
     private String name;
     private BrickTypes brickType;
     private BrickStatus brickStatus;
+    private long brickUiId;
+
 
     private ArrayList<Parameter> parameters;
 
@@ -32,6 +34,9 @@ public class Brick {
 
         return params;
     }
+
+
+
 
 
     public String getName() {
@@ -66,5 +71,12 @@ public class Brick {
         this.parameters = parameters;
     }
 
+    public long getBrickUiId() {
+        return brickUiId;
+    }
+
+    public void setBrickUiId(long brickUiId) {
+        this.brickUiId = brickUiId;
+    }
 }
 

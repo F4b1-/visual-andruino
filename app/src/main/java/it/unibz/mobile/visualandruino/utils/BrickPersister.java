@@ -220,8 +220,11 @@ public class BrickPersister {
          */
         bricks.add(item);
         bricks.add(item2);
+        /*
         Brick ifBrick = createIfBrick();
 
+
+        /*
         if(ifBrick != null) {
             bricks.add(ifBrick);
         }
@@ -232,6 +235,7 @@ public class BrickPersister {
         //Variable
         bricks.add(createVariableBrick());
         bricks.add(createEndVariableBrick());
+        */
 
 
         writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(bricks));

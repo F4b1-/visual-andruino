@@ -185,6 +185,16 @@ public class ListFragment extends Fragment {
         brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()));
 
     }
+
+    public void debugBricks()
+    {
+        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this);
+
+    }
+
+
+
+
     public void executeNextBrick()
     {
 
@@ -259,6 +269,18 @@ public class ListFragment extends Fragment {
         this.mItemArray.clear();
         this.mItemArray.addAll(mItemArray);
         mDragListView.getAdapter().notifyDataSetChanged();
+
+    }
+
+    public void setBrickStatus(long brickUI, BrickStatus brickStatus) {
+
+        for(Pair<Long, Brick> pair : this.getmItemArray()) {
+            if(pair.first == brickUI) {
+                pair.second.setBrickStatus(brickStatus);
+                mDragListView.getAdapter().notifyDataSetChanged();
+            }
+        }
+
 
     }
 
