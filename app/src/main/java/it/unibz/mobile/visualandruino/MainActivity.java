@@ -92,8 +92,22 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         if (id == R.id.debug_sketch_button) {
 
-            //listFragment.executeNextBrick();
-            listFragment.debugBricks();
+            UiHelper.writeCommand("Debugging sketch...");
+            Thread thread = new Thread() {
+                @Override
+                public void run() {
+                    try {
+
+                        listFragment.debugBricks();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            thread.start();
+
         }
 
         return super.onOptionsItemSelected(item);
