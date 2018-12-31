@@ -118,8 +118,13 @@ public class BrickHelper {
         setVariables.put(variableName, variableValue);
     }
 
-    public int getSetVariable(String variableName) {
-        return setVariables.get(variableName);
+    public Integer getSetVariable(String variableName) {
+        Integer variableValue = null;
+        if(setVariables.containsKey(variableName)) {
+            variableValue = setVariables.get(variableName);
+        }
+
+        return variableValue;
     }
 
     public Map<String, Integer> getSetVariables() {

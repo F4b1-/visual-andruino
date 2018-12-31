@@ -24,6 +24,10 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class BrickExecutorTest {
 
+    /**
+     * Testing the if brick with variable that needs to be looked up.
+     * @throws Exception
+     */
     @Test
     public void executeIfTest() throws Exception {
 
@@ -67,6 +71,56 @@ public class BrickExecutorTest {
         be.executeInternal(item, beMock);
         verify(beMock, times(0)).executeBlocks(item.getSubBricks());
     }
+
+    /**
+     * Testing the if brick with actual numerical value.
+     * @throws Exception
+     */
+    @Test
+    public void executeIfActualValueTest() throws Exception {
+
+        ArrayList<Parameter> arr=new ArrayList<Parameter>();
+        /*Parameter val=new Parameter();
+        val.setValue(String.valueOf((2)));
+        arr.add(val );*/
+        BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
+        //bbSub.setCommandId(3);
+        Brick itemSub= bbSub.buildBrick();
+
+        ArrayList<Brick> subList=new ArrayList<Brick>();
+        subList.add(itemSub);
+
+
+        ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+        Parameter valInternal=new Parameter();
+        valInternal.setValue("2");
+        arrInternal.add(valInternal);
+
+        Parameter valInternalComp=new Parameter();
+        valInternalComp.setValue(ComparatorTypes.GREATER.toString());
+        arrInternal.add(valInternalComp);
+
+        Parameter valInternalRef=new Parameter();
+        valInternalRef.setValue(String.valueOf((3)));
+        arrInternal.add(valInternalRef);
+
+        BrickBuilder bb = new BrickBuilder("test", BrickTypes.INTERNAL, arrInternal);
+        bb.setSubType(InternalSubTypes.IF);
+        bb.setSubBricks(subList);
+
+        InternalBrick item= (InternalBrick) bb.buildBrick();
+
+        //BrickHelper.getInstance().setSetVariable("testVariable", 2);
+
+        //  create mock
+        BrickExecutor beMock = mock(BrickExecutor.class);
+        // define return value for method getUniqueId()
+        BrickExecutor be = new BrickExecutor();
+        be.executeInternal(item, beMock);
+        verify(beMock, times(0)).executeBlocks(item.getSubBricks());
+    }
+
+
 
     @Test
     public void executeIfFalseTest() throws Exception {
@@ -203,8 +257,8 @@ public class BrickExecutorTest {
         be.executeInternal(item, be);
 
 
-        assertEquals(1, BrickHelper.getInstance().getSetVariable("testVariable"));
-        assertEquals("&#8226;testVariable: 1<br/>", BrickHelper.getInstance().getCurrentVariablesFormatted());
+        assertEquals(new Integer(1), BrickHelper.getInstance().getSetVariable("testVariable"));
+        assertEquals("<br>Current Variables<br>&#8226;testVariable=1<br/>", BrickHelper.getInstance().getCurrentVariablesFormatted());
     }
 
 

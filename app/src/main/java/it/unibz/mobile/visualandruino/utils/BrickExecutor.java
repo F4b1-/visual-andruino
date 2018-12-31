@@ -81,12 +81,9 @@ public class BrickExecutor {
 
     public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment) {
         Brick currentBrick = bricks.get(0);
-
         fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Started);
 
         executeBrick(currentBrick);
-
-        //remove at the end and move on
 
         bricks.remove(0);
         if (bricks.size() > 0) {
@@ -99,8 +96,17 @@ public class BrickExecutor {
 
 
 
-    public Integer lookUpVariableValue(String variableName) {
-        return BrickHelper.getInstance().getSetVariable(variableName);
+    public Integer lookUpVariableValue(String parameter) {
+        Integer variableValue = null;
+        variableValue = BrickHelper.getInstance().getSetVariable(parameter);
+        try {
+            if(variableValue == null) {
+                variableValue = Integer.valueOf(parameter);
+            }
+        } catch(Exception e) {
+        }
+
+        return variableValue;
     }
 
     public boolean allParametersSet(Integer referenceValue, ComparatorTypes comparator, Integer firstValue) {
