@@ -277,7 +277,16 @@ public class ListFragment extends Fragment {
         for(Pair<Long, Brick> pair : this.getmItemArray()) {
             if(pair.first == brickUI) {
                 pair.second.setBrickStatus(brickStatus);
-                mDragListView.getAdapter().notifyDataSetChanged();
+                getActivity().runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        mDragListView.getAdapter().notifyDataSetChanged();
+
+                    }
+                });
+
             }
         }
 

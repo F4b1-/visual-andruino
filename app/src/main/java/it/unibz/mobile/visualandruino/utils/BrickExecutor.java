@@ -26,7 +26,7 @@ public class BrickExecutor {
 
     public void executeBrick(Brick currentBrick) {
 
-        currentBrick.setBrickStatus(BrickStatus.Started);
+        //currentBrick.setBrickStatus(BrickStatus.Started);
         if (currentBrick.getBrickType() == BrickTypes.ARDUINO_COMMAND) {
             String command = "";
             command += ((ArduinoCommandBrick) currentBrick).getCommandId();
@@ -60,7 +60,7 @@ public class BrickExecutor {
             //TODO Execute Android commands
         }
 
-        currentBrick.setBrickStatus(BrickStatus.Finished);
+        //currentBrick.setBrickStatus(BrickStatus.Finished);
     }
 
     public void executeBlocks(ArrayList<Brick> bricks) {
@@ -80,8 +80,16 @@ public class BrickExecutor {
     }
 
     public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment) {
+
         Brick currentBrick = bricks.get(0);
+        fragment.setBrickStatus(currentBrick.getBrickUiId() - 1, BrickStatus.Waiting);
         fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Started);
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         executeBrick(currentBrick);
 
@@ -90,7 +98,8 @@ public class BrickExecutor {
             executeBlocks(bricks, fragment);
         }
 
-        fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Finished);
+        //reset final brick
+        fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Waiting);
 
     }
 
