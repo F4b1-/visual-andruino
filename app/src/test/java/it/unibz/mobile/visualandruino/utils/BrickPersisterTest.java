@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
 import static org.junit.Assert.assertEquals;
@@ -55,7 +56,7 @@ public class BrickPersisterTest {
         bricks.add(item2);
 
 
-        assertEquals("[{\"commandId\":3,\"name\":\"DigitalWrite\",\"brickType\":\"ARDUINO_COMMAND\",\"parameters\":[{\"parameterName\":\"PinNumber\",\"value\":\"5\"},{\"parameterName\":\"WriteValue\",\"value\":\"HIGH\",\"allowedValues\":[\"HIGH\",\"LOW\"]}]},{\"commandId\":2,\"name\":\"AnalogWrite\",\"brickType\":\"ARDUINO_COMMAND\",\"parameters\":[{\"parameterName\":\"PinNumber\",\"value\":\"5\"},{\"parameterName\":\"analogWrite\",\"value\":\"0\"}]}]", BrickPersister.translateSketchToJson(bricks));
+        assertEquals("[{\"commandId\":3,\"name\":\"DigitalWrite\",\"brickType\":\"ARDUINO_COMMAND\",\"brickStatus\":\"Waiting\",\"brickUiId\":0,\"parameters\":[{\"parameterName\":\"PinNumber\",\"value\":\"5\"},{\"parameterName\":\"WriteValue\",\"value\":\"HIGH\",\"allowedValues\":[\"HIGH\",\"LOW\"]}]},{\"commandId\":2,\"name\":\"AnalogWrite\",\"brickType\":\"ARDUINO_COMMAND\",\"brickStatus\":\"Waiting\",\"brickUiId\":0,\"parameters\":[{\"parameterName\":\"PinNumber\",\"value\":\"5\"},{\"parameterName\":\"analogWrite\",\"value\":\"0\"}]}]", BrickPersister.translateSketchToJson(bricks));
     }
 
 
@@ -67,8 +68,12 @@ public class BrickPersisterTest {
         ArrayList<Parameter> arr=new ArrayList<Parameter>();
         arr.add(val );
         BrickBuilder bb = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
+
         bb.setCommandId(3);
+
+
         Brick item= bb.buildBrick();
+
 
         Parameter val2=new Parameter();
         val2.setValue(String.valueOf((3)));
@@ -79,10 +84,11 @@ public class BrickPersisterTest {
         bb.setCommandId(4);
         Brick item2= bb.buildBrick();
 
+
         bricks.add(item);
         bricks.add(item2);
 
-        String jsonArr = "[{'commandId':3,'name':'test','brickType':'ARDUINO_COMMAND','type':2,'parameters':[{'value':'2'}]},{'commandId':4,'name':'test2','brickType':'ARDUINO_COMMAND','type':3,'parameters':[{'value':'3'}]}]";
+        String jsonArr = "[{'commandId':3,'name':'test', 'brickStatus':'Waiting', 'brickType':'ARDUINO_COMMAND','type':2,'parameters':[{'value':'2'}]},{'commandId':4,'name':'test2','brickType':'ARDUINO_COMMAND',  'brickStatus':'Waiting','type':3,'parameters':[{'value':'3'}]}]";
 
         ArrayList<Brick> loadedArr = BrickPersister.loadSketchFromJson(jsonArr);
 

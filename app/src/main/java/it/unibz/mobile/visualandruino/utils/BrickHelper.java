@@ -48,6 +48,7 @@ public class BrickHelper {
 
         for(Pair<Long, Brick> pair : uiBricks) {
             Brick currentBrick = pair.second;
+            currentBrick.setBrickUiId(pair.first);
 
               if(currentBrick.getBrickType() == BrickTypes.INTERNAL) {
 
@@ -55,6 +56,7 @@ public class BrickHelper {
                     /**
                      * Internal Command End
                      */
+
                     brickList.add(currentInternalSuperBrick);
                     insideCommandStructure = false;
                     currentInternalSuperBrick = null;
@@ -88,7 +90,7 @@ public class BrickHelper {
                 /**
                  * Regular Bricks
                  */
-                brickList.add(pair.second);
+                brickList.add(currentBrick);
             }
 
         }
@@ -116,8 +118,13 @@ public class BrickHelper {
         setVariables.put(variableName, variableValue);
     }
 
-    public int getSetVariable(String variableName) {
-        return setVariables.get(variableName);
+    public Integer getSetVariable(String variableName) {
+        Integer variableValue = null;
+        if(setVariables.containsKey(variableName)) {
+            variableValue = setVariables.get(variableName);
+        }
+
+        return variableValue;
     }
 
     public Map<String, Integer> getSetVariables() {

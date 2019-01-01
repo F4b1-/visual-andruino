@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import it.unibz.mobile.visualandruino.Constants;
+import it.unibz.mobile.visualandruino.ListFragment;
 import it.unibz.mobile.visualandruino.R;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
@@ -25,7 +26,7 @@ public class BrickExecutor {
 
     public void executeBrick(Brick currentBrick) {
 
-        currentBrick.setBrickStatus(BrickStatus.Started);
+        //currentBrick.setBrickStatus(BrickStatus.Started);
         if (currentBrick.getBrickType() == BrickTypes.ARDUINO_COMMAND) {
             String command = "";
             command += ((ArduinoCommandBrick) currentBrick).getCommandId();
@@ -59,7 +60,7 @@ public class BrickExecutor {
             //TODO Execute Android commands
         }
 
-        currentBrick.setBrickStatus(BrickStatus.Finished);
+        //currentBrick.setBrickStatus(BrickStatus.Finished);
     }
 
     public void executeBlocks(ArrayList<Brick> bricks) {
@@ -78,8 +79,43 @@ public class BrickExecutor {
 
     }
 
-    public Integer lookUpVariableValue(String variableName) {
-        return BrickHelper.getInstance().getSetVariable(variableName);
+    public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment) {
+
+        Brick currentBrick = bricks.get(0);
+        fragment.setBrickStatus(currentBrick.getBrickUiId() - 1, BrickStatus.Waiting);
+        fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Started);
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        executeBrick(currentBrick);
+
+        bricks.remove(0);
+        if (bricks.size() > 0) {
+            executeBlocks(bricks, fragment);
+        }
+
+        //reset final brick
+        fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Waiting);
+
+    }
+
+
+
+    public Integer lookUpVariableValue(String parameter) {
+        Integer variableValue = null;
+        variableValue = BrickHelper.getInstance().getSetVariable(parameter);
+        try {
+            if(variableValue == null) {
+                variableValue = Integer.valueOf(parameter);
+            }
+        } catch(Exception e) {
+        }
+
+        return variableValue;
     }
 
     public boolean allParametersSet(Integer referenceValue, ComparatorTypes comparator, Integer firstValue) {

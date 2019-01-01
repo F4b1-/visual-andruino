@@ -194,13 +194,7 @@ public class BrickPersister {
         return bb.buildBrick();
     }
 
-
-    public static boolean saveStandardSketch(Context context) {
-        /*
-        if(fileExist(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH)) {
-            return false;
-        }*/
-
+    public static ArrayList<Brick> constructStandardSketch() {
         ArrayList<Brick> bricks = new ArrayList<Brick>();
 
         /**
@@ -220,8 +214,23 @@ public class BrickPersister {
          */
         bricks.add(item);
         bricks.add(item2);
+        return bricks;
+
+    }
+
+
+    public static boolean saveStandardSketch(Context context) {
+
+        if(fileExist(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH)) {
+            return false;
+        }
+
+
+        /*
         Brick ifBrick = createIfBrick();
 
+
+        /*
         if(ifBrick != null) {
             bricks.add(ifBrick);
         }
@@ -232,9 +241,10 @@ public class BrickPersister {
         //Variable
         bricks.add(createVariableBrick());
         bricks.add(createEndVariableBrick());
+        */
 
 
-        writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(bricks));
+        writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(constructStandardSketch()));
 
         return true;
     }
