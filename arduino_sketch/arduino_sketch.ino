@@ -130,7 +130,7 @@ void handleCommand(String commandString) {
     Serial.println("unknown command");
   }
 
-  delay(1000);
+  //delay(1000);
 }
 
 /** 
