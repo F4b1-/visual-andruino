@@ -48,17 +48,23 @@ public class BrickPersister {
                 } else if(currentBrickType.equals(BrickTypes.INTERNAL.toString())) {
                     InternalBrick internal = gson.fromJson(element, InternalBrick.class);
 
-                    final JsonArray dataSubBricks  = ((JsonObject) element).get("subBricks").getAsJsonArray();
+                    if(((JsonObject) element).get("subBricks")!=null)
+                    {
+                        final JsonArray dataSubBricks  = ((JsonObject) element).get("subBricks").getAsJsonArray();
 
-                    ArrayList<Brick> internalSubBricks = new ArrayList<>();
+                        ArrayList<Brick> internalSubBricks = new ArrayList<>();
 
-                    for (JsonElement elementSubBrick : dataSubBricks) {
-                        internalSubBricks.add(gson.fromJson(elementSubBrick, ArduinoCommandBrick.class));
+                        for (JsonElement elementSubBrick : dataSubBricks) {
+                            internalSubBricks.add(gson.fromJson(elementSubBrick, ArduinoCommandBrick.class));
+                        }
+                        internal.setSubBricks(internalSubBricks, internal.getSubType());
+
                     }
 
-                    internal.setSubBricks(internalSubBricks, internal.getSubType());
 
                     list.add(internal);
+
+
 
 
                 } else if(currentBrickType.equals(BrickTypes.ANDROID.toString())) {
@@ -208,12 +214,28 @@ public class BrickPersister {
         Brick item2= createAnalogWriteBrick();
 
 
+        Brick item3= createAnalogReadBrick();
+
+        Brick item4= createVariableBrick();
+        Brick item5= createEndVariableBrick();
+
+        Brick item6= createIfBrick();
+        Brick item7= createEndIfBrick();
+
+
+
 
         /**
          * adding bricks
          */
         bricks.add(item);
         bricks.add(item2);
+        bricks.add(item3);
+        bricks.add(item4);
+        bricks.add(item5);
+        bricks.add(item6);
+        bricks.add(item7);
+
         return bricks;
 
     }
@@ -221,10 +243,10 @@ public class BrickPersister {
 
     public static boolean saveStandardSketch(Context context) {
 
-        if(fileExist(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH)) {
+        /*if(fileExist(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH)) {
             return false;
         }
-
+*/
 
         /*
         Brick ifBrick = createIfBrick();

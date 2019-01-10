@@ -118,10 +118,11 @@ public class ListFragment extends Fragment {
                     int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
 
 
-                    brickExecutor.executeBrick(mItemArray.get(pos).second);
+                    brickExecutor.executeBrick(mItemArray.get(pos).second, ListFragment.this, true);
                 }
             }
         });
+
 
 
 
@@ -159,7 +160,7 @@ public class ListFragment extends Fragment {
 
     public void addBrick(Brick brick)
     {
-        mItemArray.add( new Pair<>((long) mItemArray.size()-1,brick));
+        mItemArray.add( new Pair<>((long) mItemArray.size(),brick));
         mDragListView.getAdapter().notifyDataSetChanged();
     }
 
@@ -180,15 +181,19 @@ public class ListFragment extends Fragment {
 
     }
 
+    public void printDebbug(String message)
+    {
+        ((MainActivity) this.getContext()).printDebugg(message);
+    }
     public void executeBricks()
     {
-        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()));
+        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this, false);
 
     }
 
     public void debugBricks()
     {
-        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this);
+        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this, true);
 
     }
 
@@ -204,7 +209,9 @@ public class ListFragment extends Fragment {
             progressStatusCounter = 0;
             mItemArray.get(currentBrick).second.setBrickStatus(BrickStatus.Started);
             mDragListView.getAdapter().notifyDataSetChanged();
-            brickExecutor.executeBrick(mItemArray.get(currentBrick).second);
+
+
+            brickExecutor.executeBrick(mItemArray.get(currentBrick).second, this, true);
 
 
             new Handler(Looper.getMainLooper()).post((new Runnable() {

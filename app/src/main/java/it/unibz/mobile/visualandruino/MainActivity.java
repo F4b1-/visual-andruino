@@ -113,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         return super.onOptionsItemSelected(item);
     }
 
+    public void printDebugg(String message)
+    {
+        UiHelper.writeCommand(message);
+    }
     public void printCurrentVariables() {
 
         UiHelper.writeCommand(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()).toString());
