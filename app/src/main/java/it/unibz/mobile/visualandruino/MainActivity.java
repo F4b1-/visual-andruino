@@ -31,6 +31,7 @@ import it.unibz.mobile.visualandruino.utils.BrickPersister;
 import it.unibz.mobile.visualandruino.utils.UiHelper;
 
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -43,10 +44,8 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     ViewGroup _root;
     public ListFragment listFragment;
     public Fragment currentFragment;
+    private int checkedItem = 0;
 
-
-    //private int _xDelta;
-    //private int _yDelta;
 
     // create an action bar button
     @Override
@@ -99,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
                     try {
 
                         listFragment.debugBricks();
+                        printCurrentVariables();
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -113,10 +113,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         return super.onOptionsItemSelected(item);
     }
 
-    public void printDebugg(String message)
-    {
+    public void printDebugg(String message) {
         UiHelper.writeCommand(message);
     }
+
     public void printCurrentVariables() {
 
         UiHelper.writeCommand(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()).toString());
@@ -133,6 +133,15 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         setContentView(R.layout.activity_main);
         ListFragment listF = ListFragment.newInstance();
         showListFragment(listF);
+
+        if (savedInstanceState != null) {
+            ArrayList<Pair<Long, Brick>> bricks = (ArrayList<Pair<Long, Brick>>) savedInstanceState.getSerializable("bricks");
+
+            if (bricks != null) {
+                listF.setmItemArrayInital(bricks);
+            }
+        }
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_color)));
         BrickPersister.saveStandardSketch(getApplicationContext());
 
@@ -161,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         }
     }
 
-    public void showListProgFragment()
-    {
+    public void showListProgFragment() {
         showFragment(listFragment);
     }
+
     public void showFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment, "fragment");
@@ -248,53 +257,74 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         return brickPairs;
     }
 
+
     private void showPersistenceDialog(Context c, final boolean load) {
+
         String title;
         String message;
         String positiveButtonText;
 
+
+        final EditText taskEditText = new EditText(c);
+        taskEditText.setText(Constants.EXAMPLE_SKETCH);
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+
         if (load) {
             title = Constants.LOAD_TITLE;
-            message = Constants.LOAD_ENTER_FILE;
+
             positiveButtonText = Constants.LOAD_BUTTON;
         } else {
             title = Constants.SAVE_TITLE;
-            message = Constants.SAVE_ENTER_FILE;
             positiveButtonText = Constants.SAVE_BUTTON;
+            builder.setMessage(Constants.SAVE_ENTER_FILE);
+            builder.setView(taskEditText);
         }
 
-        final EditText taskEditText = new EditText(c);
-        taskEditText.setText(Constants.STANDARD_SKETCH);
-        AlertDialog dialog = new AlertDialog.Builder(c)
-                .setTitle(title)
-                .setMessage(message)
-                .setView(taskEditText)
-                .setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String fileName = String.valueOf(taskEditText.getText());
-                        if (load) {
-                            listFragment.setmItemArray(getCertainSketch(fileName));
-                        } else {
-                            ArrayList<Pair<Long, Brick>> brickList = listFragment.getmItemArray();
-                           /* ArrayList<Brick> brickList = new ArrayList<>();
+        builder.setTitle(title);
 
+        final String[] internalSketches = BrickPersister.getInternalSketches(getApplicationContext(), Constants.SKETCHES_FOLDER);
 
-                            for(Pair<Long, Brick> pair : listFragment.getmItemArray()) {
-                                brickList.add(pair.second);
-                            }*/
+        checkedItem = 0;
+        builder.setSingleChoiceItems(internalSketches, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                checkedItem = which;
+            }
+        });
 
+        builder.setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-                            ArrayList<Brick> translatedBricks = BrickHelper.getInstance().translateUiBricksToBackendBricks(brickList);
-
-                            BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(translatedBricks));
-                        }
-
+                if (load) {
+                    if(internalSketches.length > 0) {
+                        listFragment.setmItemArray(getCertainSketch(internalSketches[checkedItem]));
                     }
-                })
-                .setNegativeButton(Constants.CANCEL_BUTTON, null)
-                .create();
+
+                } else {
+                    String fileName = String.valueOf(taskEditText.getText());
+                    ArrayList<Pair<Long, Brick>> brickList = listFragment.getmItemArray();
+
+                    ArrayList<Brick> translatedBricks = BrickHelper.getInstance().translateUiBricksToBackendBricks(brickList);
+
+                    BrickPersister.writeJsonToFile(getApplicationContext(), Constants.SKETCHES_FOLDER, fileName, BrickPersister.translateSketchToJson(translatedBricks));
+                }
+
+            }
+        });
+        builder.setNegativeButton(Constants.CANCEL_BUTTON, null);
+
+        AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Make sure to call the super method so that the states of our views are saved
+        super.onSaveInstanceState(outState);
+        // Save our own state now
+        outState.putSerializable("bricks", listFragment.getmItemArray());
     }
 
 }

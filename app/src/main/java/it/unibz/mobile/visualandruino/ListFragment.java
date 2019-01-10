@@ -59,7 +59,11 @@ public class ListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -276,7 +280,11 @@ public class ListFragment extends Fragment {
         this.mItemArray.clear();
         this.mItemArray.addAll(mItemArray);
         mDragListView.getAdapter().notifyDataSetChanged();
+    }
 
+    public void setmItemArrayInital(ArrayList<Pair<Long, Brick>> mItemArray) {
+
+        this.mItemArray = mItemArray;
     }
 
     public void setBrickStatus(long brickUI, BrickStatus brickStatus) {
@@ -307,4 +315,9 @@ public class ListFragment extends Fragment {
     public View getMainView() {
         return mainView;
     }
+
+
+
+
+
 }

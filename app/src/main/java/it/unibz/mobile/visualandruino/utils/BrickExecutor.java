@@ -44,7 +44,7 @@ public class BrickExecutor {
                 BrickCommunicator.getInstance().sendCommand(command);
             }
             if(debugg)
-                fragment.printDebbug("send command "+command);
+                fragment.printDebbug("send command "+ currentBrick.getName());
 
         } else if (currentBrick.getBrickType() == BrickTypes.INTERNAL) {
 
@@ -84,7 +84,7 @@ public class BrickExecutor {
 
     }
 */
-    public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment,boolean debugg) {
+    public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment, boolean debugg) {
 
         Brick currentBrick = bricks.get(0);
         if(debugg)
@@ -248,7 +248,7 @@ public class BrickExecutor {
         /**
          * *** ASSIGN VARIABLE  ***
          */
-        if (currentBrick.getSubType() == InternalSubTypes.VARIABLE) {
+        if (currentBrick.getSubType() == InternalSubTypes.VARIABLE && currentBrick.getSubBricks() != null && !currentBrick.getSubBricks().isEmpty()) {
             BrickCommunicator.getInstance().setAwaitingReturn(true);
 
 

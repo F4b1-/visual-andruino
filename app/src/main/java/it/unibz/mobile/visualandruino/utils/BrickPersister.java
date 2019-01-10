@@ -112,6 +112,29 @@ public class BrickPersister {
 
     }
 
+    public static String[] getInternalSketches(Context context, String folderName) {
+        ArrayList<String> internalSketches = new ArrayList<>();
+
+
+            String folder = context.getFilesDir().getAbsolutePath() + File.separator + folderName;
+
+            File subFolder = new File(folder);
+
+            if (!subFolder.exists()) {
+                subFolder.mkdirs();
+            }
+
+            File[] files = subFolder.listFiles();
+
+            for (int i = 0; i < files.length; i++)
+            {
+                internalSketches.add(files[i].getName());
+                
+            }
+
+            return internalSketches.toArray(new String[0]);
+    }
+
     public static String readJsonFile(Context context, String folderName, String fileName) {
 
         StringBuilder sb = new StringBuilder();
