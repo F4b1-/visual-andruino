@@ -68,8 +68,8 @@ public class BrickExecutorTest {
         BrickExecutor beMock = mock(BrickExecutor.class);
         // define return value for method getUniqueId()
         BrickExecutor be = new BrickExecutor();
-        be.executeInternal(item, beMock);
-        verify(beMock, times(0)).executeBlocks(item.getSubBricks());
+        be.executeInternal(item, null, beMock, false);
+        verify(beMock, times(0)).executeBlocks(item.getSubBricks(), null, false);
     }
 
     /**
@@ -116,8 +116,8 @@ public class BrickExecutorTest {
         BrickExecutor beMock = mock(BrickExecutor.class);
         // define return value for method getUniqueId()
         BrickExecutor be = new BrickExecutor();
-        be.executeInternal(item, beMock);
-        verify(beMock, times(0)).executeBlocks(item.getSubBricks());
+        be.executeInternal(item, null, beMock, false);
+        verify(beMock, times(0)).executeBlocks(item.getSubBricks(), null, false);
     }
 
 
@@ -162,8 +162,8 @@ public class BrickExecutorTest {
         BrickExecutor beMock = mock(BrickExecutor.class);
         // define return value for method getUniqueId()
         BrickExecutor be = new BrickExecutor();
-        be.executeInternal(item, beMock);
-        verify(beMock, times(1)).executeBlocks(item.getSubBricks());
+        be.executeInternal(item, null, beMock, false);
+        verify(beMock, times(1)).executeBlocks(item.getSubBricks(), null, false);
     }
 
 
@@ -205,8 +205,8 @@ public class BrickExecutorTest {
         BrickExecutor beMock = mock(BrickExecutor.class);
         // define return value for method getUniqueId()
         BrickExecutor be = new BrickExecutor();
-        be.executeInternal(item, beMock);
-        verify(beMock, times(2)).executeBlocks(item.getSubBricks());
+        be.executeInternal(item, null, beMock, false);
+        verify(beMock, times(2)).executeBlocks(item.getSubBricks(), null, false);
     }
 
 
@@ -254,7 +254,7 @@ public class BrickExecutorTest {
         };
 
         thread.start();
-        be.executeInternal(item, be);
+        be.executeInternal(item, null, be, false);
 
 
         assertEquals(new Integer(1), BrickHelper.getInstance().getSetVariable("testVariable"));
