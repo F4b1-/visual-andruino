@@ -103,11 +103,26 @@ void handleCommand(String commandString) {
     digitalWrite(atoi(commandParam1), atoi(commandParam2));  
   
    }
+   // -- analogRead ---
    else if(strcmp(commandId, "-1") == 0) {
     char* commandParam1 = tokens[1];
+    pinMode(atoi(commandParam1), INPUT);
     Serial.println("analogRead");
     Serial.println(commandParam1);
-    mySerial.write("testing return value");
+    int returnedReadValue = analogRead(atoi(commandParam1));
+    Serial.println(returnedReadValue);
+    mySerial.write(String(returnedReadValue).c_str());
+    mySerial.write(3);
+   }
+   // -- digitalRead ---
+   else if(strcmp(commandId, "-2") == 0) {
+    char* commandParam1 = tokens[1];
+    pinMode(atoi(commandParam1), INPUT);
+    Serial.println("digitalRead");
+    Serial.println(commandParam1);
+    int returnedReadValue = digitalRead(atoi(commandParam1));
+    Serial.println(returnedReadValue);
+    mySerial.write(String(returnedReadValue).c_str());
     mySerial.write(3);
    }
   
@@ -115,7 +130,7 @@ void handleCommand(String commandString) {
     Serial.println("unknown command");
   }
 
-  delay(1000);
+  //delay(1000);
 }
 
 /** 

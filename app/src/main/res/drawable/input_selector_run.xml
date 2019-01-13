@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
-
         <shape
             android:shape="rectangle">
 
@@ -12,8 +11,8 @@
             <gradient
                 android:angle="45"
 
-                android:endColor="@color/endColor"
-                android:startColor="@color/endColor"
+                android:endColor="@color/colorInput"
+                android:startColor="@color/colorInput"
                 android:type="linear" />
 
             <!--If your shape requires only one solid color-->
@@ -38,7 +37,6 @@
                  android:bottom="8dp" />-->
 
         </shape>
-
     </item>
     <item>
         <shape
@@ -50,9 +48,8 @@
 
             <gradient
                 android:angle="45"
-
-                android:endColor="@color/startColor"
-                android:startColor="@color/startColor"
+                android:endColor="@color/colorInput"
+                android:startColor="@color/colorInput"
                 android:type="linear" />
 
             <!--If your shape requires only one solid color-->
@@ -77,7 +74,6 @@
                  android:bottom="8dp" />-->
 
         </shape>
-
     </item>
 </selector>
 

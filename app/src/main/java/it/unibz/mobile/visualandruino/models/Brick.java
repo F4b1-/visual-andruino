@@ -2,22 +2,40 @@ package it.unibz.mobile.visualandruino.models;
 
 import java.util.ArrayList;
 
+import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
 public class Brick {
     private String name;
     private BrickTypes brickType;
-    private int type;
+    private BrickStatus brickStatus;
+    private long brickUiId;
+
 
     private ArrayList<Parameter> parameters;
 
-    public Brick(String name, BrickTypes brickType, int type, ArrayList<Parameter> parameters)
+
+
+    public Brick(String name, BrickTypes brickType, ArrayList<Parameter> parameters)
     {
         this.name = name;
         this.brickType = brickType;
-        this.type = type;
         this.parameters = parameters;
+        this.brickStatus= BrickStatus.Waiting;
     }
+
+
+    public String getParametersText() {
+        String params="";
+        for ( int i=0; i< parameters.size(); i++ )
+        {
+            params=params+  parameters.get(i).getParameterName()+"="+parameters.get(i).getValue()+";";
+        }
+
+        return params;
+    }
+
+
 
 
 
@@ -27,6 +45,10 @@ public class Brick {
 
     public BrickTypes getBrickType() {
         return brickType;
+    }
+
+    public BrickStatus getBrickStatus() {
+        return brickStatus;
     }
 
     public ArrayList<Parameter> getParameters() {
@@ -41,15 +63,20 @@ public class Brick {
         this.brickType = type;
     }
 
+    public void setBrickStatus(BrickStatus status) {
+        this.brickStatus = status;
+    }
+
     public void setParameters(ArrayList<Parameter> parameters) {
         this.parameters = parameters;
     }
 
-    public int getType() {
-        return type;
+    public long getBrickUiId() {
+        return brickUiId;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setBrickUiId(long brickUiId) {
+        this.brickUiId = brickUiId;
     }
 }
+

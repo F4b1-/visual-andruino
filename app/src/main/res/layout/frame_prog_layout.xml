@@ -1,35 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white">
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/varView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:visibility="gone"/>
 
+        <com.jraska.console.Console
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="5dp"
 
+            />
+        <ProgressBar
+            android:id="@+id/progress_bar_run"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:minHeight="5dp"
+            android:max="2000"
+            android:progress="0"
+            android:progressTint="@color/colorPrimaryDark" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             >
 
             <EditText
-                android:id="@+id/pinNumber"
+                android:id="@+id/fileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="20dp"
                 android:layout_marginEnd="11dp"
                 android:layout_marginRight="11dp"
-                android:hint="Pin Number"
+                android:layout_marginBottom="20dp"
+                android:hint="File Name"
                 android:inputType="text" />
 
 
@@ -40,7 +59,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="15dp"
-                android:text="RUN" />
+                android:text="RUN"
+                android:visibility="gone" />
 
 
             <Button
@@ -50,21 +70,18 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="15dp"
-                android:text="Test" />
-
-
+                android:text="Test"
+                 />
 
 
         </LinearLayout>
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             >
-
-
 
 
             <Button
@@ -85,7 +102,6 @@
                 android:text="readResult" />
 
 
-
         </LinearLayout>
 
 
@@ -93,15 +109,10 @@
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-
-            <!-- Need to wrap DragListView in another layout for
-                wrap_content to work for some reason -->
             <com.woxthebox.draglistview.DragListView
                 android:id="@+id/drag_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
+                android:layout_height="wrap_content" />
 
 
         </it.unibz.mobile.visualandruino.MySwipeRefreshLayout>
@@ -110,11 +121,32 @@
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/addButton"
+        android:id="@+id/runButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_anchorGravity="top"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility="invisible"
+        app:backgroundTint="@color/app_color"
+        app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_add_white_24dp" />
+
+
+
 
 </FrameLayout>

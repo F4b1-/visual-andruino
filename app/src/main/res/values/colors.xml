@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f51b5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#266a81</color>
+    <color name="colorPrimaryDark">#307e9f</color>
     <color name="colorAccents">#FF4081</color>
     <color name="list_item_background">#AACCCCCC</color>
     <color name="colorInput">#008184</color>
     <color name="colorDelay">#ff8c1a</color>
 
     <color name="app_color">#008184</color>
-    <color name="endColor">#121839</color>
-    <color name="startColor">#000000</color>
+    <color name="endColor">#695093</color>
+    <color name="startColor">#3e2e5c</color>
     <color name="endColor2">#ff8c1a</color>
     <color name="startColor2">#ffb366</color>
+    <color name="endColor3">#0073df</color>
+    <color name="startColor3">#005dd6</color>
 
     <color name="textWhite">#ffffff</color>
+    <color name="white">#ffffff</color>
     <color name="textDark">#000000</color>
+
+    <color name="addInternal">#005354</color>
+    <color name="addAndroid">#008184</color>
 </resources>

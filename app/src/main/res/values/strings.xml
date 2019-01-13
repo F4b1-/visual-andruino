@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">VisualAndruino</string>
     <string name="action_settings">Settings</string>
+    <string name="digitalWText">Digital Write</string>
+    <string name="pin_prompt">Choose a Pin Number</string>
+    <string-array name="pinNumbers">
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+    </string-array>
+
+    <string name="digital_write_prompt">Choose a Output</string>
+    <string-array name="digital_write_Outputs">
+        <item>HIGH</item>
+        <item>LOW</item>
+
+    </string-array>
 </resources>

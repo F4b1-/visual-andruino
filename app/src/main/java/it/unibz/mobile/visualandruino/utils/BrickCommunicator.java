@@ -1,5 +1,6 @@
 package it.unibz.mobile.visualandruino.utils;
 
+import android.app.Activity;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 import it.unibz.mobile.visualandruino.ListFragment;
+import it.unibz.mobile.visualandruino.models.InternalBrick;
 
 
 //Builder Class
@@ -18,10 +20,12 @@ public class BrickCommunicator {
 
     private SmoothBluetooth mSmoothBluetooth;
     private List<Integer> mBuffer = new ArrayList<>();
-    private ListFragment listFragment;
+
+    private boolean awaitingReturn = false;
+    private int currentReturnValue = -1;
 
     // static method to create instance of Singleton class
-    public static BrickCommunicator getInstance()
+    public static synchronized BrickCommunicator getInstance()
     {
         if (single_instance == null) {
             single_instance = new BrickCommunicator();
@@ -30,12 +34,13 @@ public class BrickCommunicator {
         return single_instance;
     }
 
-    public void initiateBluetooth(ListFragment listFragment) {
-        this.listFragment = listFragment;
-        if(listFragment != null) {
-            mSmoothBluetooth = new SmoothBluetooth(listFragment.getActivity().getApplicationContext());
+    public void initiateBluetooth(Activity activity) {
+
+        if(activity != null) {
+            mSmoothBluetooth = new SmoothBluetooth(activity.getApplicationContext());
             mSmoothBluetooth.setListener(mListener);
             mSmoothBluetooth.tryConnection();
+
         }
 
     }
@@ -64,6 +69,7 @@ public class BrickCommunicator {
             //called when connected to particular device
             //Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_SHORT).show();
             //writeCommand("Connected");
+            UiHelper.writeCommand("Connected to " + device.getName());
 
         }
 
@@ -77,6 +83,7 @@ public class BrickCommunicator {
         @Override
         public void onConnectionFailed(Device device) {
             //called when connection failed to particular device
+            UiHelper.writeCommand("Connection failed. Trying again...");
             mSmoothBluetooth.tryConnection();
         }
 
@@ -93,6 +100,7 @@ public class BrickCommunicator {
         @Override
         public void onNoDevicesFound() {
             //called when no devices found
+            UiHelper.writeCommand("No devices found. Trying again...");
             mSmoothBluetooth.tryConnection();
         }
 
@@ -121,7 +129,7 @@ public class BrickCommunicator {
         @Override
         public void onDataReceived(int data) {
             //receives all bytes
-            mBuffer.add(data);
+           /* mBuffer.add(data);
             StringBuilder sb = new StringBuilder();
 
             if (data == 3 && !mBuffer.isEmpty()) {
@@ -131,20 +139,68 @@ public class BrickCommunicator {
                 }
                 mBuffer.clear();
 
-                listFragment.updateReturnView(sb.toString());
+                currentReturnValue = Integer.valueOf(sb.toString());
+                awaitingReturn = false;
 
-                //TextView resultView = getView().findViewById(R.id.resultView);
-                //resultView.setText(sb.toString());
 
-            }
+
+            }*/
+
+           handleReceivedData(data);
 
         }
     };
 
 
+    public void handleReceivedData(int data) {
+        mBuffer.add(data);
+        StringBuilder sb = new StringBuilder();
+
+        if (data == 3 && !mBuffer.isEmpty()) {
+
+            for (int integer : mBuffer) {
+                sb.append((char) integer);
+            }
+            mBuffer.clear();
+
+            setRequestedValue(sb.toString());
+        }
+    }
+
+    public void setRequestedValue(String value) {
+        value = value.substring(0, value.length() - 1);
+        if(value != null && !value.isEmpty()) {
+            currentReturnValue = Long.valueOf(value).intValue();
+        }
+
+        setAwaitingReturn(false);
+
+    }
+
+
 
     public void sendCommand(String command) {
         mSmoothBluetooth.send(command, false);
-        Toast.makeText(this.listFragment.getContext(), "Send "+command, Toast.LENGTH_SHORT).show();
+
+    }
+
+    public synchronized boolean isAwaitingReturn() {
+        return awaitingReturn;
+    }
+
+    public synchronized void setAwaitingReturn(boolean awaitingReturn) {
+        this.awaitingReturn = awaitingReturn;
+    }
+
+    public synchronized int getCurrentReturnValue() {
+        return currentReturnValue;
+    }
+
+    public synchronized void setCurrentReturnValue(int currentReturnValue) {
+        this.currentReturnValue = currentReturnValue;
+    }
+
+    public SmoothBluetooth getmSmoothBluetooth() {
+        return mSmoothBluetooth;
     }
 }

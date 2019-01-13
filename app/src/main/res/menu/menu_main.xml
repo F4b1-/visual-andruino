@@ -7,4 +7,30 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/save_sketch_button"
+        android:icon="@drawable/ic_save_white_24dp"
+        android:title="Save"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/load_sketch_button"
+        android:icon="@drawable/ic_folder_open_white_24dp"
+        android:title="Load"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/run_sketch_button"
+        android:icon="@drawable/ic_play_arrow_white_24dp"
+        android:title="Run"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/debug_sketch_button"
+        android:icon="@drawable/ic_bug_report_white_24dp"
+        android:title="Debug"
+        app:showAsAction="always"
+        />
 </menu>
