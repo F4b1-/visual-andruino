@@ -24,7 +24,7 @@ import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 public class BrickExecutor {
 
 
-    public void executeBrick(Brick currentBrick, ListFragment fragment, boolean debugg) {
+    public void executeBrick(Brick currentBrick, ListFragment fragment, boolean debug) {
 
 
 
@@ -43,12 +43,12 @@ public class BrickExecutor {
             if (BrickCommunicator.getInstance().getmSmoothBluetooth() != null) {
                 BrickCommunicator.getInstance().sendCommand(command);
             }
-            if(debugg)
+            if(debug)
                 fragment.printDebbug("send command "+ currentBrick.getName());
 
         } else if (currentBrick.getBrickType() == BrickTypes.INTERNAL) {
 
-            executeInternal((InternalBrick) currentBrick, fragment, debugg);/*
+            executeInternal((InternalBrick) currentBrick, fragment, debug);/*
             // Execute subBricks recursively
             if(((InternalBrick) currentBrick).getSubType() == InternalSubTypes.FOR) {
                 int forLoopLimiter = Integer.parseInt(currentBrick.getParameters().get(0).getValue());
@@ -84,10 +84,10 @@ public class BrickExecutor {
 
     }
 */
-    public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment, boolean debugg) {
+    public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment, boolean debug) {
 
         Brick currentBrick = bricks.get(0);
-        if(debugg)
+        if(debug)
         {
             fragment.setBrickStatus(currentBrick.getBrickUiId() - 1, BrickStatus.Waiting);
             fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Started);
@@ -98,15 +98,15 @@ public class BrickExecutor {
             }
         }
 
-        executeBrick(currentBrick, fragment, debugg);
+        executeBrick(currentBrick, fragment, debug);
 
 
         bricks.remove(0);
         if (bricks.size() > 0) {
-            executeBlocks(bricks, fragment, debugg);
+            executeBlocks(bricks, fragment, debug);
         }
 
-        if(debugg) {
+        if(debug) {
             //reset final brick
             fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Waiting);
         }
@@ -132,11 +132,15 @@ public class BrickExecutor {
         return (referenceValue != null && comparator != null && firstValue != null);
     }
 
-    public void executeInternal(InternalBrick currentBrick,  ListFragment fragment, boolean debugg) {
-         executeInternal(currentBrick,fragment, debugg, this);
+    public void executeInternal(InternalBrick currentBrick,  ListFragment fragment, boolean debug) {
+         executeInternal(currentBrick,fragment, debug, this);
     }
 
-    public void executeInternal(final InternalBrick currentBrick, ListFragment fragment, boolean debugg, final BrickExecutor brickExecutor) {
+    public void executeInternal(InternalBrick currentBrick,  ListFragment fragment, final BrickExecutor brickExecutor, boolean debug) {
+        executeInternal(currentBrick,fragment, debug, brickExecutor);
+    }
+
+    public void executeInternal(final InternalBrick currentBrick, ListFragment fragment, boolean debug, final BrickExecutor brickExecutor) {
 
         /**
          * *** FOR ***
@@ -149,13 +153,13 @@ public class BrickExecutor {
 
                 if (comparator == ComparatorTypes.GREATER && referenceValue < forLoopLimiter) {
                     for (int i = referenceValue; i < forLoopLimiter; i++) {
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                     }
                 }
 
                 if (comparator == ComparatorTypes.LESS && referenceValue > forLoopLimiter) {
                     for (int i = referenceValue; i > forLoopLimiter; i--) {
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                     }
                 }
             }
@@ -172,28 +176,28 @@ public class BrickExecutor {
             if (allParametersSet(referenceValue, comparator, loopLimiter)) {
                 if (comparator == ComparatorTypes.GREATER) {
                     while (referenceValue > loopLimiter) {
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                         referenceValue--;
                     }
                 }
 
                 if (comparator == ComparatorTypes.LESS) {
                     while (referenceValue < loopLimiter) {
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                         referenceValue++;
                     }
                 }
 
                 if (comparator == ComparatorTypes.EQUALS) {
                     while (referenceValue == loopLimiter) {
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                         referenceValue++;
                     }
                 }
 
                 if (comparator == ComparatorTypes.NOTEQUALS) {
                     while (referenceValue != loopLimiter) {
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                         referenceValue++;
                     }
                 }
@@ -212,31 +216,31 @@ public class BrickExecutor {
             if (allParametersSet(referenceValue, comparator, secondValue)) {
                 if (comparator == ComparatorTypes.GREATER) {
                     if (referenceValue > secondValue) {
-                        printDebbug(fragment,debugg,"If: true");
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        printDebbug(fragment,debug,"If: true");
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                     }else {
-                        printDebbug(fragment,debugg,"If: false");
+                        printDebbug(fragment,debug,"If: false");
                     }
                 } else if (comparator == ComparatorTypes.LESS) {
                     if (referenceValue < secondValue) {
-                        printDebbug(fragment,debugg,"If: true");
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        printDebbug(fragment,debug,"If: true");
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                     }else {
-                        printDebbug(fragment,debugg,"If: false");
+                        printDebbug(fragment,debug,"If: false");
                     }
                 } else if (comparator == ComparatorTypes.EQUALS) {
                     if (referenceValue == secondValue) {
-                        printDebbug(fragment,debugg,"If: true");
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        printDebbug(fragment,debug,"If: true");
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                     }else {
-                        printDebbug(fragment,debugg,"If: false");
+                        printDebbug(fragment,debug,"If: false");
                     }
                 } else if (comparator == ComparatorTypes.NOTEQUALS) {
                     if (referenceValue != secondValue) {
-                        printDebbug(fragment,debugg,"If: true");
-                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+                        printDebbug(fragment,debug,"If: true");
+                        brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
                     }else {
-                        printDebbug(fragment,debugg,"If: false");
+                        printDebbug(fragment,debug,"If: false");
                     }
                 }
             }
@@ -252,7 +256,7 @@ public class BrickExecutor {
             BrickCommunicator.getInstance().setAwaitingReturn(true);
 
 
-            brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debugg);
+            brickExecutor.executeBlocks(currentBrick.getSubBricks(),fragment,debug);
             awaitReturn(0);
 
             Parameter variableNameParam = currentBrick.getParameters().get(0);
@@ -271,9 +275,9 @@ public class BrickExecutor {
 
 
     }
-    public void printDebbug(ListFragment fragment, boolean debugg, String message)
+    public void printDebbug(ListFragment fragment, boolean debug, String message)
     {
-        if(debugg)
+        if(debug)
             fragment.printDebbug(message);
     }
 

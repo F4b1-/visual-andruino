@@ -51,9 +51,8 @@ public class BrickPersisterInstrumentedTest {
     @Test
     public void saveStandardSketchCreateTest() throws Exception {
         removeFile(instrumentationCtx, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH);
-        boolean createdNewStandardFile = BrickPersister.saveStandardSketch(instrumentationCtx);
+        BrickPersister.saveStandardSketch(instrumentationCtx);
         //String standardContent = "[{\"commandId\":3,\"brickType\":\"ARDUINO_COMMAND\",\"name\":\"DigitalWrite\",\"parameters\":[{\"parameterName\":\"PinNumber\",\"value\":\"5\"},{\"allowedValues\":[\"HIGH\",\"LOW\"],\"parameterName\":\"WriteValue\",\"value\":\"HIGH\"}]},{\"commandId\":2,\"brickType\":\"ARDUINO_COMMAND\",\"name\":\"AnalogWrite\",\"parameters\":[{\"parameterName\":\"PinNumber\",\"value\":\"5\"},{\"parameterName\":\"analogWrite\",\"value\":\"0\"}]}]";
-        assertTrue(createdNewStandardFile);
         assertNotNull(BrickPersister.readJsonFile(instrumentationCtx, Constants.SKETCHES_FOLDER,
                 Constants.STANDARD_SKETCH));
         //assertEquals(standardContent, BrickPersister.readJsonFile(instrumentationCtx, Constants.SKETCHES_FOLDER,
@@ -61,6 +60,7 @@ public class BrickPersisterInstrumentedTest {
 
     }
 
+    /*
     @Test
     public void saveStandardSketchExistsTest() throws Exception {
         removeFile(instrumentationCtx, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH);
@@ -73,7 +73,7 @@ public class BrickPersisterInstrumentedTest {
         //assertEquals(standardContent, BrickPersister.readJsonFile(instrumentationCtx, Constants.SKETCHES_FOLDER,
         //        Constants.STANDARD_SKETCH));
 
-    }
+    }*/
 
 
 
