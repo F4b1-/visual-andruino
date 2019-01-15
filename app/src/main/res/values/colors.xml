@@ -14,6 +14,7 @@
     <color name="startColor2">#ffb366</color>
     <color name="endColor3">#0073df</color>
     <color name="startColor3">#005dd6</color>
+    <color name="draggColor">#535353</color>
 
     <color name="textWhite">#ffffff</color>
     <color name="white">#ffffff</color>
@@ -21,4 +22,15 @@
 
     <color name="addInternal">#005354</color>
     <color name="addAndroid">#008184</color>
+
+    <color name="brickDigitalWrite">#63409c</color>
+    <color name="brickDigitalRead">#3e2e5c</color>
+    <color name="brickAnalogWrite">#ffb366</color>
+    <color name="brickAnalogRead">#ff8c1a</color>
+    <color name="brickTone">#4b7139</color>
+    <color name="brickVariable">#005dd6</color>
+    <color name="brickIf">#0046a1</color>
+    <color name="brickFor">#00357b</color>
+
+
 </resources>

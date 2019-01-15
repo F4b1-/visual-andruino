@@ -270,11 +270,11 @@ public class BrickPersister {
         /**
          * AnalogWrite
          */
-        Brick item2= createAnalogWriteBrick();
+        Brick item2= createDigitalReadBrick();
 
 
-        Brick item3= createAnalogReadBrick();
-        Brick itemDR= createDigitalReadBrick();
+        Brick item3=createAnalogWriteBrick();
+        Brick itemDR= createAnalogReadBrick() ;
 
 
 
@@ -465,7 +465,7 @@ public static Brick createIfBrick() {
         valInternalRef.setAllowedValues(BrickPersister.getArrValues(-50,50,1));
         arrInternal.add(valInternalRef);
 
-        BrickBuilder bb = new BrickBuilder("FOR", BrickTypes.INTERNAL, arrInternal);
+        BrickBuilder bb = new BrickBuilder("For", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.FOR);
         //bb.setSubBricks(subList);
 
@@ -477,7 +477,7 @@ public static Brick createIfBrick() {
     public static Brick createEndFORBrick() {
 
         ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
-        BrickBuilder bb = new BrickBuilder("EndFOR", BrickTypes.INTERNAL, arrInternal);
+        BrickBuilder bb = new BrickBuilder("EndFor", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.ENDFOR);
         //bb.setSubBricks(subList);
 
