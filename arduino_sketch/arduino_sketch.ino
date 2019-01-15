@@ -103,6 +103,20 @@ void handleCommand(String commandString) {
     digitalWrite(atoi(commandParam1), atoi(commandParam2));  
   
    }
+   // -- tone ---
+   else if(strcmp(commandId, "4") == 0) {
+   char* commandParam1 = tokens[1];
+   char* commandParam2 = tokens[2];
+   //char* commandParam3 = tokens[3];
+    
+    Serial.println("tone");
+    Serial.println(commandParam1);
+    Serial.println(commandParam2);
+    //Serial.println(commandParam3);
+    tone(atoi(commandParam1), atoi(commandParam2), 500);
+    
+  
+   }
    // -- analogRead ---
    else if(strcmp(commandId, "-1") == 0) {
     char* commandParam1 = tokens[1];
@@ -158,4 +172,3 @@ void splitCommand(char* str, char* tokens[]) {
    }
    
 }
-

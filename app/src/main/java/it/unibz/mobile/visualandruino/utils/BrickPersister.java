@@ -167,6 +167,27 @@ public class BrickPersister {
         return fileExists;
 
     }
+
+    public static Brick createToneBrick()
+    {
+
+        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,53,1);
+        val1.setAllowedValues(allowedValuesV1);
+
+
+        Parameter analogVal2=new Parameter("Tone",String.valueOf((0)));
+        analogVal2.setAllowedValues(BrickPersister.getArrValues(0,1000,10));
+
+
+        ArrayList<Parameter> arrTone=new ArrayList<Parameter>();
+        arrTone.add(val1);
+        arrTone.add(analogVal2);
+
+        BrickBuilder bb = new BrickBuilder("Tone", BrickTypes.ARDUINO_COMMAND , arrTone);
+        bb.setCommandId(4);
+        return bb.buildBrick();
+    }
     public static Brick createDigitalWriteBrick()
     {
 
@@ -223,6 +244,21 @@ public class BrickPersister {
         return bb.buildBrick();
     }
 
+    public static Brick createDigitalReadBrick()
+    {
+        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,53,1);
+        val1.setAllowedValues(allowedValuesV1);
+
+
+
+        ArrayList<Parameter> arrAnalog=new ArrayList<Parameter>();
+        arrAnalog.add(val1);
+        BrickBuilder bb = new BrickBuilder("DigitalRead", BrickTypes.ARDUINO_COMMAND , arrAnalog);
+        bb.setCommandId(-2);
+        return bb.buildBrick();
+    }
+
     public static ArrayList<Brick> constructStandardSketch() {
         ArrayList<Brick> bricks = new ArrayList<Brick>();
 
@@ -238,7 +274,11 @@ public class BrickPersister {
 
 
         Brick item3= createAnalogReadBrick();
+        Brick itemDR= createDigitalReadBrick();
 
+
+
+        Brick itemTone= createToneBrick();
         Brick item4= createVariableBrick();
         Brick item5= createEndVariableBrick();
 
@@ -254,6 +294,9 @@ public class BrickPersister {
         bricks.add(item);
         bricks.add(item2);
         bricks.add(item3);
+
+        bricks.add(itemDR);
+        bricks.add(itemTone);
         bricks.add(item4);
         bricks.add(item5);
         bricks.add(item6);
