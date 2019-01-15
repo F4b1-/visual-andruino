@@ -286,6 +286,10 @@ public class BrickPersister {
         Brick item7= createEndIfBrick();
 
 
+        Brick item8= createFORBrick();
+        Brick item9= createEndFORBrick();
+
+
 
 
         /**
@@ -301,6 +305,8 @@ public class BrickPersister {
         bricks.add(item5);
         bricks.add(item6);
         bricks.add(item7);
+        bricks.add(item8);
+        bricks.add(item9);
 
         return bricks;
 
@@ -429,6 +435,50 @@ public static Brick createIfBrick() {
         ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
         BrickBuilder bb = new BrickBuilder("EndVariable", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.ENDVARIABLE);
+        //bb.setSubBricks(subList);
+
+        InternalBrick item= (InternalBrick) bb.buildBrick();
+        return item;
+    }
+
+
+    public static Brick createFORBrick() {
+        /**
+         * While
+         */
+
+        ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+        Parameter valInternal=new Parameter("Ref",String.valueOf((2)));
+        valInternal.setAllowedValues(BrickPersister.getArrValues(0,50,1));
+        arrInternal.add(valInternal);
+
+        Parameter valInternalComp=new Parameter("Comparator",ComparatorTypes.GREATER.toString());
+        ArrayList<String> allowedValues = new ArrayList<String>();
+
+        allowedValues.add(ComparatorTypes.GREATER.toString());
+        allowedValues.add(ComparatorTypes.LESS.toString());
+        valInternalComp.setAllowedValues(allowedValues);
+
+        arrInternal.add(valInternalComp);
+
+        Parameter valInternalRef=new Parameter("Limiter",String.valueOf((3)));
+        valInternalRef.setAllowedValues(BrickPersister.getArrValues(-50,50,1));
+        arrInternal.add(valInternalRef);
+
+        BrickBuilder bb = new BrickBuilder("FOR", BrickTypes.INTERNAL, arrInternal);
+        bb.setSubType(InternalSubTypes.FOR);
+        //bb.setSubBricks(subList);
+
+        InternalBrick item= (InternalBrick) bb.buildBrick();
+        return item;
+    }
+
+
+    public static Brick createEndFORBrick() {
+
+        ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+        BrickBuilder bb = new BrickBuilder("EndFOR", BrickTypes.INTERNAL, arrInternal);
+        bb.setSubType(InternalSubTypes.ENDFOR);
         //bb.setSubBricks(subList);
 
         InternalBrick item= (InternalBrick) bb.buildBrick();
