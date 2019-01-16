@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
+import it.unibz.mobile.visualandruino.Constants;
 import it.unibz.mobile.visualandruino.ListFragment;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
 
@@ -24,6 +25,8 @@ public class BrickCommunicator {
     private boolean awaitingReturn = false;
     private int currentReturnValue = -1;
     private Activity activity = null;
+
+    private String bluetoothDeviceName = Constants.DEFAULT_BLUETOOTH_DEVICE;
 
     // static method to create instance of Singleton class
     public static synchronized BrickCommunicator getInstance()
@@ -46,6 +49,13 @@ public class BrickCommunicator {
         }
 
     }
+
+    public void initiateBluetooth(Activity activity, String bluetoothDeviceName) {
+        this.bluetoothDeviceName = bluetoothDeviceName;
+        initiateBluetooth(activity);
+
+    }
+
 
 
     private SmoothBluetooth.Listener mListener = new SmoothBluetooth.Listener() {
@@ -80,18 +90,23 @@ public class BrickCommunicator {
             //called when disconnected from device
             //writeCommand("Disconnected");
             //mSmoothBluetooth.tryConnection();
-            if(activity != null) {
-                initiateBluetooth(activity);
-            }
+            UiHelper.writeCommand("You got disconnected. Go to the settings menu to reload.");
 
         }
 
         @Override
         public void onConnectionFailed(Device device) {
             //called when connection failed to particular device
-            UiHelper.writeCommand("Connection failed. Trying again...");
-            if(activity != null) {
+            String deviceName = "device";
+            if(device != null) {
+                deviceName = device.getName();
+            }
+            UiHelper.writeCommand("Connection failed for " + deviceName +  ". Trying again...");
+            if(activity != null && device != null) {
+                mSmoothBluetooth.disconnect();
+                mSmoothBluetooth.stop();
                 initiateBluetooth(activity);
+
             }
         }
 
@@ -119,16 +134,16 @@ public class BrickCommunicator {
             //you can filter devices list and connect to specific one
             //connectionCallback.connectTo(deviceList.get(position));
 
-            Device spiderDevice = null;
+            Device bluetoothDevice = null;
 
             for (Device device: deviceList) {
 
-                if(device.getName().equals("HC-05")) {
-                    spiderDevice = device;
+                if(device.getName().equals(bluetoothDeviceName)) {
+                    bluetoothDevice = device;
                 }
             }
 
-            connectionCallback.connectTo(spiderDevice);
+            connectionCallback.connectTo(bluetoothDevice);
 
 
 
@@ -136,24 +151,6 @@ public class BrickCommunicator {
 
         @Override
         public void onDataReceived(int data) {
-            //receives all bytes
-           /* mBuffer.add(data);
-            StringBuilder sb = new StringBuilder();
-
-            if (data == 3 && !mBuffer.isEmpty()) {
-
-                for (int integer : mBuffer) {
-                    sb.append((char) integer);
-                }
-                mBuffer.clear();
-
-                currentReturnValue = Integer.valueOf(sb.toString());
-                awaitingReturn = false;
-
-
-
-            }*/
-
            handleReceivedData(data);
 
         }
@@ -210,5 +207,13 @@ public class BrickCommunicator {
 
     public SmoothBluetooth getmSmoothBluetooth() {
         return mSmoothBluetooth;
+    }
+
+    public void disconnect() {
+        mSmoothBluetooth.disconnect();
+    }
+
+    public void stop() {
+        mSmoothBluetooth.stop();
     }
 }

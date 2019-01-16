@@ -82,26 +82,11 @@ public class BrickExecutor {
             fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Waiting);
         }
 
-        //currentBrick.setBrickStatus(BrickStatus.Finished);
-
-    }
-
-    /*public void executeBlocks(ArrayList<Brick> bricks) {
-        Brick currentBrick = bricks.get(0);
-
-        executeBrick(currentBrick);
-
-        //remove at the end and move on
-
-        bricks.remove(0);
-        if (bricks.size() > 0) {
-            executeBlocks(bricks);
-        }
-        currentBrick.setBrickStatus(BrickStatus.Waiting);
 
 
     }
-*/
+
+
     public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment, boolean debug) {
 
         Brick currentBrick = bricks.get(0);
