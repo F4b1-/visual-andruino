@@ -134,8 +134,11 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         ListFragment listF = ListFragment.newInstance();
         showListFragment(listF);
 
+        boolean needToInitializeBluetooth = true;
         if (savedInstanceState != null) {
             ArrayList<Pair<Long, Brick>> bricks = (ArrayList<Pair<Long, Brick>>) savedInstanceState.getSerializable("bricks");
+            needToInitializeBluetooth = savedInstanceState.getBoolean("needToInitializeBT");
+
 
             if (bricks != null) {
                 listF.setmItemArrayInital(bricks);
@@ -147,10 +150,12 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         final BrickCommunicator brickCommunicator = BrickCommunicator.getInstance();
 
-        UiHelper.writeCommand("Initialising bluetooth");
 
 
-        brickCommunicator.initiateBluetooth(this);
+        if (needToInitializeBluetooth) {
+            brickCommunicator.initiateBluetooth(this);
+        }
+
 
 
     }
@@ -325,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         super.onSaveInstanceState(outState);
         // Save our own state now
         outState.putSerializable("bricks", listFragment.getmItemArray());
+        outState.putBoolean("needToInitializeBT", false);
     }
 
 }

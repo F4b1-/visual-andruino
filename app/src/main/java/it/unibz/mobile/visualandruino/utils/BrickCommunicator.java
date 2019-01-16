@@ -23,6 +23,7 @@ public class BrickCommunicator {
 
     private boolean awaitingReturn = false;
     private int currentReturnValue = -1;
+    private Activity activity = null;
 
     // static method to create instance of Singleton class
     public static synchronized BrickCommunicator getInstance()
@@ -35,7 +36,8 @@ public class BrickCommunicator {
     }
 
     public void initiateBluetooth(Activity activity) {
-
+        this.activity = activity;
+        UiHelper.writeCommand("Initialising bluetooth");
         if(activity != null) {
             mSmoothBluetooth = new SmoothBluetooth(activity.getApplicationContext());
             mSmoothBluetooth.setListener(mListener);
@@ -77,14 +79,20 @@ public class BrickCommunicator {
         public void onDisconnected() {
             //called when disconnected from device
             //writeCommand("Disconnected");
-            mSmoothBluetooth.tryConnection();
+            //mSmoothBluetooth.tryConnection();
+            if(activity != null) {
+                initiateBluetooth(activity);
+            }
+
         }
 
         @Override
         public void onConnectionFailed(Device device) {
             //called when connection failed to particular device
             UiHelper.writeCommand("Connection failed. Trying again...");
-            mSmoothBluetooth.tryConnection();
+            if(activity != null) {
+                initiateBluetooth(activity);
+            }
         }
 
         @Override
