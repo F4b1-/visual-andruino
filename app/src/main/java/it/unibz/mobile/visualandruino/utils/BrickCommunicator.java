@@ -102,7 +102,9 @@ public class BrickCommunicator {
                 deviceName = device.getName();
             }
             UiHelper.writeCommand("Connection failed for " + deviceName +  ". Trying again...");
-            if(activity != null) {
+            if(activity != null && device != null) {
+                mSmoothBluetooth.disconnect();
+                mSmoothBluetooth.stop();
                 initiateBluetooth(activity);
 
             }
@@ -212,7 +214,6 @@ public class BrickCommunicator {
     }
 
     public void stop() {
-
         mSmoothBluetooth.stop();
     }
 }

@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         UiHelper.writeCommand(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()).toString());
 
-        //((TextView) findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
 
     }
 
@@ -342,18 +341,13 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     private void showSettingsDialog(final Activity c) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(c);
-
-
         builder.setTitle(Constants.SETTINGS_TITLE);
-
-        final String[] internalSketches = BrickPersister.getInternalSketches(getApplicationContext(), Constants.SKETCHES_FOLDER);
 
         final EditText taskEditText = new EditText(c);
         taskEditText.setText(Constants.DEFAULT_BLUETOOTH_DEVICE);
 
         LinearLayout layout = new LinearLayout(c);
         layout.setOrientation(LinearLayout.VERTICAL);
-
         final TextView textView = new TextView(c);
         textView.setText("Bluetooth Device name");
         layout.addView(textView);
@@ -361,11 +355,12 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         builder.setView(layout);
 
-        builder.setPositiveButton(Constants.SAVE_BUTTON, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(Constants.RELOAD_BUTTON, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-
+                BrickCommunicator.getInstance().disconnect();
+                BrickCommunicator.getInstance().stop();
                 BrickCommunicator.getInstance().initiateBluetooth(c, taskEditText.getText().toString());
 
             }
