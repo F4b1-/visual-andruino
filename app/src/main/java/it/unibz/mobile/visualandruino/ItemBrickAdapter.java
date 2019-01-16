@@ -1,6 +1,8 @@
 package it.unibz.mobile.visualandruino;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
@@ -60,21 +62,38 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
         holder.btnParameters.setText(brickItem.getParametersText());
         holder.brickData = brickItem;
 
+        StateListDrawable stateListDrawable= new StateListDrawable();
 
-
-        if (!brickItem.getBrickStatus().equals(BrickStatus.Waiting)) {
-            holder.mLayout.setBackgroundResource(R.drawable.input_selector_run);
+        if (brickItem.getBrickStatus().equals(BrickStatus.Started)) {
+            stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.app_color)));
+            //holder.mLayout.setBackgroundResource(R.drawable.input_selector_run);
         } else {
-            if (brickItem.getName().equals("AnalogWrite")) {
-                holder.mLayout.setBackgroundResource(R.drawable.input2_selector);
 
-            } else if (brickItem.getName().equals("DigitalWrite")) {
-                holder.mLayout.setBackgroundResource(R.drawable.input_selector);
+            stateListDrawable.addState(new int[] {android.R.attr.state_pressed}, new ColorDrawable(context.getResources().getColor(R.color.draggColor)));
+
+            if (brickItem.getName().equals("AnalogWrite")) {
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickAnalogWrite)));
+            }else if (brickItem.getName().equals("AnalogRead")) {
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickAnalogRead)));
+            }else if (brickItem.getName().equals("DigitalWrite")) {
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickDigitalWrite)));
+            }else if (brickItem.getName().equals("DigitalRead")) {
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickDigitalRead)));
+            }else if (brickItem.getName().equals("Tone")) {
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickTone)));
+            }else if (brickItem.getName().equals("For") ||brickItem.getName().equals("EndFor") ) {
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickFor)));
+            }else if (brickItem.getName().equals("If") ||brickItem.getName().equals("EndIf") ) {
+            stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickIf)));
+            }else if (brickItem.getName().equals("Variable") ||brickItem.getName().equals("EndVariable") ) {
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.brickVariable)));
+
             } else {
-                holder.mLayout.setBackgroundResource(R.drawable.input_selector3);
+                stateListDrawable.addState(new int[] {}, new ColorDrawable(context.getResources().getColor(R.color.startColor3)));
             }
 
         }
+        holder.mLayout.setBackground(stateListDrawable);
 
     }
 

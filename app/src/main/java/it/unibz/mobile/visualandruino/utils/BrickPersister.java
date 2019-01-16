@@ -167,6 +167,27 @@ public class BrickPersister {
         return fileExists;
 
     }
+
+    public static Brick createToneBrick()
+    {
+
+        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,53,1);
+        val1.setAllowedValues(allowedValuesV1);
+
+
+        Parameter analogVal2=new Parameter("Tone",String.valueOf((0)));
+        analogVal2.setAllowedValues(BrickPersister.getArrValues(0,1000,10));
+
+
+        ArrayList<Parameter> arrTone=new ArrayList<Parameter>();
+        arrTone.add(val1);
+        arrTone.add(analogVal2);
+
+        BrickBuilder bb = new BrickBuilder("Tone", BrickTypes.ARDUINO_COMMAND , arrTone);
+        bb.setCommandId(4);
+        return bb.buildBrick();
+    }
     public static Brick createDigitalWriteBrick()
     {
 
@@ -223,6 +244,21 @@ public class BrickPersister {
         return bb.buildBrick();
     }
 
+    public static Brick createDigitalReadBrick()
+    {
+        Parameter val1=new Parameter("PinNumber",String.valueOf(("5")));
+        ArrayList<String> allowedValuesV1 = BrickPersister.getArrValues(5,53,1);
+        val1.setAllowedValues(allowedValuesV1);
+
+
+
+        ArrayList<Parameter> arrAnalog=new ArrayList<Parameter>();
+        arrAnalog.add(val1);
+        BrickBuilder bb = new BrickBuilder("DigitalRead", BrickTypes.ARDUINO_COMMAND , arrAnalog);
+        bb.setCommandId(-2);
+        return bb.buildBrick();
+    }
+
     public static ArrayList<Brick> constructStandardSketch() {
         ArrayList<Brick> bricks = new ArrayList<Brick>();
 
@@ -234,16 +270,24 @@ public class BrickPersister {
         /**
          * AnalogWrite
          */
-        Brick item2= createAnalogWriteBrick();
+        Brick item2= createDigitalReadBrick();
 
 
-        Brick item3= createAnalogReadBrick();
+        Brick item3=createAnalogWriteBrick();
+        Brick itemDR= createAnalogReadBrick() ;
 
+
+
+        Brick itemTone= createToneBrick();
         Brick item4= createVariableBrick();
         Brick item5= createEndVariableBrick();
 
         Brick item6= createIfBrick();
         Brick item7= createEndIfBrick();
+
+
+        Brick item8= createFORBrick();
+        Brick item9= createEndFORBrick();
 
 
 
@@ -254,10 +298,15 @@ public class BrickPersister {
         bricks.add(item);
         bricks.add(item2);
         bricks.add(item3);
+
+        bricks.add(itemDR);
+        bricks.add(itemTone);
         bricks.add(item4);
         bricks.add(item5);
         bricks.add(item6);
         bricks.add(item7);
+        bricks.add(item8);
+        bricks.add(item9);
 
         return bricks;
 
@@ -386,6 +435,50 @@ public static Brick createIfBrick() {
         ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
         BrickBuilder bb = new BrickBuilder("EndVariable", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.ENDVARIABLE);
+        //bb.setSubBricks(subList);
+
+        InternalBrick item= (InternalBrick) bb.buildBrick();
+        return item;
+    }
+
+
+    public static Brick createFORBrick() {
+        /**
+         * While
+         */
+
+        ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+        Parameter valInternal=new Parameter("Ref",String.valueOf((2)));
+        valInternal.setAllowedValues(BrickPersister.getArrValues(0,50,1));
+        arrInternal.add(valInternal);
+
+        Parameter valInternalComp=new Parameter("Comparator",ComparatorTypes.GREATER.toString());
+        ArrayList<String> allowedValues = new ArrayList<String>();
+
+        allowedValues.add(ComparatorTypes.GREATER.toString());
+        allowedValues.add(ComparatorTypes.LESS.toString());
+        valInternalComp.setAllowedValues(allowedValues);
+
+        arrInternal.add(valInternalComp);
+
+        Parameter valInternalRef=new Parameter("Limiter",String.valueOf((3)));
+        valInternalRef.setAllowedValues(BrickPersister.getArrValues(-50,50,1));
+        arrInternal.add(valInternalRef);
+
+        BrickBuilder bb = new BrickBuilder("For", BrickTypes.INTERNAL, arrInternal);
+        bb.setSubType(InternalSubTypes.FOR);
+        //bb.setSubBricks(subList);
+
+        InternalBrick item= (InternalBrick) bb.buildBrick();
+        return item;
+    }
+
+
+    public static Brick createEndFORBrick() {
+
+        ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
+        BrickBuilder bb = new BrickBuilder("EndFor", BrickTypes.INTERNAL, arrInternal);
+        bb.setSubType(InternalSubTypes.ENDFOR);
         //bb.setSubBricks(subList);
 
         InternalBrick item= (InternalBrick) bb.buildBrick();

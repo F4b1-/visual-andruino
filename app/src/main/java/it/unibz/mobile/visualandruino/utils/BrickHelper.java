@@ -130,4 +130,10 @@ public class BrickHelper {
     public Map<String, Integer> getSetVariables() {
         return setVariables;
     }
+
+    public static ArrayList<Brick> copyBricks(ArrayList<Brick> list) {
+        ArrayList<Brick> copy = new ArrayList<Brick>(list.size());
+        for (Brick item : list) copy.add(item);
+        return copy;
+    }
 }
