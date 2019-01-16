@@ -1,6 +1,8 @@
 package it.unibz.mobile.visualandruino;
 
 
+import android.app.Activity;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
@@ -33,9 +35,12 @@ import it.unibz.mobile.visualandruino.utils.UiHelper;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jraska.console.Console;
+
+import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity implements ItemParameterFragment.OnListFragmentInteractionListener {
@@ -58,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            showSettingsDialog(MainActivity.this);
+        }
+
 
         if (id == R.id.load_sketch_button) {
             showPersistenceDialog(MainActivity.this, true);
@@ -158,6 +168,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
 
 
+    }
+
+    public void initializeBluetooth(String bluetoothDevice) {
+        BrickCommunicator.getInstance().initiateBluetooth(this, bluetoothDevice);
     }
 
     @Override
@@ -324,6 +338,45 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     }
 
 
+
+    private void showSettingsDialog(final Activity c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+
+
+        builder.setTitle(Constants.SETTINGS_TITLE);
+
+        final String[] internalSketches = BrickPersister.getInternalSketches(getApplicationContext(), Constants.SKETCHES_FOLDER);
+
+        final EditText taskEditText = new EditText(c);
+        taskEditText.setText(Constants.DEFAULT_BLUETOOTH_DEVICE);
+
+        LinearLayout layout = new LinearLayout(c);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final TextView textView = new TextView(c);
+        textView.setText("Bluetooth Device name");
+        layout.addView(textView);
+        layout.addView(taskEditText);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton(Constants.SAVE_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                BrickCommunicator.getInstance().initiateBluetooth(c, taskEditText.getText().toString());
+
+            }
+        });
+        builder.setNegativeButton(Constants.CANCEL_BUTTON, null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Make sure to call the super method so that the states of our views are saved
@@ -333,4 +386,10 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         outState.putBoolean("needToInitializeBT", false);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BrickCommunicator.getInstance().stop();
+    }
 }
