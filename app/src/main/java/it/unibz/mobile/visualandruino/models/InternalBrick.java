@@ -1,11 +1,12 @@
 package it.unibz.mobile.visualandruino.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 
-public class InternalBrick extends Brick {
+public class InternalBrick extends Brick implements Serializable {
     private ArrayList<Brick> subBricks;
     private InternalSubTypes subType;
 

@@ -1,11 +1,14 @@
 package it.unibz.mobile.visualandruino.models;
 
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
-public class ArduinoCommandBrick extends Brick {
+public class ArduinoCommandBrick extends Brick implements Serializable {
     private int commandId;
 
 

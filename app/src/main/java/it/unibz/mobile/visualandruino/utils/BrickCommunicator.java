@@ -216,4 +216,8 @@ public class BrickCommunicator {
     public void stop() {
         mSmoothBluetooth.stop();
     }
+
+    public String getBluetoothDeviceName() {
+        return bluetoothDeviceName;
+    }
 }

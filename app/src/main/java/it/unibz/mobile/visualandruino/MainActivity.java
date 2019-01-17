@@ -145,7 +145,8 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         boolean needToInitializeBluetooth = true;
         if (savedInstanceState != null) {
-            ArrayList<Pair<Long, Brick>> bricks = (ArrayList<Pair<Long, Brick>>) savedInstanceState.getSerializable("bricks");
+            ArrayList<Brick> backendBricks = BrickPersister.loadSketchFromJson(savedInstanceState.getString("bricks"));
+            ArrayList<Pair<Long, Brick>> bricks = BrickPersister.translateBackendBricksToUiBricks(backendBricks);
             needToInitializeBluetooth = savedInstanceState.getBoolean("needToInitializeBT");
 
 
@@ -210,67 +211,17 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         //you can leave it empty
     }
 
+
+
+
     public ArrayList<Pair<Long, Brick>> getCertainSketch(String fileName) {
-        ArrayList<Pair<Long, Brick>> brickPairs = new ArrayList<Pair<Long, Brick>>();
+
 
         String standardJSON = BrickPersister.readJsonFile(getApplicationContext(), Constants.SKETCHES_FOLDER,
                 fileName);
         ArrayList<Brick> brickList = BrickPersister.loadSketchFromJson(standardJSON);
 
-        int counter = 0;
-
-        for (Brick item : brickList) {
-
-
-            brickPairs.add(new Pair<>((long) counter, item));
-
-
-            if (item.getBrickType() == BrickTypes.INTERNAL) {
-                ArrayList<Brick> subBricks = ((InternalBrick) item).getSubBricks();
-                if (subBricks != null) {
-                    for (Brick subBrick : subBricks) {
-                        counter++;
-                        brickPairs.add(new Pair<>((long) counter, subBrick));
-                    }
-
-
-                    InternalSubTypes subType = ((InternalBrick) item).getSubType();
-                    InternalSubTypes endSubType = null;
-                    switch (subType) {
-                        //Case statements
-                        case IF:
-                            endSubType = InternalSubTypes.ENDIF;
-                            break;
-                        case VARIABLE:
-                            endSubType = InternalSubTypes.ENDVARIABLE;
-                            break;
-                        case FOR:
-                            endSubType = InternalSubTypes.ENDFOR;
-                            break;
-                        case WHILE:
-                            endSubType = InternalSubTypes.ENDWHILE;
-                            break;
-                        //Default case statement
-                        default:
-                            endSubType = InternalSubTypes.ENDWHILE;
-                    }
-
-                    ArrayList<Parameter> arrInternal = new ArrayList<Parameter>();
-                    BrickBuilder bb = new BrickBuilder(endSubType.name(), BrickTypes.INTERNAL, arrInternal);
-                    bb.setSubType(endSubType);
-                    //bb.setSubBricks(subList);
-
-                    Brick itemEnd = (InternalBrick) bb.buildBrick();
-                    counter++;
-                    brickPairs.add(new Pair<>((long) counter, itemEnd));
-
-
-                }
-            }
-
-            counter++;
-
-        }
+        ArrayList<Pair<Long, Brick>> brickPairs = BrickPersister.translateBackendBricksToUiBricks(brickList);
 
         return brickPairs;
     }
@@ -279,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     private void showPersistenceDialog(Context c, final boolean load) {
 
         String title;
-        String message;
         String positiveButtonText;
 
 
@@ -338,17 +288,17 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
 
 
-    private void showSettingsDialog(final Activity c) {
+    private void showSettingsDialog(final Activity a) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        AlertDialog.Builder builder = new AlertDialog.Builder(a);
         builder.setTitle(Constants.SETTINGS_TITLE);
 
-        final EditText taskEditText = new EditText(c);
-        taskEditText.setText(Constants.DEFAULT_BLUETOOTH_DEVICE);
+        final EditText taskEditText = new EditText(a);
+        taskEditText.setText(BrickCommunicator.getInstance().getBluetoothDeviceName());
 
-        LinearLayout layout = new LinearLayout(c);
+        LinearLayout layout = new LinearLayout(a);
         layout.setOrientation(LinearLayout.VERTICAL);
-        final TextView textView = new TextView(c);
+        final TextView textView = new TextView(a);
         textView.setText("Bluetooth Device name");
         layout.addView(textView);
         layout.addView(taskEditText);
@@ -361,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
                 BrickCommunicator.getInstance().disconnect();
                 BrickCommunicator.getInstance().stop();
-                BrickCommunicator.getInstance().initiateBluetooth(c, taskEditText.getText().toString());
+                BrickCommunicator.getInstance().initiateBluetooth(a, taskEditText.getText().toString());
 
             }
         });
@@ -377,14 +327,13 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         // Make sure to call the super method so that the states of our views are saved
         super.onSaveInstanceState(outState);
         // Save our own state now
-        outState.putSerializable("bricks", listFragment.getmItemArray());
+        ArrayList<Brick> bricks = BrickHelper.getInstance().translateUiBricksToBackendBricks(listFragment.getmItemArray());
+        outState.putString("bricks", BrickPersister.translateSketchToJson(bricks));
+
         outState.putBoolean("needToInitializeBT", false);
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        BrickCommunicator.getInstance().stop();
-    }
+
+
 }
