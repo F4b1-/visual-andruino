@@ -1,11 +1,12 @@
 package it.unibz.mobile.visualandruino.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
-public class Brick {
+public class Brick implements Serializable {
     private String name;
     private BrickTypes brickType;
     private BrickStatus brickStatus;

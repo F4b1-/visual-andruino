@@ -1,7 +1,9 @@
 package it.unibz.mobile.visualandruino.models.enums;
 
 
-public enum BrickTypes {
+import java.io.Serializable;
+
+public enum BrickTypes implements Serializable {
     ARDUINO_COMMAND, INTERNAL, ANDROID;
 }
 

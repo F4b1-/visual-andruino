@@ -1,6 +1,7 @@
 package it.unibz.mobile.visualandruino.utils;
 
 import android.content.Context;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -33,6 +34,10 @@ public class BrickPersister {
         String json = gson.toJson(bricks);
         return json;
     }
+
+
+
+
 
     public static ArrayList<Brick> loadSketchFromJson(String sketch) {
         Gson gson = new Gson();
@@ -167,6 +172,68 @@ public class BrickPersister {
         return fileExists;
 
     }
+
+
+    public static ArrayList<Pair<Long, Brick>> translateBackendBricksToUiBricks(ArrayList<Brick> brickList) {
+        ArrayList<Pair<Long, Brick>> brickPairs = new ArrayList<Pair<Long, Brick>>();
+        int counter = 0;
+
+        for (Brick item : brickList) {
+
+
+            brickPairs.add(new Pair<>((long) counter, item));
+
+
+            if (item.getBrickType() == BrickTypes.INTERNAL) {
+                ArrayList<Brick> subBricks = ((InternalBrick) item).getSubBricks();
+                if (subBricks != null) {
+                    for (Brick subBrick : subBricks) {
+                        counter++;
+                        brickPairs.add(new Pair<>((long) counter, subBrick));
+                    }
+
+
+                    InternalSubTypes subType = ((InternalBrick) item).getSubType();
+                    InternalSubTypes endSubType = null;
+                    switch (subType) {
+                        //Case statements
+                        case IF:
+                            endSubType = InternalSubTypes.ENDIF;
+                            break;
+                        case VARIABLE:
+                            endSubType = InternalSubTypes.ENDVARIABLE;
+                            break;
+                        case FOR:
+                            endSubType = InternalSubTypes.ENDFOR;
+                            break;
+                        case WHILE:
+                            endSubType = InternalSubTypes.ENDWHILE;
+                            break;
+                        //Default case statement
+                        default:
+                            endSubType = InternalSubTypes.ENDWHILE;
+                    }
+
+                    ArrayList<Parameter> arrInternal = new ArrayList<Parameter>();
+                    BrickBuilder bb = new BrickBuilder(endSubType.name(), BrickTypes.INTERNAL, arrInternal);
+                    bb.setSubType(endSubType);
+                    //bb.setSubBricks(subList);
+
+                    Brick itemEnd = (InternalBrick) bb.buildBrick();
+                    counter++;
+                    brickPairs.add(new Pair<>((long) counter, itemEnd));
+
+
+                }
+            }
+
+            counter++;
+
+        }
+
+        return brickPairs;
+    }
+
 
     public static Brick createToneBrick()
     {
