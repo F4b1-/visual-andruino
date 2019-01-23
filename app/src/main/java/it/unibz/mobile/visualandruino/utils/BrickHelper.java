@@ -11,7 +11,6 @@ import java.util.Map;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
-import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 
 public class BrickHelper {
 
@@ -127,9 +126,6 @@ public class BrickHelper {
         return variableValue;
     }
 
-    public Map<String, Integer> getSetVariables() {
-        return setVariables;
-    }
 
     public static ArrayList<Brick> copyBricks(ArrayList<Brick> list) {
         ArrayList<Brick> copy = new ArrayList<Brick>(list.size());

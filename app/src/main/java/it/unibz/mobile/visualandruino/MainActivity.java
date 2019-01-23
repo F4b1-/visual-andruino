@@ -2,51 +2,36 @@ package it.unibz.mobile.visualandruino;
 
 
 import android.app.Activity;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
-import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
-import it.unibz.mobile.visualandruino.utils.BrickBuilder;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
 import it.unibz.mobile.visualandruino.utils.UiHelper;
 
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.jraska.console.Console;
-
-import org.w3c.dom.Text;
-
 
 public class MainActivity extends AppCompatActivity implements ItemParameterFragment.OnListFragmentInteractionListener {
 
-
-    ViewGroup _root;
     public ListFragment listFragment;
     public Fragment currentFragment;
     private int checkedItem = 0;
@@ -170,13 +155,9 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
     }
 
-    public void initializeBluetooth(String bluetoothDevice) {
-        BrickCommunicator.getInstance().initiateBluetooth(this, bluetoothDevice);
-    }
 
     @Override
     public void onBackPressed() {
-
 
         // note: you can also use 'getSupportFragmentManager()'
         FragmentManager mgr = getSupportFragmentManager();
@@ -185,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
             super.onBackPressed();
         } else {
             mgr.popBackStack();
-            //mgr.popBackStackImmediate(currentFragment.getClass().getName(), 0);
+
         }
     }
 

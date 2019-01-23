@@ -15,12 +15,9 @@ import android.widget.TextView;
 import com.woxthebox.draglistview.DragItemAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
-import it.unibz.mobile.visualandruino.models.Parameter;
 import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
@@ -125,9 +122,7 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
                             boolean isInternal = false;
                             if (brickData.getBrickType() == BrickTypes.INTERNAL) {
                                 InternalSubTypes internalSubType = ((InternalBrick) brickData).getSubType();
-                                /*if (internalSubType == InternalSubTypes.FOR || internalSubType == InternalSubTypes.WHILE || internalSubType == InternalSubTypes.IF) {
-                                    updateVariableParametersWithSetVariables();
-                                }*/
+
                                 isInternal = true;
                                 isVariable = internalSubType == InternalSubTypes.VARIABLE ? true : false;
                             }
@@ -144,14 +139,12 @@ class ItemBrickAdapter extends DragItemAdapter<Pair<Long, Brick>, ItemBrickAdapt
 
         @Override
         public void onItemClicked(View view) {
-            //Toast.makeText(view.getContext(), "Item clicked", Toast.LENGTH_SHORT).show();
+
             recyclerViewOnItemClickListener.onClick(view, getAdapterPosition());
         }
 
         @Override
         public boolean onItemLongClicked(View view) {
-            //Toast.makeText(view.getContext(), "Item long clicked", Toast.LENGTH_SHORT).show();
-
             recyclerViewOnItemClickListener.onClick(view, getAdapterPosition());
             return true;
         }

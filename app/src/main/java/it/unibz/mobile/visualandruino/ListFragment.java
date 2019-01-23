@@ -18,34 +18,31 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.EditText;
+
 import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
+
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
-import it.unibz.mobile.visualandruino.utils.BrickPersister;
 
 public class ListFragment extends Fragment {
 
     private ArrayList<Pair<Long, Brick>> mItemArray;
     private DragListView mDragListView;
-    private ListSwipeHelper mSwipeHelper;
     private MySwipeRefreshLayout mRefreshLayout;
     private View mainView;
     BrickExecutor brickExecutor;
     ItemBrickAdapter listAdapter;
     ProgressBar progressBarRun;
-    Handler progressHandler = new Handler();
-    int currentBrick=0;
-    int progressStatusCounter = 0;
 
     public ListFragment()
     {
@@ -180,7 +177,6 @@ public class ListFragment extends Fragment {
                 });
         mDragListView.setAdapter(listAdapter, true);
         mDragListView.setCanDragHorizontally(false);
-        //mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item_parameters));
 
 
     }
@@ -203,77 +199,11 @@ public class ListFragment extends Fragment {
 
 
 
-
-    public void executeNextBrick()
-    {
-
-        printCurrentVariables();
-        if(currentBrick<mItemArray.size())
-        {
-            progressStatusCounter = 0;
-            mItemArray.get(currentBrick).second.setBrickStatus(BrickStatus.Started);
-            mDragListView.getAdapter().notifyDataSetChanged();
-
-
-            brickExecutor.executeBrick(mItemArray.get(currentBrick).second, this, true);
-
-
-            new Handler(Looper.getMainLooper()).post((new Runnable() {
-                @Override
-                public void run() {
-                    new CountDownTimer(progressBarRun.getMax(), 10) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                            progressBarRun.setProgress(progressBarRun.getMax()-(int) millisUntilFinished);
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            currentBrick+=1;
-                            executeNextBrick();
-                            progressBarRun.setProgress(progressBarRun.getMax());
-                        }
-                    }.start();
-                }
-            }));
-        }else {
-            progressBarRun.setProgress(0);
-            currentBrick=0;
-            for(int i=0; i<mItemArray.size();i++)
-            {
-                mItemArray.get(i).second.setBrickStatus(BrickStatus.Waiting);
-            }
-            mDragListView.getAdapter().notifyDataSetChanged();
-        }
-
-    }
-    public void updateReturnView(String answer) {
-        /*TextView resultView = getView().findViewById(R.id.resultView);
-        resultView.setText(answer);*/
-    }
-
-
-
     public void printCurrentVariables() {
         ((TextView)mainView.findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
 
     }
 
-
-    private static class MyDragItem extends DragItem {
-
-        MyDragItem(Context context, int layoutId) {
-            super(context, layoutId);
-        }
-
-        @Override
-        public void onBindDragView(View clickedView, View dragView) {
-            CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
-            ((TextView) dragView.findViewById(R.id.text)).setText(text);
-            dragView.findViewById(R.id.item_layout).setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
-        }
-    }
 
     public void setmItemArray(ArrayList<Pair<Long, Brick>> mItemArray) {
 

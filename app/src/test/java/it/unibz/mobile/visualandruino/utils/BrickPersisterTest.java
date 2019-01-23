@@ -2,14 +2,15 @@ package it.unibz.mobile.visualandruino.utils;
 
 
 import org.junit.Test;
-import static org.assertj.core.api.Assertions.*;
+
 import java.util.ArrayList;
+
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class BrickPersisterTest {

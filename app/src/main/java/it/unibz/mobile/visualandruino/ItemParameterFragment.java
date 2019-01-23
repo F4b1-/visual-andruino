@@ -10,10 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.utils.BrickHelper;
-
 import java.util.ArrayList;
+
+import it.unibz.mobile.visualandruino.models.Parameter;
 
 /**
  * A fragment representing a list of Items.

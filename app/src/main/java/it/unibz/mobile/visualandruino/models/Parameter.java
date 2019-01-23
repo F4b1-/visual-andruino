@@ -3,7 +3,6 @@ package it.unibz.mobile.visualandruino.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Parameter implements Serializable {
@@ -41,11 +40,6 @@ public class Parameter implements Serializable {
 
     public String getParameterName() {
         return parameterName;
-    }
-
-    public void addToAllowedValues(ArrayList<String> valuesToBeAdded) {
-        valuesToBeAdded.addAll((List<String>) this.allowedValues.clone());
-        this.allowedValues = valuesToBeAdded;
     }
 
     public void setParameterName(String parameterName) {
