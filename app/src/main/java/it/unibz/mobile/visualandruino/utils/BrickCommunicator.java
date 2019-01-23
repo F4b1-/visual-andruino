@@ -1,7 +1,6 @@
 package it.unibz.mobile.visualandruino.utils;
 
 import android.app.Activity;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +8,6 @@ import java.util.List;
 import io.palaima.smoothbluetooth.Device;
 import io.palaima.smoothbluetooth.SmoothBluetooth;
 import it.unibz.mobile.visualandruino.Constants;
-import it.unibz.mobile.visualandruino.ListFragment;
-import it.unibz.mobile.visualandruino.models.InternalBrick;
 
 
 //Builder Class
@@ -72,24 +69,16 @@ public class BrickCommunicator {
         @Override
         public void onConnecting(Device device) {
             //called when connecting to particular device
-            //Toast.makeText(MainActivity.this, "Connecting to: " + device.getName(), Toast.LENGTH_SHORT).show();
-            //writeCommand("Connecting to: " + device.getName());
         }
 
         @Override
         public void onConnected(Device device) {
-            //called when connected to particular device
-            //Toast.makeText(MainActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-            //writeCommand("Connected");
             UiHelper.writeCommand("Connected to " + device.getName());
-
         }
 
         @Override
         public void onDisconnected() {
             //called when disconnected from device
-            //writeCommand("Disconnected");
-            //mSmoothBluetooth.tryConnection();
             UiHelper.writeCommand("You got disconnected. Go to the settings menu to reload.");
 
         }
@@ -132,7 +121,6 @@ public class BrickCommunicator {
                                    final SmoothBluetooth.ConnectionCallback connectionCallback) {
             //receives discovered devices list and connection callback
             //you can filter devices list and connect to specific one
-            //connectionCallback.connectTo(deviceList.get(position));
 
             Device bluetoothDevice = null;
 
@@ -201,9 +189,6 @@ public class BrickCommunicator {
         return currentReturnValue;
     }
 
-    public synchronized void setCurrentReturnValue(int currentReturnValue) {
-        this.currentReturnValue = currentReturnValue;
-    }
 
     public SmoothBluetooth getmSmoothBluetooth() {
         return mSmoothBluetooth;

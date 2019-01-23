@@ -3,11 +3,13 @@ package it.unibz.mobile.visualandruino.utils;
 import android.content.Context;
 import android.support.v4.util.Pair;
 import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,17 +79,6 @@ public class BrickPersister {
                 }
             }
         }
-/*
-        ArrayList<Brick> listCasted = new ArrayList();
-        for(Brick superBrick : list) {
-            if(superBrick.getBrickType() == BrickTypes.INTERNAL) {
-                if(!((InternalBrick)superBrick).getSubBricks().isEmpty()) {
-                    for(Brick subBrick : ((InternalBrick)superBrick).getSubBricks()) {
-                        subBrick
-                    }
-                }
-            }
-        }*/
 
         return list;
     }
@@ -217,7 +208,6 @@ public class BrickPersister {
                     ArrayList<Parameter> arrInternal = new ArrayList<Parameter>();
                     BrickBuilder bb = new BrickBuilder(endSubType.name(), BrickTypes.INTERNAL, arrInternal);
                     bb.setSubType(endSubType);
-                    //bb.setSubBricks(subList);
 
                     Brick itemEnd = (InternalBrick) bb.buildBrick();
                     counter++;
@@ -382,29 +372,6 @@ public class BrickPersister {
 
     public static boolean saveStandardSketch(Context context) {
 
-        /*if(fileExist(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH)) {
-            return false;
-        }
-*/
-
-        /*
-        Brick ifBrick = createIfBrick();
-
-
-        /*
-        if(ifBrick != null) {
-            bricks.add(ifBrick);
-        }
-        Brick endBrick= createEndIfBrick();
-        bricks.add(endBrick );
-
-
-        //Variable
-        bricks.add(createVariableBrick());
-        bricks.add(createEndVariableBrick());
-        */
-
-
         writeJsonToFile(context, Constants.SKETCHES_FOLDER, Constants.STANDARD_SKETCH, translateSketchToJson(constructStandardSketch()));
 
         return true;
@@ -421,12 +388,6 @@ public static Brick createIfBrick() {
     /**
      * If
      */
-    /*ArrayList<Parameter> arr=new ArrayList<Parameter>();
-    BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
-    Brick itemSub= bbSub.buildBrick();
-
-    ArrayList<Brick> subList=new ArrayList<Brick>();
-    subList.add(itemSub);*/
 
 
     ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
@@ -451,7 +412,6 @@ public static Brick createIfBrick() {
 
     BrickBuilder bb = new BrickBuilder("If", BrickTypes.INTERNAL, arrInternal);
     bb.setSubType(InternalSubTypes.IF);
-    //bb.setSubBricks(subList);
 
     InternalBrick item= (InternalBrick) bb.buildBrick();
     return item;
@@ -463,7 +423,6 @@ public static Brick createIfBrick() {
         ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
         BrickBuilder bb = new BrickBuilder("EndIf", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.ENDIF);
-        //bb.setSubBricks(subList);
 
         InternalBrick item= (InternalBrick) bb.buildBrick();
         return item;
@@ -475,12 +434,6 @@ public static Brick createIfBrick() {
         /**
          * If
          */
-    /*ArrayList<Parameter> arr=new ArrayList<Parameter>();
-    BrickBuilder bbSub = new BrickBuilder("test", BrickTypes.ARDUINO_COMMAND, arr);
-    Brick itemSub= bbSub.buildBrick();
-
-    ArrayList<Brick> subList=new ArrayList<Brick>();
-    subList.add(itemSub);*/
 
 
         ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
@@ -490,7 +443,6 @@ public static Brick createIfBrick() {
 
         BrickBuilder bb = new BrickBuilder("Variable", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.VARIABLE);
-        //bb.setSubBricks(subList);
 
         InternalBrick item= (InternalBrick) bb.buildBrick();
         return item;
@@ -534,7 +486,6 @@ public static Brick createIfBrick() {
 
         BrickBuilder bb = new BrickBuilder("For", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.FOR);
-        //bb.setSubBricks(subList);
 
         InternalBrick item= (InternalBrick) bb.buildBrick();
         return item;
@@ -546,7 +497,6 @@ public static Brick createIfBrick() {
         ArrayList<Parameter> arrInternal=new ArrayList<Parameter>();
         BrickBuilder bb = new BrickBuilder("EndFor", BrickTypes.INTERNAL, arrInternal);
         bb.setSubType(InternalSubTypes.ENDFOR);
-        //bb.setSubBricks(subList);
 
         InternalBrick item= (InternalBrick) bb.buildBrick();
         return item;

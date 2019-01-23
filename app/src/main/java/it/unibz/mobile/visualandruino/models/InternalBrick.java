@@ -25,10 +25,6 @@ public class InternalBrick extends Brick implements Serializable {
         return subType;
     }
 
-    public void setSubType(InternalSubTypes subType) {
-        this.subType = subType;
-    }
-
     public void setSubBricks(ArrayList<Brick> subBricks, InternalSubTypes subType) {
         this.subBricks = subBricks;
         this.subType = subType;

@@ -68,10 +68,6 @@ public class Brick implements Serializable {
         this.brickStatus = status;
     }
 
-    public void setParameters(ArrayList<Parameter> parameters) {
-        this.parameters = parameters;
-    }
-
     public long getBrickUiId() {
         return brickUiId;
     }

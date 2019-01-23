@@ -1,8 +1,6 @@
 package it.unibz.mobile.visualandruino.models;
 
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -24,7 +22,4 @@ public class ArduinoCommandBrick extends Brick implements Serializable {
         return commandId;
     }
 
-    public void setCommandId(int commandId) {
-        this.commandId = commandId;
-    }
 }
