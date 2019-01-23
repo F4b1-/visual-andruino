@@ -122,8 +122,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        
         setContentView(R.layout.activity_main);
         ListFragment listF = ListFragment.newInstance();
         showListFragment(listF);
