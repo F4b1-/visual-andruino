@@ -13,14 +13,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.unibz.mobile.visualandruino.ItemParameterFragment.OnListFragmentInteractionListener;
-import it.unibz.mobile.visualandruino.dummy.DummyContent.DummyItem;
 import it.unibz.mobile.visualandruino.models.Parameter;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemParameterRecyclerViewAdapter.ViewHolder> {
 
     private final List<Parameter> mValues;

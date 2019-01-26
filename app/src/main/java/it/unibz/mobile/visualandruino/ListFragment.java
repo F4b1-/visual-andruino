@@ -1,11 +1,7 @@
 package it.unibz.mobile.visualandruino;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -22,7 +18,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
@@ -33,12 +28,13 @@ import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
+import it.unibz.mobile.visualandruino.utils.BrickIncorrectOrderException;
 
 public class ListFragment extends Fragment {
 
     private ArrayList<Pair<Long, Brick>> mItemArray;
     private DragListView mDragListView;
-    private MySwipeRefreshLayout mRefreshLayout;
+    private BrickSwipeRefreshLayout mRefreshLayout;
     private View mainView;
     BrickExecutor brickExecutor;
     ItemBrickAdapter listAdapter;
@@ -65,7 +61,7 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.frame_prog_layout, container, false);
-        mRefreshLayout = (MySwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
+        mRefreshLayout = (BrickSwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
         mDragListView = (DragListView) mainView.findViewById(R.id.drag_list_view);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
@@ -187,7 +183,14 @@ public class ListFragment extends Fragment {
     }
     public void executeBricks()
     {
-        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this, false);
+        try {
+            brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this, false);
+        }
+        catch (BrickIncorrectOrderException exp)
+        {
+            this.printDebbug(exp.getMessage());
+        }
+
 
     }
 

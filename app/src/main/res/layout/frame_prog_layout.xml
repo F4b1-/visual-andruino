@@ -104,7 +104,7 @@
         </LinearLayout>
 
 
-        <it.unibz.mobile.visualandruino.MySwipeRefreshLayout
+        <it.unibz.mobile.visualandruino.BrickSwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content" />
 
 
-        </it.unibz.mobile.visualandruino.MySwipeRefreshLayout>
+        </it.unibz.mobile.visualandruino.BrickSwipeRefreshLayout>
 
 
     </LinearLayout>
