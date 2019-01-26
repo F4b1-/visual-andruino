@@ -55,15 +55,36 @@ public class BrickHelper {
                     /**
                      * Internal Command End
                      */
+                    if(currentInternalSuperBrick==null)
+                    {
+                        throw new BrickIncorrectOrderException(((InternalBrick) currentBrick).getSubType().toString()+" without Start founded" );
+                    }
 
-                    brickList.add(currentInternalSuperBrick);
-                    insideCommandStructure = false;
-                    currentInternalSuperBrick = null;
+                    if(!("END"+currentInternalSuperBrick.getSubType().toString())
+                            .equals(((InternalBrick) currentBrick).getSubType().toString()))
+                    {
+                        throw new BrickIncorrectOrderException(((InternalBrick) currentBrick).getSubType().toString()+" without Start founded" );
+                    }
+
+                    if(insideCommandStructure)
+                    {
+                        brickList.add(currentInternalSuperBrick);
+                        insideCommandStructure = false;
+                        currentInternalSuperBrick = null;
+                    }else
+                    {
+                        throw new BrickIncorrectOrderException(
+                                "Brick "+ ((InternalBrick) currentBrick).getSubType().toString()+ " founded before start internal brick" );
+                    }
 
                 } else {
                     /**
                      * Internal Command Start
                      */
+                    if(currentInternalSuperBrick!=null)
+                    {
+                        throw new BrickIncorrectOrderException("Internal brick under Internal brick is not supported" );
+                    }
                     insideCommandStructure = true;
                     ((InternalBrick) currentBrick).setSubBricks(new ArrayList<Brick>(), ((InternalBrick) currentBrick).getSubType());
                     currentInternalSuperBrick = (InternalBrick) currentBrick;
@@ -92,6 +113,10 @@ public class BrickHelper {
                 brickList.add(currentBrick);
             }
 
+        }
+        if(insideCommandStructure)
+        {
+            throw new BrickIncorrectOrderException("Started Internal Brick with out end" );
         }
 
         return brickList;
@@ -132,4 +157,6 @@ public class BrickHelper {
         for (Brick item : list) copy.add(item);
         return copy;
     }
+
+
 }
