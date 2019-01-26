@@ -6,14 +6,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class MySwipeRefreshLayout extends SwipeRefreshLayout {
+public class BrickSwipeRefreshLayout extends SwipeRefreshLayout {
     private View mScrollingView;
 
-    public MySwipeRefreshLayout(Context context) {
+    public BrickSwipeRefreshLayout(Context context) {
         super(context);
     }
 
-    public MySwipeRefreshLayout(Context context, AttributeSet attrs) {
+    public BrickSwipeRefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

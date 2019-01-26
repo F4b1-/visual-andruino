@@ -1,21 +1,15 @@
 package it.unibz.mobile.visualandruino.utils;
 
-import android.os.Handler;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import it.unibz.mobile.visualandruino.Constants;
 import it.unibz.mobile.visualandruino.ListFragment;
-import it.unibz.mobile.visualandruino.R;
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
-import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.Parameter;
+import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
+import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.enums.ComparatorTypes;
 import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 
@@ -39,8 +33,6 @@ public class BrickExecutor {
         }
 
 
-
-        //currentBrick.setBrickStatus(BrickStatus.Started);
         if (currentBrick.getBrickType() == BrickTypes.ARDUINO_COMMAND) {
             String command = "";
             command += ((ArduinoCommandBrick) currentBrick).getCommandId();
@@ -60,18 +52,9 @@ public class BrickExecutor {
 
         } else if (currentBrick.getBrickType() == BrickTypes.INTERNAL) {
 
-            executeInternal((InternalBrick) currentBrick, fragment, debug);/*
-            // Execute subBricks recursively
-            if(((InternalBrick) currentBrick).getSubType() == InternalSubTypes.FOR) {
-                int forLoopLimiter = Integer.parseInt(currentBrick.getParameters().get(0).getValue());
-                for(int i=0; i<=forLoopLimiter; i++) {
-                    executeBlocks(((InternalBrick) currentBrick).getSubBricks() );
-                }
-            }*/
+            executeInternal((InternalBrick) currentBrick, fragment, debug);
 
 
-
-            // TODO Execute
         } else if (currentBrick.getBrickType() == BrickTypes.ANDROID) {
             //TODO Execute Android commands
         }
@@ -82,26 +65,11 @@ public class BrickExecutor {
             fragment.setBrickStatus(currentBrick.getBrickUiId(), BrickStatus.Waiting);
         }
 
-        //currentBrick.setBrickStatus(BrickStatus.Finished);
-
-    }
-
-    /*public void executeBlocks(ArrayList<Brick> bricks) {
-        Brick currentBrick = bricks.get(0);
-
-        executeBrick(currentBrick);
-
-        //remove at the end and move on
-
-        bricks.remove(0);
-        if (bricks.size() > 0) {
-            executeBlocks(bricks);
-        }
-        currentBrick.setBrickStatus(BrickStatus.Waiting);
 
 
     }
-*/
+
+
     public void executeBlocks(ArrayList<Brick> bricks, ListFragment fragment, boolean debug) {
 
         Brick currentBrick = bricks.get(0);

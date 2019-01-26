@@ -1,11 +1,7 @@
 package it.unibz.mobile.visualandruino;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,34 +14,31 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.EditText;
-import com.woxthebox.draglistview.DragItem;
+
 import com.woxthebox.draglistview.DragListView;
 import com.woxthebox.draglistview.swipe.ListSwipeHelper;
 import com.woxthebox.draglistview.swipe.ListSwipeItem;
+
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.enums.BrickStatus;
 import it.unibz.mobile.visualandruino.utils.BrickExecutor;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
-import it.unibz.mobile.visualandruino.utils.BrickPersister;
+import it.unibz.mobile.visualandruino.utils.BrickIncorrectOrderException;
 
 public class ListFragment extends Fragment {
 
     private ArrayList<Pair<Long, Brick>> mItemArray;
     private DragListView mDragListView;
-    private ListSwipeHelper mSwipeHelper;
-    private MySwipeRefreshLayout mRefreshLayout;
+    private BrickSwipeRefreshLayout mRefreshLayout;
     private View mainView;
     BrickExecutor brickExecutor;
     ItemBrickAdapter listAdapter;
     ProgressBar progressBarRun;
-    Handler progressHandler = new Handler();
-    int currentBrick=0;
-    int progressStatusCounter = 0;
 
     public ListFragment()
     {
@@ -68,7 +61,7 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.frame_prog_layout, container, false);
-        mRefreshLayout = (MySwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
+        mRefreshLayout = (BrickSwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
         mDragListView = (DragListView) mainView.findViewById(R.id.drag_list_view);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
         mDragListView.setDragListListener(new DragListView.DragListListenerAdapter() {
@@ -116,7 +109,7 @@ public class ListFragment extends Fragment {
                     Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
                     int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
                     mDragListView.getAdapter().removeItem(pos);
-                }else
+                }else if(swipedDirection == ListSwipeItem.SwipeDirection.RIGHT)
                 {
                     Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
                     int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
@@ -124,6 +117,7 @@ public class ListFragment extends Fragment {
 
                     brickExecutor.executeBrick(mItemArray.get(pos).second, ListFragment.this, true);
                 }
+                mDragListView.getAdapter().notifyDataSetChanged();
             }
         });
 
@@ -180,7 +174,6 @@ public class ListFragment extends Fragment {
                 });
         mDragListView.setAdapter(listAdapter, true);
         mDragListView.setCanDragHorizontally(false);
-        //mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item_parameters));
 
 
     }
@@ -191,7 +184,14 @@ public class ListFragment extends Fragment {
     }
     public void executeBricks()
     {
-        brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this, false);
+        try {
+            brickExecutor.executeBlocks(BrickHelper.getInstance().translateUiBricksToBackendBricks((ArrayList<Pair<Long, Brick>>) mItemArray.clone()), this, false);
+        }
+        catch (BrickIncorrectOrderException exp)
+        {
+            this.printDebbug(exp.getMessage());
+        }
+
 
     }
 
@@ -203,77 +203,11 @@ public class ListFragment extends Fragment {
 
 
 
-
-    public void executeNextBrick()
-    {
-
-        printCurrentVariables();
-        if(currentBrick<mItemArray.size())
-        {
-            progressStatusCounter = 0;
-            mItemArray.get(currentBrick).second.setBrickStatus(BrickStatus.Started);
-            mDragListView.getAdapter().notifyDataSetChanged();
-
-
-            brickExecutor.executeBrick(mItemArray.get(currentBrick).second, this, true);
-
-
-            new Handler(Looper.getMainLooper()).post((new Runnable() {
-                @Override
-                public void run() {
-                    new CountDownTimer(progressBarRun.getMax(), 10) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-
-                            progressBarRun.setProgress(progressBarRun.getMax()-(int) millisUntilFinished);
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            currentBrick+=1;
-                            executeNextBrick();
-                            progressBarRun.setProgress(progressBarRun.getMax());
-                        }
-                    }.start();
-                }
-            }));
-        }else {
-            progressBarRun.setProgress(0);
-            currentBrick=0;
-            for(int i=0; i<mItemArray.size();i++)
-            {
-                mItemArray.get(i).second.setBrickStatus(BrickStatus.Waiting);
-            }
-            mDragListView.getAdapter().notifyDataSetChanged();
-        }
-
-    }
-    public void updateReturnView(String answer) {
-        /*TextView resultView = getView().findViewById(R.id.resultView);
-        resultView.setText(answer);*/
-    }
-
-
-
     public void printCurrentVariables() {
         ((TextView)mainView.findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
 
     }
 
-
-    private static class MyDragItem extends DragItem {
-
-        MyDragItem(Context context, int layoutId) {
-            super(context, layoutId);
-        }
-
-        @Override
-        public void onBindDragView(View clickedView, View dragView) {
-            CharSequence text = ((TextView) clickedView.findViewById(R.id.text)).getText();
-            ((TextView) dragView.findViewById(R.id.text)).setText(text);
-            dragView.findViewById(R.id.item_layout).setBackgroundColor(dragView.getResources().getColor(R.color.list_item_background));
-        }
-    }
 
     public void setmItemArray(ArrayList<Pair<Long, Brick>> mItemArray) {
 

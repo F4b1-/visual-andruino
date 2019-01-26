@@ -1,47 +1,37 @@
 package it.unibz.mobile.visualandruino;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.Brick;
-import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.Parameter;
-import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
-import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
-import it.unibz.mobile.visualandruino.utils.BrickBuilder;
 import it.unibz.mobile.visualandruino.utils.BrickCommunicator;
 import it.unibz.mobile.visualandruino.utils.BrickHelper;
 import it.unibz.mobile.visualandruino.utils.BrickPersister;
 import it.unibz.mobile.visualandruino.utils.UiHelper;
 
-import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.jraska.console.Console;
-
 
 public class MainActivity extends AppCompatActivity implements ItemParameterFragment.OnListFragmentInteractionListener {
 
-
-    ViewGroup _root;
     public ListFragment listFragment;
     public Fragment currentFragment;
     private int checkedItem = 0;
@@ -58,6 +48,11 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            showSettingsDialog(MainActivity.this);
+        }
+
 
         if (id == R.id.load_sketch_button) {
             showPersistenceDialog(MainActivity.this, true);
@@ -121,22 +116,21 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
         UiHelper.writeCommand(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()).toString());
 
-        //((TextView) findViewById(R.id.varView)).setText(Html.fromHtml(BrickHelper.getInstance().getCurrentVariablesFormatted()));
 
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        
         setContentView(R.layout.activity_main);
         ListFragment listF = ListFragment.newInstance();
         showListFragment(listF);
 
         boolean needToInitializeBluetooth = true;
         if (savedInstanceState != null) {
-            ArrayList<Pair<Long, Brick>> bricks = (ArrayList<Pair<Long, Brick>>) savedInstanceState.getSerializable("bricks");
+            ArrayList<Brick> backendBricks = BrickPersister.loadSketchFromJson(savedInstanceState.getString("bricks"));
+            ArrayList<Pair<Long, Brick>> bricks = BrickPersister.translateBackendBricksToUiBricks(backendBricks);
             needToInitializeBluetooth = savedInstanceState.getBoolean("needToInitializeBT");
 
 
@@ -160,9 +154,9 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
 
     }
 
+
     @Override
     public void onBackPressed() {
-
 
         // note: you can also use 'getSupportFragmentManager()'
         FragmentManager mgr = getSupportFragmentManager();
@@ -171,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
             super.onBackPressed();
         } else {
             mgr.popBackStack();
-            //mgr.popBackStackImmediate(currentFragment.getClass().getName(), 0);
+
         }
     }
 
@@ -197,67 +191,17 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
         //you can leave it empty
     }
 
+
+
+
     public ArrayList<Pair<Long, Brick>> getCertainSketch(String fileName) {
-        ArrayList<Pair<Long, Brick>> brickPairs = new ArrayList<Pair<Long, Brick>>();
+
 
         String standardJSON = BrickPersister.readJsonFile(getApplicationContext(), Constants.SKETCHES_FOLDER,
                 fileName);
         ArrayList<Brick> brickList = BrickPersister.loadSketchFromJson(standardJSON);
 
-        int counter = 0;
-
-        for (Brick item : brickList) {
-
-
-            brickPairs.add(new Pair<>((long) counter, item));
-
-
-            if (item.getBrickType() == BrickTypes.INTERNAL) {
-                ArrayList<Brick> subBricks = ((InternalBrick) item).getSubBricks();
-                if (subBricks != null) {
-                    for (Brick subBrick : subBricks) {
-                        counter++;
-                        brickPairs.add(new Pair<>((long) counter, subBrick));
-                    }
-
-
-                    InternalSubTypes subType = ((InternalBrick) item).getSubType();
-                    InternalSubTypes endSubType = null;
-                    switch (subType) {
-                        //Case statements
-                        case IF:
-                            endSubType = InternalSubTypes.ENDIF;
-                            break;
-                        case VARIABLE:
-                            endSubType = InternalSubTypes.ENDVARIABLE;
-                            break;
-                        case FOR:
-                            endSubType = InternalSubTypes.ENDFOR;
-                            break;
-                        case WHILE:
-                            endSubType = InternalSubTypes.ENDWHILE;
-                            break;
-                        //Default case statement
-                        default:
-                            endSubType = InternalSubTypes.ENDWHILE;
-                    }
-
-                    ArrayList<Parameter> arrInternal = new ArrayList<Parameter>();
-                    BrickBuilder bb = new BrickBuilder(endSubType.name(), BrickTypes.INTERNAL, arrInternal);
-                    bb.setSubType(endSubType);
-                    //bb.setSubBricks(subList);
-
-                    Brick itemEnd = (InternalBrick) bb.buildBrick();
-                    counter++;
-                    brickPairs.add(new Pair<>((long) counter, itemEnd));
-
-
-                }
-            }
-
-            counter++;
-
-        }
+        ArrayList<Pair<Long, Brick>> brickPairs = BrickPersister.translateBackendBricksToUiBricks(brickList);
 
         return brickPairs;
     }
@@ -266,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     private void showPersistenceDialog(Context c, final boolean load) {
 
         String title;
-        String message;
         String positiveButtonText;
 
 
@@ -324,13 +267,53 @@ public class MainActivity extends AppCompatActivity implements ItemParameterFrag
     }
 
 
+
+    private void showSettingsDialog(final Activity a) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(a);
+        builder.setTitle(Constants.SETTINGS_TITLE);
+
+        final EditText taskEditText = new EditText(a);
+        taskEditText.setText(BrickCommunicator.getInstance().getBluetoothDeviceName());
+
+        LinearLayout layout = new LinearLayout(a);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        final TextView textView = new TextView(a);
+        textView.setText("Bluetooth Device name");
+        layout.addView(textView);
+        layout.addView(taskEditText);
+
+        builder.setView(layout);
+
+        builder.setPositiveButton(Constants.RELOAD_BUTTON, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                BrickCommunicator.getInstance().disconnect();
+                BrickCommunicator.getInstance().stop();
+                BrickCommunicator.getInstance().initiateBluetooth(a, taskEditText.getText().toString());
+
+            }
+        });
+        builder.setNegativeButton(Constants.CANCEL_BUTTON, null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Make sure to call the super method so that the states of our views are saved
         super.onSaveInstanceState(outState);
         // Save our own state now
-        outState.putSerializable("bricks", listFragment.getmItemArray());
+        ArrayList<Brick> bricks = BrickHelper.getInstance().translateUiBricksToBackendBricks(listFragment.getmItemArray());
+        outState.putString("bricks", BrickPersister.translateSketchToJson(bricks));
+
         outState.putBoolean("needToInitializeBT", false);
     }
+
+
+
 
 }

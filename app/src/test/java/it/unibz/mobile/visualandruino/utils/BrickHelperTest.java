@@ -5,7 +5,6 @@ import android.support.v4.util.Pair;
 
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
@@ -13,6 +12,7 @@ import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 

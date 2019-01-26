@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VisualAndruino</string>
+    <string name="app_name">Visual Andruino</string>
     <string name="action_settings">Settings</string>
     <string name="digitalWText">Digital Write</string>
     <string name="pin_prompt">Choose a Pin Number</string>

@@ -1,30 +1,17 @@
 package it.unibz.mobile.visualandruino;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.woxthebox.draglistview.DragItem;
 import com.woxthebox.draglistview.DragListView;
-import com.woxthebox.draglistview.swipe.ListSwipeHelper;
-import com.woxthebox.draglistview.swipe.ListSwipeItem;
 
 import java.util.ArrayList;
 
@@ -35,8 +22,7 @@ public class ListBricksBase extends Fragment {
 
     private ArrayList<Pair<Long, Brick>> mItemArray;
     private DragListView mDragListView;
-    private ListSwipeHelper mSwipeHelper;
-    private MySwipeRefreshLayout mRefreshLayout;
+    private BrickSwipeRefreshLayout mRefreshLayout;
     private View mainView;
 
     ItemBrickAdapter listAdapter;
@@ -59,7 +45,7 @@ public class ListBricksBase extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mainView = inflater.inflate(R.layout.fram_bricks_base, container, false);
-        mRefreshLayout = (MySwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
+        mRefreshLayout = (BrickSwipeRefreshLayout) mainView.findViewById(R.id.swipe_refresh_layout);
         mDragListView = (DragListView) mainView.findViewById(R.id.drag_list_view);
         mDragListView.getRecyclerView().setVerticalScrollBarEnabled(true);
         mRefreshLayout.setScrollingView(mDragListView.getRecyclerView());
@@ -98,7 +84,6 @@ public class ListBricksBase extends Fragment {
         mDragListView.setDragEnabled(false);
         mDragListView.setClickable(true );
 
-        //mDragListView.setCustomDragItem(new MyDragItem(getContext(), R.layout.list_item_parameters));
 
 
     }

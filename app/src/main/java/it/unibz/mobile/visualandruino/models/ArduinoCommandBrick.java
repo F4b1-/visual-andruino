@@ -1,11 +1,12 @@
 package it.unibz.mobile.visualandruino.models;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 
-public class ArduinoCommandBrick extends Brick {
+public class ArduinoCommandBrick extends Brick implements Serializable {
     private int commandId;
 
 
@@ -21,7 +22,4 @@ public class ArduinoCommandBrick extends Brick {
         return commandId;
     }
 
-    public void setCommandId(int commandId) {
-        this.commandId = commandId;
-    }
 }

@@ -1,13 +1,10 @@
 package it.unibz.mobile.visualandruino.utils;
 
 
-import android.os.Handler;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import it.unibz.mobile.visualandruino.models.ArduinoCommandBrick;
 import it.unibz.mobile.visualandruino.models.Brick;
 import it.unibz.mobile.visualandruino.models.InternalBrick;
 import it.unibz.mobile.visualandruino.models.Parameter;
@@ -15,11 +12,9 @@ import it.unibz.mobile.visualandruino.models.enums.BrickTypes;
 import it.unibz.mobile.visualandruino.models.enums.ComparatorTypes;
 import it.unibz.mobile.visualandruino.models.enums.InternalSubTypes;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class BrickExecutorTest {

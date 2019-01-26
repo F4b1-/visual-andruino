@@ -1,28 +1,20 @@
 package it.unibz.mobile.visualandruino;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import it.unibz.mobile.visualandruino.ItemParameterFragment.OnListFragmentInteractionListener;
-import it.unibz.mobile.visualandruino.dummy.DummyContent.DummyItem;
-import it.unibz.mobile.visualandruino.models.Parameter;
-
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
+import it.unibz.mobile.visualandruino.ItemParameterFragment.OnListFragmentInteractionListener;
+import it.unibz.mobile.visualandruino.models.Parameter;
+
 public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemParameterRecyclerViewAdapter.ViewHolder> {
 
     private final List<Parameter> mValues;
@@ -87,7 +79,7 @@ public class ItemParameterRecyclerViewAdapter extends RecyclerView.Adapter<ItemP
 
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>( holder.mView.getContext(),R.layout.spinner_item,mValues.get(position).getAllowedValues());
-        //spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+
         holder.spValueView.setAdapter(spinnerArrayAdapter);
         holder.spValueView.setSelection(mValues.get(position).getAllowedValues().indexOf(mValues.get(position).getValue()) );
 
