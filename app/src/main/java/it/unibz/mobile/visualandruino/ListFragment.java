@@ -109,7 +109,7 @@ public class ListFragment extends Fragment {
                     Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
                     int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
                     mDragListView.getAdapter().removeItem(pos);
-                }else
+                }else if(swipedDirection == ListSwipeItem.SwipeDirection.RIGHT)
                 {
                     Pair<Long, String> adapterItem = (Pair<Long, String>) item.getTag();
                     int pos = mDragListView.getAdapter().getPositionForItem(adapterItem);
@@ -117,6 +117,7 @@ public class ListFragment extends Fragment {
 
                     brickExecutor.executeBrick(mItemArray.get(pos).second, ListFragment.this, true);
                 }
+                mDragListView.getAdapter().notifyDataSetChanged();
             }
         });
 
